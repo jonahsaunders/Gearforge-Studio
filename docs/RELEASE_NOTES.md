@@ -1,8 +1,22 @@
-# GearForge Studio 1.0.0rc4
+# GearForge Studio 1.0.0rc5
 
-This release candidate adds an open engineering study to the hardened offline
-desktop application. It establishes the calculation foundation for the agreed
-250 W, 1,500 rpm, 5:1 steel spur development target.
+This release candidate extends the open engineering workflow from gear mesh
+loads into explicit shaft geometry and individual bearing reactions. It supports
+the agreed 250 W, 1,500 rpm, 5:1 steel spur development target.
+
+- Define two support positions, solid/hollow stepped sections, duty cases and
+  three-axis forces/couples. Calculate bearing loads, bending, elastic motion,
+  axial extension, twist and nominal surface stress.
+- Transfer every pinion or wheel duty case from a gear study, including the
+  off-axis helical thrust couple and balanced coupling torque.
+- Inspect interactive load-path diagrams, save/reopen shaft studies and export
+  full inputs, numerical results, readable reports and integrity manifests.
+- Compare 1,452 shaft reaction/motion values against pinned PyNiteFEA in a separate
+  compatible verification environment. The reference solver is not bundled.
+- Exercise all six shaft tabs, numerical equilibrium, save/reload and verified
+  exports in each native package smoke test.
+
+The prior open gear-study and software-hardening capabilities remain:
 
 - Edit external spur/helical geometry, normal profile shifts and an operating-duty
   spectrum; calculate tooth dimensions, contact ratios, quasi-static mesh forces,
@@ -32,5 +46,5 @@ exports continue to reject unqualified designs. See
 
 Python 3.12 is the build/test runtime; the supported package range is 3.12–3.13.
 Native archives remain unsigned. Root `VALIDATION.json` links version-specific
-evidence; rc3 evidence remains historical. The
+evidence; rc4 and earlier evidence remain historical. The
 [deployment guide](INTERNAL_DEPLOYMENT.md) covers workstation acceptance and rollback.

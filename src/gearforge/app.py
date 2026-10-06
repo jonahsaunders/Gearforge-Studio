@@ -148,7 +148,7 @@ class MainWindow(QMainWindow):
             file.addAction(action)
             self.command_actions[title]=action
         design=self.menuBar().addMenu("Design")
-        for title,callback,shortcut in [("Engineering study…",self.engineering_study,None),("Study selected stage…",self.study_selected_stage,None),("Generate designs",self.generate,"Ctrl+Return"),("Load CAD preview",self.load_preview,"Ctrl+Shift+L"),("Sample tooth meshing…",self.check_mesh,None),("Compare selected rows",self.compare,None)]:
+        for title,callback,shortcut in [("Engineering study…",self.engineering_study,None),("Shaft and bearing loads…",self.shaft_study,None),("Study selected stage…",self.study_selected_stage,None),("Generate designs",self.generate,"Ctrl+Return"),("Load CAD preview",self.load_preview,"Ctrl+Shift+L"),("Sample tooth meshing…",self.check_mesh,None),("Compare selected rows",self.compare,None)]:
             action=QAction(title,self);action.triggered.connect(callback)
             if shortcut:action.setShortcut(shortcut)
             design.addAction(action)
@@ -173,6 +173,12 @@ class MainWindow(QMainWindow):
     def engineering_study(self):
         from .engineering_ui import EngineeringStudyDialog
         EngineeringStudyDialog(self).exec()
+
+    def shaft_study(self):
+        from .shaft_ui import ShaftStudyDialog
+        from .shafts import shaft_from_gear_study
+        from .engineering import EngineeringStudy
+        ShaftStudyDialog(self,shaft_from_gear_study(EngineeringStudy())).exec()
 
     def study_selected_stage(self):
         from .engineering import study_for_stage

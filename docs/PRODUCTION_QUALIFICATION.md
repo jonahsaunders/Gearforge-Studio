@@ -2,9 +2,9 @@
 
 **Status: not qualified for final production gearbox design or service-load
 ratings.** The requested commercial outcome is not yet achieved. Version
-1.0.0rc4 adds an open engineering study for external spur/helical geometry,
-quasi-static forces and operating duty. It does not turn the existing screening
-equations into a validated fatigue or service-life rating method.
+1.0.0rc5 includes open external spur/helical geometry, quasi-static forces,
+operating duty and explicit shaft/bearing load paths. These elastic geometry/load
+calculations do not establish fatigue or service-life ratings.
 
 ## Current numerical boundary
 
@@ -77,10 +77,10 @@ public abstracts are insufficient to implement or verify its complete procedure.
 | Planetary rating | Above plus internal ring, unequal load sharing, carrier/pin/bearing compliance and planet phasing | Unverified |
 | Bevel, worm, cycloidal | Family-specific contact geometry and applicable rating methods, not a reused spur approximation | Concept search only |
 | Materials | Traceable fatigue/contact/wear data over the qualified process, temperature, life and lubrication envelope; uncertainty and batch controls | Illustrative printed values / conditional catalog values |
-| Full assembly | Bearings from actual supplier data, shaft fatigue, key/pin/clamp retention, housing/fasteners/mounts, external loads and tolerances | Generic screens / unmodeled failure modes |
+| Full assembly | Bearings from actual supplier data, shaft fatigue, key/pin/clamp retention, housing/fasteners/mounts, external loads and tolerances | Explicit two-support shaft reactions, stepped-section elastic motion and nominal stress implemented; actual bearing capacity, fatigue, retention and housing remain |
 | Thermal and tribology | Validated losses, temperature, lubrication, wear/creep and applicable scuffing limits across duty | Assumed efficiency; no validated thermal solver |
 | Manufacturing | Production tooth/root definition, fit/tolerance stack, drawings, retention details, inspection and quality criteria | Sampled tooth CAD and reference layouts |
-| Calculation verification | Independent worked cases, trusted reference results, tolerance-based comparisons, failure/boundary cases and independent review | 72 scalar geometry comparisons against pinned FreeCAD Gears; hand force/energy/exposure cases and input regressions; no fatigue or assembly-rating verification |
+| Calculation verification | Independent worked cases, trusted reference results, tolerance-based comparisons, failure/boundary cases and independent review | 72 scalar geometry comparisons against FreeCAD Gears and 1,452 shaft reaction/motion comparisons against PyNiteFEA; hand cases and input regressions; no fatigue or assembly-rating verification |
 | Product validation | Guarded qualification tests under a reviewed plan covering applicable loads, life, temperature, wear and representative manufacturing variation | Physical evidence unavailable |
 | Engineering release | Controlled evidence linked to exact inputs, model version, manufacturing definition and reviewer approval; change-triggered requalification | Hash-traceable prototype and engineering-study packages; no approval override |
 

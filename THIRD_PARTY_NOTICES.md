@@ -50,6 +50,12 @@ technical pages are public reading material, not declared open-source content;
 their document text, figures and tables are not redistributed. No proprietary
 standard text, standard factor table or restricted reference result is bundled.
 
+The optional shaft comparison uses [PyNiteFEA 3.2.0](https://github.com/JWock82/Pynite),
+licensed MIT, in a separate verification environment. Its source and dependencies
+are not included in the application build. The bundled shaft fixture contains
+GearForge-authored synthetic inputs and numerical results. The adapter uses the
+reference's public API; it does not copy the finite-element implementation.
+
 Primary technical/source references:
 
 - https://cadquery.readthedocs.io/en/stable/

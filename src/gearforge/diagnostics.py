@@ -23,7 +23,7 @@ def desktop_smoke(destination: Path, include_cad=False):
     def finish():
         if state["finished"]:return
         state["finished"]=True
-        result={"ok":not errors,"errors":errors,"candidates":len(window.candidates),"cad_meshes":len(window.viewer.meshes),"elapsed_s":round(time.monotonic()-started,3),"simulation_points":len(window.sweep["points"]) if window.selected else 0,"native_platform":"offscreen","engineering_study":state.get("engineering_study")}
+        result={"ok":not errors,"errors":errors,"candidates":len(window.candidates),"cad_meshes":len(window.viewer.meshes),"elapsed_s":round(time.monotonic()-started,3),"simulation_points":len(window.sweep["points"]) if window.selected else 0,"native_platform":"offscreen","engineering_study":state.get("engineering_study"),"shaft_study":state.get("shaft_study")}
         if window.selected:result["selected"]=window.selected.id
         (destination/"desktop-smoke.json").write_text(json.dumps(result,indent=2))
         if not errors:
@@ -87,6 +87,34 @@ def desktop_smoke(destination: Path, include_cad=False):
             errors.append(f"Engineering study: {exc}")
         finally:
             study_window.dirty=False;study_window.close()
+        from .shaft_ui import ShaftStudyDialog
+        from .shafts import ShaftStudy, shaft_from_gear_study, calculate_shaft_study, export_shaft_study
+        shaft_window=ShaftStudyDialog(window,shaft_from_gear_study(EngineeringStudy()))
+        shaft_window.show_error=lambda error:errors.append(str(error))
+        try:
+            shaft_window.show()
+            if not shaft_window.calculate():raise ValueError("Shaft study calculation failed")
+            for index in range(shaft_window.tabs.count()):
+                shaft_window.tabs.setCurrentIndex(index);app.processEvents()
+                capture=shaft_window.grab()
+                if capture.isNull():raise ValueError(f"Shaft study tab {index} did not render")
+                capture.save(str(destination/f"shaft-study-{index}.png"))
+            shaft=shaft_window.read_study();shaft.save(destination/"target.gearforge-shaft")
+            loaded_shaft=ShaftStudy.load(destination/"target.gearforge-shaft")
+            shaft_result=calculate_shaft_study(loaded_shaft)
+            if shaft_result["study_sha256"]!=shaft_window.result["study_sha256"]:
+                raise ValueError("Shaft study did not round-trip")
+            export_shaft_study(loaded_shaft,destination/"shaft-calculation")
+            manifest=verify_bundle(destination/"shaft-calculation")
+            residual=max(abs(value) for case in shaft_result["cases"] for value in case["equilibrium_residual"].values())
+            if residual>1e-8 or shaft_result["production_approved"]:raise ValueError("Shaft load balance or qualification failed")
+            state["shaft_study"]={"app_version":shaft_result["app_version"],"tabs_rendered":shaft_window.tabs.count(),
+                "verified_files":len(manifest["files"]),"maximum_equilibrium_residual":residual,
+                "study_sha256":shaft_result["study_sha256"],"production_approved":False}
+        except Exception as exc:
+            errors.append(f"Shaft study: {exc}")
+        finally:
+            shaft_window.dirty=False;shaft_window.close()
         finish()
     window.generate();timer.timeout.connect(tick);timer.start()
     app.exec()

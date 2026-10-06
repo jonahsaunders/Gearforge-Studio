@@ -83,6 +83,17 @@ def main(argv=None):
     study_calculate = study_commands.add_parser("calculate",help="Export geometry, quasi-static loads and duty exposure; no production rating")
     study_calculate.add_argument("path",type=Path)
     study_calculate.add_argument("--out",type=Path,required=True)
+    shaft = subs.add_parser("shaft",help="Create or calculate explicit shaft and bearing loads")
+    shaft_commands = shaft.add_subparsers(dest="shaft_command",required=True)
+    shaft_new = shaft_commands.add_parser("new",help="Create an editable shaft study for the 250 W development target")
+    shaft_new.add_argument("path",type=Path)
+    shaft_from = shaft_commands.add_parser("from-study",help="Transfer all gear duty cases and the off-axis thrust couple")
+    shaft_from.add_argument("path",type=Path)
+    shaft_from.add_argument("--role",choices=["pinion","wheel"],default="pinion")
+    shaft_from.add_argument("--out",type=Path,required=True)
+    shaft_calculate = shaft_commands.add_parser("calculate",help="Export bearing loads, elastic motion and nominal shaft stress")
+    shaft_calculate.add_argument("path",type=Path)
+    shaft_calculate.add_argument("--out",type=Path,required=True)
     search = subs.add_parser("search",help="Search a project and save candidate JSON")
     search.add_argument("project",type=Path)
     search.add_argument("--catalog",type=Path)
@@ -132,6 +143,18 @@ def main(argv=None):
             else:
                 result=export_study(EngineeringStudy.load(args.path),args.out)
                 print(json.dumps(result,indent=2))
+            return 0
+        if args.command == "shaft":
+            from .engineering import EngineeringStudy
+            from .shafts import ShaftStudy, shaft_from_gear_study, export_shaft_study
+            if args.shaft_command == "calculate":
+                print(json.dumps(export_shaft_study(ShaftStudy.load(args.path),args.out),indent=2))
+            else:
+                path=args.path if args.shaft_command=="new" else args.out
+                if path.exists() or path.is_symlink():raise FileExistsError("Shaft study already exists")
+                source=EngineeringStudy() if args.shaft_command=="new" else EngineeringStudy.load(args.path)
+                shaft_from_gear_study(source,getattr(args,"role","pinion")).save(path)
+                print(path)
             return 0
         if args.command in ("verify","backup","restore"):
             from .maintenance import verify_bundle, backup_data, restore_data

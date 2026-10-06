@@ -140,6 +140,11 @@ Their documents and images are not bundled or represented as openly licensed.
 
 ## Remaining production work
 
+The [shaft and bearing load-path study](SHAFT_ANALYSIS.md) now connects these
+mesh loads to explicit support geometry, stepped shaft sections and elastic
+response. Its independent verification uses a separately installed MIT-licensed
+finite-element reference. It does not infer fatigue allowables or bearing capacity.
+
 Develop and independently verify open fatigue/contact, bearing, shaft, assembly,
 thermal and manufacturing methods, with explicit supported domains and uncertainty.
 Use redistributable material and test datasets whose provenance is known; never

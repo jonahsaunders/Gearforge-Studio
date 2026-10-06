@@ -5,9 +5,11 @@ recursive-include docs *.md *.json
 recursive-include packaging *.py *.spec *.sh *.bat *.command
 recursive-include packaging/licenses *.txt
 recursive-include scripts *.py
+recursive-include scripts requirements-*.txt
 recursive-include tests *.py
 recursive-include tests/data *.json
 recursive-include examples *.gearforge
 recursive-include examples *.gearforge-study
+recursive-include examples *.gearforge-shaft
 prune examples/exported-*
 recursive-include src/gearforge/data *.csv *.json *.svg *.png

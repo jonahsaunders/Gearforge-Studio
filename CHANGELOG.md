@@ -1,5 +1,23 @@
 # Unreleased
 
+# 1.0.0rc5 — 2026-10-06
+
+- Add explicit shaft/support geometry, stepped solid or hollow sections, and
+  operating cases with three-axis forces and couples.
+- Resolve individual bearing reactions, two-plane bending, deflection/slope,
+  axial movement, twist and nominal surface stress. Find continuous beam extrema
+  between loads and section boundaries, rather than using drawing samples.
+- Transfer every spur/helical duty case into a pinion or wheel shaft study,
+  including the bending couple from off-axis helical thrust and balanced torque.
+- Add a desktop editor, interactive load-path diagrams, strict save/reload,
+  CLI operations and traceable calculation exports.
+- Independently compare 1,452 numerical results with a pinned MIT-licensed
+  PyNiteFEA reference in an isolated environment. No reference solver is bundled
+  or added to the application's runtime dependencies.
+- Extend native smoke checks to all six shaft-study tabs and verified exports.
+  Bearing capacity, shaft fatigue and production service-life approval remain
+  outstanding; nominal surface stress is not a fatigue assessment.
+
 # 1.0.0rc4 — 2026-10-06
 
 - Add a desktop engineering-study editor and batch commands for the agreed

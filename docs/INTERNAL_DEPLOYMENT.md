@@ -1,6 +1,6 @@
 # Internal company deployment
 
-GearForge Studio 1.0.0rc4 is an offline desktop tool for **prototype exploration
+GearForge Studio 1.0.0rc5 is an offline desktop tool for **prototype exploration
 and engineering review**. This deployment guide does not approve a gearbox for
 production, certify a load rating, or replace the company's engineering process.
 The application retains visible prototype/concept labels in reports and exports.
@@ -51,7 +51,7 @@ There is no automatic production rollout.
 ## Install and launch
 
 For an approved native archive, extract the **entire** directory to a
-version-specific location such as `C:\CompanyApps\GearForge\1.0.0rc4`. Keep
+version-specific location such as `C:\CompanyApps\GearForge\1.0.0rc5`. Keep
 `GearForgeStudio.exe` and `_internal` together. Launch the executable. Runtime
 operation does not require an internet connection or Python installation.
 
@@ -144,6 +144,9 @@ approval. Keep approvals in the company's existing review system.
 - Open **Design → Engineering study**, calculate the target, edit its duty,
   confirm old results disappear, then save/reopen and verify its exported bundle.
   Back up `.gearforge-study` files separately; they are not part of catalog backup.
+- Transfer a gear study into its shaft load editor, change the support positions,
+  recalculate, and verify the shaft report. Back up `.gearforge-shaft` files with
+  the project records; they are also separate from catalog backup.
 - Import the approved supplier catalog. Test that an invalid import preserves
   existing records and that a successful import clears previous results.
 - Export a report-only and a full prototype package into new directories; verify

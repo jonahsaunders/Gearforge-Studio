@@ -5,7 +5,7 @@ from pathlib import Path
 
 from PySide6.QtWidgets import (
     QDialog, QDoubleSpinBox, QFileDialog, QFormLayout, QHBoxLayout, QLabel, QHeaderView,
-    QLineEdit, QMessageBox, QPushButton, QScrollArea, QSpinBox, QTabWidget,
+    QLineEdit, QMessageBox, QPushButton, QScrollArea, QSpinBox, QTabWidget, QInputDialog,
     QTableWidget, QTableWidgetItem, QTextBrowser, QTextEdit, QVBoxLayout, QWidget,
 )
 
@@ -96,7 +96,7 @@ class EngineeringStudyDialog(QDialog):
         self.status = QLabel(); self.status.setWordWrap(True); layout.addWidget(self.status)
         actions = QHBoxLayout()
         for label, callback in (("Open study…", self.open_study), ("Save study…", self.save_study),
-                                ("Calculate", self.calculate), ("Export calculation…", self.export), ("Close", self.reject)):
+                                ("Calculate", self.calculate), ("Study shaft loads…", self.study_shaft), ("Export calculation…", self.export), ("Close", self.reject)):
             button = QPushButton(label); button.clicked.connect(callback); actions.addWidget(button)
         layout.addLayout(actions)
         for row_form in (form, context_form):
@@ -177,6 +177,17 @@ class EngineeringStudyDialog(QDialog):
             return True
         except (ValueError, TypeError, OverflowError) as exc:
             self.result = None; self.report.clear(); self.show_error(exc); return False
+
+    def study_shaft(self):
+        from .shafts import shaft_from_gear_study
+        from .shaft_ui import ShaftStudyDialog
+        try:source=self.read_study()
+        except (ValueError,TypeError) as exc:self.show_error(exc);return False
+        role,ok=QInputDialog.getItem(self,"Study shaft loads","Choose the shaft; all duty cases will be transferred.",["Pinion","Wheel"],0,False)
+        if not ok:return False
+        try:study=shaft_from_gear_study(source,role.lower())
+        except (ValueError,TypeError) as exc:self.show_error(exc);return False
+        dialog=ShaftStudyDialog(self,study);dialog.dirty=True;dialog.exec();return True
 
     def show_error(self, error):
         QMessageBox.warning(self, "Engineering study", str(error))
