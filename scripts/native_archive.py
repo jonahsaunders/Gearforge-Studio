@@ -60,6 +60,9 @@ def main():
         bearing=evidence.get("bearing_study") or {}
         if bearing.get("app_version")!=version or bearing.get("tabs_rendered")!=5 or bearing.get("verified_files")!=3:
             raise RuntimeError("Native bearing study smoke failed: "+str(bearing))
+        fatigue=evidence.get("fatigue_study") or {}
+        if fatigue.get("app_version")!=version or fatigue.get("tabs_rendered")!=5 or fatigue.get("verified_files")!=3:
+            raise RuntimeError("Native fatigue study smoke failed: "+str(fatigue))
     output=ROOT/"release-assets";output.mkdir(exist_ok=True)
     if system!="darwin":
         platform_note=("Use GearForgeCLI.exe for console commands and diagnostics.\n" if system=="windows"

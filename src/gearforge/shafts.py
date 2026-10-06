@@ -265,6 +265,40 @@ def solve_shaft_case(study: ShaftStudy, case_index=0) -> dict:
     return _solve_validated_case(study, case_index)
 
 
+def shaft_section_stress(study: ShaftStudy, case_index: int, position_mm: float, side="right") -> dict:
+    """Exact nominal section result on a specified side of loads/diameter steps.
+
+    This is a cut through the input load path, independent of plot sampling.
+    At X=0 only the right cut exists; at the far end only the left cut exists.
+    """
+    study.validate()
+    _integer(case_index, "Case index", 0, len(study.cases)-1)
+    position_mm = finite(position_mm, "Section position", 0, study.length_mm)
+    if side not in ("left", "right") or (position_mm == 0 and side == "left") or (position_mm == study.length_mm and side == "right"):
+        raise ValueError("Choose a section side inside the shaft")
+    return _section_stress(study, study.cases[case_index], position_mm, side)
+
+
+def _section_stress(study: ShaftStudy, case: ShaftCase, position: float, side: str) -> dict:
+    # Caller validates the complete study and cut. Fatigue studies reuse this
+    # helper after one validation, rather than validating every case/station.
+    section = next(s for s in study.sections if
+        (s.start_mm < position <= s.end_mm if side == "left" else s.start_mm <= position < s.end_mm))
+    loads = [*case.loads, *_reactions(study, case)]
+    left = [p for p in loads if p.position_mm < position or (side == "right" and p.position_mm == position)]
+    my = math.fsum(p.force_y_n*(position-p.position_mm)-1000*p.moment_z_nm for p in left)
+    mz = math.fsum(p.force_z_n*(position-p.position_mm)+1000*p.moment_y_nm for p in left)
+    axial = -math.fsum(p.axial_n for p in left)
+    torque = -math.fsum(p.torque_nm for p in left)
+    bending = math.hypot(my, mz)*section.outer_diameter_mm/(2*section.inertia_mm4)
+    torsion = torque*1000*section.outer_diameter_mm/(4*section.inertia_mm4)
+    return dict(position_mm=position, side=side, section=asdict(section),
+        curvature_moment_y_nmm=my, curvature_moment_z_nmm=mz,
+        bending_moment_magnitude_nm=math.hypot(my,mz)/1000, axial_force_n=axial, torque_nm=torque,
+        nominal_bending_mpa=bending, nominal_axial_mpa=axial/section.area_mm2,
+        nominal_torsion_mpa=torsion)
+
+
 def _solve_validated_case(study: ShaftStudy, case_index: int) -> dict:
     case = study.cases[case_index]
     ra, rb = _reactions(study, case)

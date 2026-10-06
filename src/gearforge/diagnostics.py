@@ -24,6 +24,7 @@ def desktop_smoke(destination: Path, include_cad=False):
         if state["finished"]:return
         state["finished"]=True
         result={"ok":not errors,"errors":errors,"candidates":len(window.candidates),"cad_meshes":len(window.viewer.meshes),"elapsed_s":round(time.monotonic()-started,3),"simulation_points":len(window.sweep["points"]) if window.selected else 0,"native_platform":"offscreen","engineering_study":state.get("engineering_study"),"shaft_study":state.get("shaft_study"),"bearing_study":state.get("bearing_study")}
+        result["fatigue_study"]=state.get("fatigue_study")
         if window.selected:result["selected"]=window.selected.id
         (destination/"desktop-smoke.json").write_text(json.dumps(result,indent=2))
         if not errors:
@@ -145,6 +146,35 @@ def desktop_smoke(destination: Path, include_cad=False):
             errors.append(f'Bearing study: {exc}')
         finally:
             bearing_window.dirty=False;bearing_window.close()
+        from .fatigue_ui import FatigueStudyDialog
+        from .fatigue import FatigueStudy,nasa_example,calculate_fatigue_study,export_fatigue_study
+        fatigue_window=FatigueStudyDialog(window,nasa_example())
+        fatigue_window.show_error=lambda error:errors.append(str(error))
+        try:
+            fatigue_window.show()
+            if not fatigue_window.calculate():raise ValueError('Fatigue assessment failed')
+            for index in range(fatigue_window.tabs.count()):
+                fatigue_window.tabs.setCurrentIndex(index);app.processEvents();capture=fatigue_window.grab()
+                if capture.isNull():raise ValueError(f'Fatigue study tab {index} did not render')
+                capture.save(str(destination/f'fatigue-study-{index}.png'))
+            fatigue=fatigue_window.read_study();fatigue.save(destination/'example.gearforge-fatigue')
+            loaded_fatigue=FatigueStudy.load(destination/'example.gearforge-fatigue')
+            fatigue_result=calculate_fatigue_study(loaded_fatigue)
+            if fatigue_result['study_sha256']!=fatigue_window.result['study_sha256']:
+                raise ValueError('Fatigue inputs did not round-trip')
+            export_fatigue_study(loaded_fatigue,destination/'fatigue-calculation')
+            manifest=verify_bundle(destination/'fatigue-calculation')
+            endpoint=fatigue_result['stations'][0]['cases'][0]['corrected_reference_strength_mpa']
+            if not math.isclose(endpoint,125.06778394565542,rel_tol=1e-10):raise ValueError('NASA example endpoint changed')
+            if fatigue_result['production_approved'] or fatigue_result['rated_gearbox_life_hours'] is not None:
+                raise ValueError('Fatigue assessment falsely approves gearbox life')
+            state['fatigue_study']={'app_version':fatigue_result['app_version'],'tabs_rendered':fatigue_window.tabs.count(),
+                'verified_files':len(manifest['files']),'nasa_example_corrected_endpoint_mpa':endpoint,
+                'study_sha256':fatigue_result['study_sha256'],'production_approved':False}
+        except Exception as exc:
+            errors.append(f'Fatigue study: {exc}')
+        finally:
+            fatigue_window.dirty=False;fatigue_window.close()
         finish()
     window.generate();timer.timeout.connect(tick);timer.start()
     app.exec()

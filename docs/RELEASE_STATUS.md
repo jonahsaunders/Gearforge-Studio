@@ -1,4 +1,4 @@
-# Release status — 1.0.0rc6
+# Release status — 1.0.0rc7
 
 This is an implemented and tested desktop **release candidate**. It is not a finished
 commercially validated gearbox design product. The remaining work below is concrete
@@ -26,7 +26,11 @@ elastic motion, nominal stress, diagrams and traceable exports, with 1,452
 independent finite-element comparisons. See [shaft analysis](SHAFT_ANALYSIS.md).
 The rc6 [bearing assessment](BEARING_ANALYSIS.md) adds explicit capacity inputs,
 basic per-bearing fatigue arithmetic and operating-limit checks across duty.
-Actual supplier selection, adjusted service life and shaft fatigue remain unqualified.
+Actual supplier selection and adjusted service life remain unqualified.
+The rc7 [shaft fatigue study](SHAFT_FATIGUE.md) adds selected-section rotating
+bending/steady-torque arithmetic, explicit material evidence and a public NASA
+worked example. Transient fatigue, actual material allowables and whole-shaft
+qualification remain unresolved.
 
 ## Implemented
 

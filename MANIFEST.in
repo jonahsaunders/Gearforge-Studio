@@ -12,5 +12,6 @@ recursive-include examples *.gearforge
 recursive-include examples *.gearforge-study
 recursive-include examples *.gearforge-shaft
 recursive-include examples *.gearforge-bearing
+recursive-include examples *.gearforge-fatigue
 prune examples/exported-*
 recursive-include src/gearforge/data *.csv *.json *.svg *.png

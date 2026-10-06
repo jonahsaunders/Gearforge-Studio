@@ -9,7 +9,7 @@ with 3D printed parts, catalog gears, or combinations of both. It combines a
 native Qt workspace, discrete design search, engineering screening, a component
 catalog, dimensional print calibration, rigid-body CAD animation and design exports.
 
-**Current version: 1.0.0rc6 · Python 3.12 recommended · Apache-2.0 application code**
+**Current version: 1.0.0rc7 · Python 3.12 recommended · Apache-2.0 application code**
 
 > **Release status:** This is a tested software release candidate for prototype
 > engineering. Its calculations are preliminary screens, not certified ISO/AGMA
@@ -31,6 +31,12 @@ reports. Its first development target is 250 W at 1,500 rpm, 5:1 reduction and
 for public GitHub distribution; no paid standard or private calculation package
 is required. See the [open engineering guide](docs/OPEN_ENGINEERING.md) for the
 method, reproducible FreeCAD Gears comparisons and exact verification scope.
+
+**Shaft fatigue and material evidence** adds explicit material curves, critical
+section cuts, application factors and rotating-bending/steady-torque fatigue
+blocks. It includes a public NASA worked example and bounded finite-life
+calculations. It does not supply material allowables or production approval.
+See the [shaft fatigue guide](docs/SHAFT_FATIGUE.md).
 
 **Shaft and bearing loads** adds explicit support positions, stepped solid/hollow
 sections, external forces and couples, individual bearing reactions, deflection,
@@ -503,8 +509,8 @@ windowed executable and a file-based worker protocol. Windows also includes
 For the current release:
 
 ```bash
-git tag -a v1.0.0rc6 -m "GearForge Studio 1.0.0rc6"
-git push origin v1.0.0rc6
+git tag -a v1.0.0rc7 -m "GearForge Studio 1.0.0rc7"
+git push origin v1.0.0rc7
 ```
 
 The tag must match package/runtime versions. Manual builds on `main` upload
@@ -531,7 +537,7 @@ includes them automatically and preserves file permissions:
 ```bash
 git init -b main
 git add .
-git commit -m "Add GearForge Studio 1.0.0rc6"
+git commit -m "Add GearForge Studio 1.0.0rc7"
 git remote add origin https://github.com/jonahsaunders/Gearforge-Studio.git
 git push -u origin main
 ```

@@ -73,3 +73,13 @@ GearForge implementations. The adapter uses Python standard-library Decimal.
 Bundled capacities/factors are synthetic, not a manufacturer product table.
 Linked Schaeffler/SKF documents provide public mathematical context; their text,
 tables and figures are not redistributed. No paid standard is required.
+
+## Open shaft fatigue method reference
+
+The original `fatigue.py` implementation and benchmark adapter use mathematical
+relations and numerical example inputs from Stuart H. Loewenthal, NASA RP-1123
+(1984), printed pages 17–19. [NTRS](https://ntrs.nasa.gov/citations/19840018973)
+identifies the NASA-authored work as US-government work with public use permitted.
+The scanned report, third-party figures and material/factor tables are not
+bundled. Original source, tests and adapter code remain Apache-2.0. Historical
+example values are not material allowables. See `docs/SHAFT_FATIGUE.md`.

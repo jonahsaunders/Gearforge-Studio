@@ -142,7 +142,7 @@ class ShaftStudyDialog(QDialog):
         self.status=QLabel();self.status.setWordWrap(True);layout.addWidget(self.status)
         buttons=QHBoxLayout();layout.addLayout(buttons)
         for label,callback in (('Open shaft study…',self.open_study),('Save shaft study…',self.save_study),
-                               ('Calculate',self.calculate),('Assess bearings…',self.assess_bearings),('Export calculation…',self.export),('Close',self.reject)):
+                               ('Calculate',self.calculate),('Assess bearings…',self.assess_bearings),('Assess fatigue…',self.assess_fatigue),('Export calculation…',self.export),('Close',self.reject)):
             button=QPushButton(label);button.clicked.connect(callback);buttons.addWidget(button)
         self.set_study(study or ShaftStudy())
 
@@ -278,6 +278,13 @@ class ShaftStudyDialog(QDialog):
         try:study=bearings_from_shaft(self.read_study())
         except (ValueError,TypeError) as exc:self.show_error(exc);return False
         dialog=BearingStudyDialog(self,study);dialog.dirty=True;dialog.exec();return True
+
+    def assess_fatigue(self):
+        from .fatigue import fatigue_from_shaft
+        from .fatigue_ui import FatigueStudyDialog
+        try:study=fatigue_from_shaft(self.read_study())
+        except (ValueError,TypeError) as exc:self.show_error(exc);return False
+        dialog=FatigueStudyDialog(self,study);dialog.dirty=True;dialog.exec();return True
 
     def save_study(self):
         try:study=self.read_study()

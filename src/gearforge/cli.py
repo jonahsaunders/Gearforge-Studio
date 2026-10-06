@@ -105,6 +105,17 @@ def main(argv=None):
     bearing_calculate = bearing_commands.add_parser("calculate",help="Export per-bearing basic fatigue and explicit operating-limit checks")
     bearing_calculate.add_argument("path",type=Path)
     bearing_calculate.add_argument("--out",type=Path,required=True)
+    fatigue = subs.add_parser("fatigue",help="Assess explicit shaft material and rotating-bending fatigue blocks")
+    fatigue_commands = fatigue.add_subparsers(dest="fatigue_command",required=True)
+    fatigue_new = fatigue_commands.add_parser("new",help="Create blank fatigue evidence for the development shaft")
+    fatigue_new.add_argument("path",type=Path)
+    fatigue_new.add_argument("--nasa-example",action="store_true",help="Use public NASA numerical benchmark inputs, never material allowables")
+    fatigue_from = fatigue_commands.add_parser("from-shaft",help="Retain shaft inputs with fresh material and critical-section data")
+    fatigue_from.add_argument("path",type=Path)
+    fatigue_from.add_argument("--out",type=Path,required=True)
+    fatigue_calculate = fatigue_commands.add_parser("calculate",help="Export bounded stress-life arithmetic and evidence gaps; no production rating")
+    fatigue_calculate.add_argument("path",type=Path)
+    fatigue_calculate.add_argument("--out",type=Path,required=True)
     search = subs.add_parser("search",help="Search a project and save candidate JSON")
     search.add_argument("project",type=Path)
     search.add_argument("--catalog",type=Path)
@@ -179,6 +190,20 @@ def main(argv=None):
                 if args.bearing_command=="from-shaft":study=bearings_from_shaft(ShaftStudy.load(args.path))
                 elif args.synthetic_example:study=synthetic_bearing_example()
                 else:study=bearings_from_shaft(shaft_from_gear_study(EngineeringStudy()))
+                study.save(path);print(path)
+            return 0
+        if args.command == "fatigue":
+            from .fatigue import FatigueStudy,fatigue_from_shaft,nasa_example,export_fatigue_study
+            from .shafts import ShaftStudy,shaft_from_gear_study
+            from .engineering import EngineeringStudy
+            if args.fatigue_command == "calculate":
+                print(json.dumps(export_fatigue_study(FatigueStudy.load(args.path),args.out),indent=2))
+            else:
+                path=args.out if args.fatigue_command=="from-shaft" else args.path
+                if path.exists() or path.is_symlink():raise FileExistsError("Fatigue study already exists")
+                if args.fatigue_command=="from-shaft":study=fatigue_from_shaft(ShaftStudy.load(args.path))
+                elif args.nasa_example:study=nasa_example()
+                else:study=fatigue_from_shaft(shaft_from_gear_study(EngineeringStudy()))
                 study.save(path);print(path)
             return 0
         if args.command in ("verify","backup","restore"):

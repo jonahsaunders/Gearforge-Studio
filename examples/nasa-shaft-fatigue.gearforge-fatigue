@@ -1,0 +1,164 @@
+{
+  "name": "NASA shaft fatigue worked example \u2014 not material allowables",
+  "shaft": {
+    "name": "NASA RP-1123 numerical example load path",
+    "length_mm": 600.0,
+    "bearing_a_mm": 0.0,
+    "bearing_b_mm": 600.0,
+    "axial_locator": "a",
+    "sections": [
+      {
+        "start_mm": 0.0,
+        "end_mm": 600.0,
+        "outer_diameter_mm": 55.0,
+        "inner_diameter_mm": 0.0,
+        "youngs_modulus_mpa": 200000.0,
+        "shear_modulus_mpa": 76923.07692307692,
+        "material_basis": "Illustrative steel elastic moduli; confirm actual material and temperature"
+      }
+    ],
+    "cases": [
+      {
+        "name": "Moment 2000 N m",
+        "rpm": 1000.0,
+        "duration_hours": 0.25,
+        "ambient_c": 25.0,
+        "loads": [
+          {
+            "name": "Center load",
+            "position_mm": 300.0,
+            "axial_n": 0.0,
+            "force_y_n": -13333.333333333334,
+            "force_z_n": 0.0,
+            "torque_nm": -3000.0,
+            "moment_y_nm": 0.0,
+            "moment_z_nm": 0.0
+          },
+          {
+            "name": "Drive",
+            "position_mm": 0.0,
+            "axial_n": 0.0,
+            "force_y_n": 0.0,
+            "force_z_n": 0.0,
+            "torque_nm": 3000.0,
+            "moment_y_nm": 0.0,
+            "moment_z_nm": 0.0
+          }
+        ]
+      },
+      {
+        "name": "Moment 1500 N m",
+        "rpm": 1000.0,
+        "duration_hours": 0.5833333333333334,
+        "ambient_c": 25.0,
+        "loads": [
+          {
+            "name": "Center load",
+            "position_mm": 300.0,
+            "axial_n": 0.0,
+            "force_y_n": -10000.0,
+            "force_z_n": 0.0,
+            "torque_nm": -3000.0,
+            "moment_y_nm": 0.0,
+            "moment_z_nm": 0.0
+          },
+          {
+            "name": "Drive",
+            "position_mm": 0.0,
+            "axial_n": 0.0,
+            "force_y_n": 0.0,
+            "force_z_n": 0.0,
+            "torque_nm": 3000.0,
+            "moment_y_nm": 0.0,
+            "moment_z_nm": 0.0
+          }
+        ]
+      },
+      {
+        "name": "Moment 1000 N m",
+        "rpm": 1000.0,
+        "duration_hours": 0.8333333333333334,
+        "ambient_c": 25.0,
+        "loads": [
+          {
+            "name": "Center load",
+            "position_mm": 300.0,
+            "axial_n": 0.0,
+            "force_y_n": -6666.666666666667,
+            "force_z_n": 0.0,
+            "torque_nm": -3000.0,
+            "moment_y_nm": 0.0,
+            "moment_z_nm": 0.0
+          },
+          {
+            "name": "Drive",
+            "position_mm": 0.0,
+            "axial_n": 0.0,
+            "force_y_n": 0.0,
+            "force_z_n": 0.0,
+            "torque_nm": 3000.0,
+            "moment_y_nm": 0.0,
+            "moment_z_nm": 0.0
+          }
+        ]
+      }
+    ],
+    "source_study": null,
+    "source_description": "NASA RP-1123 pp18-19 numerical inputs; original simply supported load-path adapter",
+    "notes": "Historical numerical benchmark only. 600 mm span and 1000 rpm are adapter choices, not NASA geometry or operating data.",
+    "schema_version": 1
+  },
+  "material": {
+    "designation": "Historical RP-1123 example inputs; not a purchasable material specification",
+    "yield_strength_mpa": 634.0,
+    "fatigue_coefficient_mpa": 1227.0,
+    "reference_strength_mpa": 323.0,
+    "reference_cycles": 1000000.0,
+    "minimum_cycles": 1000.0,
+    "maximum_cycles": 10000000.0,
+    "minimum_temperature_c": 20.0,
+    "maximum_temperature_c": 40.0,
+    "data_status": "reference_example",
+    "source_reference": "https://ntrs.nasa.gov/citations/19840018973; printed pp17-19, equations 28-31",
+    "applicable_conditions": "Historical example only. Temperature window and 1e3..1e7 cycle window are numerical adapter assumptions, not validated material limits; no population survival claim.",
+    "redistribution_basis": "NTRS marks this NASA-authored work: Work of the US Gov. Public Use Permitted. Original adapter: Apache-2.0."
+  },
+  "stations": [
+    {
+      "name": "Center, drive side",
+      "position_mm": 300.0,
+      "side": "left",
+      "fatigue_reduction_factor": 0.4,
+      "static_bending_kt": 1.0,
+      "static_torsion_kt": 1.0,
+      "static_axial_kt": 1.0,
+      "factor_basis": "NASA example assumes total fatigue reduction 0.4; unit static factors are synthetic adapter inputs."
+    }
+  ],
+  "cases": [
+    {
+      "case_name": "Moment 2000 N m",
+      "load_model": "fixed_bending_steady_torque",
+      "operating_temperature_c": 25.0,
+      "basis": "Original adapter: fixed transverse center force and steady torque during each rotation block"
+    },
+    {
+      "case_name": "Moment 1500 N m",
+      "load_model": "fixed_bending_steady_torque",
+      "operating_temperature_c": 25.0,
+      "basis": "Original adapter: fixed transverse center force and steady torque during each rotation block"
+    },
+    {
+      "case_name": "Moment 1000 N m",
+      "load_model": "fixed_bending_steady_torque",
+      "operating_temperature_c": 25.0,
+      "basis": "Original adapter: fixed transverse center force and steady torque during each rotation block"
+    }
+  ],
+  "bending_design_factor": 2.0,
+  "static_design_factor": 1.0,
+  "required_hours": 1.6666666666666667,
+  "duty_coverage_basis": "NASA three-level bending spectrum, constant 3000 N m torque. Transient paths and physical fatigue tests are not supplied.",
+  "notes": "Rotation blocks only. Assess starts, stops, reversals, load transitions and all other critical sections separately.",
+  "schema_version": 1
+}

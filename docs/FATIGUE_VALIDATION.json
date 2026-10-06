@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "app_version": "1.0.0rc7",
+  "date": "2026-10-06",
+  "status": "local source checks passed; cross-platform and native validation pending",
+  "production_qualified": false,
+  "methods": "docs/SHAFT_FATIGUE.md",
+  "distribution_constraint": "GitHub-publishable original implementation, numerical examples and fixtures; no paid standards or restricted data",
+  "local_windows_source_tests": {
+    "tests": 201,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "local_source_desktop_smoke": {
+    "ok": true,
+    "errors": [],
+    "candidates": 60,
+    "cad_meshes": 15,
+    "elapsed_s": 14.734,
+    "simulation_points": 25,
+    "native_platform": "offscreen",
+    "engineering_study": {
+      "app_version": "1.0.0rc7",
+      "tabs_rendered": 4,
+      "verified_files": 3,
+      "input_power_w": 250.0,
+      "study_sha256": "6351727be05d242e0a8445d16b21249f8be1a491e9996a71ab658bbb123b8838",
+      "production_approved": false
+    },
+    "shaft_study": {
+      "app_version": "1.0.0rc7",
+      "tabs_rendered": 6,
+      "verified_files": 3,
+      "maximum_equilibrium_residual": 0.0,
+      "study_sha256": "5786457039a04580d2d7bec531f69b4e904f7cc0f044d8afa92daad40321ec7e",
+      "production_approved": false
+    },
+    "bearing_study": {
+      "app_version": "1.0.0rc7",
+      "tabs_rendered": 5,
+      "verified_files": 3,
+      "synthetic_basic_l10_hours": 18295.51049310608,
+      "study_sha256": "f73a5b330272ed1758d70f9711f62b1ba50f7e3459f0f64a15b6b639c0995f94",
+      "production_approved": false
+    },
+    "fatigue_study": {
+      "app_version": "1.0.0rc7",
+      "tabs_rendered": 5,
+      "verified_files": 3,
+      "nasa_example_corrected_endpoint_mpa": 125.06778394565542,
+      "study_sha256": "7ac9696d45671f4941e4973b93ddd55725a2c8eeccf05e8365f867390b996ece",
+      "production_approved": false
+    },
+    "selected": "416647d929c4"
+  },
+  "independent_fatigue_comparison": {
+    "reference": "https://ntrs.nasa.gov/citations/19840018973",
+    "source": "NASA RP-1123 (1984), printed pp17-19, equations 28-31",
+    "provenance": "Public US-government-authored reference example; original Apache-2.0 load-path adapter and independent 60-digit Decimal implementation",
+    "scope": "Selected exact shaft cuts, steady-torque correction, finite-life exponent, block cycles/damage; published rounded one-step sizing example. No physical material qualification.",
+    "published_example": {
+      "computed": {
+        "mean_corrected_reference_mpa": 312.67143946521287,
+        "corrected_reference_mpa": 125.06857578608515,
+        "exponent": 0.16528272639428349,
+        "diameter_mm": 55.74413494840061,
+        "peak_only_diameter_mm": 54.59469294313172
+      },
+      "rounded_values_and_absolute_tolerances": {
+        "mean_corrected_reference_mpa": [
+          313,
+          0.6
+        ],
+        "corrected_reference_mpa": [
+          125,
+          0.3
+        ],
+        "exponent": [
+          0.165,
+          0.0005
+        ],
+        "diameter_mm": [
+          56,
+          0.5
+        ],
+        "peak_only_diameter_mm": [
+          54,
+          1.0
+        ]
+      }
+    },
+    "tolerance": {
+      "relative": 1e-10,
+      "absolute": 1e-12
+    },
+    "comparisons": 100,
+    "maximum_relative_error": 5.883406217326492e-15,
+    "passed": true
+  },
+  "limitations": [
+    "Original open implementation and example arithmetic are not physical material or service-life qualification.",
+    "Selected solid-shaft cuts under rotating bending and steady within-block torque only; axial/hollow/transient fatigue remain unsupported.",
+    "No bundled material allowables, factor tables or paid standards. Historical NASA example inputs are not a supplier material specification.",
+    "Actual material data, critical-section coverage, tooth fatigue/contact, thermal/lubrication, manufacturing and physical gearbox qualification remain.",
+    "Unsigned native packages require acceptance on actual company workstation images."
+  ]
+}

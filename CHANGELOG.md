@@ -1,5 +1,18 @@
 # Unreleased
 
+# 1.0.0rc7 — 2026-10-06
+
+- Add open shaft fatigue studies with material provenance, exact critical-section
+  cuts, separate fatigue/static factors and declared finite-life curve bounds.
+- Implement NASA RP-1123 rotating-bending/steady-torque arithmetic and retain
+  unsupported axial/hollow/transient loading and missing evidence as unassessed.
+- Add five desktop tabs, shaft-study transfer, CLI, strict saved inputs and
+  calculation reports/manifests. Preserve every numeric input on editor round-trip.
+- Verify 100 comparisons against independent Decimal arithmetic and the public
+  NASA worked example; bundle no paid standards or restricted material tables.
+- Exercise fatigue workflows in source and native desktop checks. Production
+  gearbox design and service-life qualification remain outstanding.
+
 # 1.0.0rc6 — 2026-10-06
 
 - Add bearing assessments linked to complete, recalculated shaft studies.

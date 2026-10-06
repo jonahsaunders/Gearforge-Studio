@@ -12,6 +12,11 @@ standard text is copied into the runtime. Existing runtime dependencies retain
 their licenses and release notices. New dependencies or copied datasets must
 have an explicit redistribution license and retained attribution before inclusion.
 
+The shaft fatigue extension uses an original implementation of a publicly
+available NASA-authored method and a numerical worked example. See
+[shaft fatigue and its redistribution basis](SHAFT_FATIGUE.md). Public access
+does not by itself authorize copying third-party tables from a document.
+
 ## Accepted development target
 
 Start with an enclosed, single-stage steel spur gearbox at 250 W input,
