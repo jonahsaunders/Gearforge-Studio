@@ -51,6 +51,9 @@ def main():
         import json
         evidence=json.loads((destination/"desktop-smoke.json").read_text())
         if not evidence["ok"] or evidence["simulation_points"]!=25:raise RuntimeError(evidence)
+        study=evidence.get("engineering_study") or {}
+        if study.get("app_version")!=version or study.get("tabs_rendered")!=4 or study.get("verified_files")!=3:
+            raise RuntimeError("Native engineering study smoke failed: "+str(study))
     output=ROOT/"release-assets";output.mkdir(exist_ok=True)
     if system!="darwin":
         platform_note=("Use GearForgeCLI.exe for console commands and diagnostics.\n" if system=="windows"

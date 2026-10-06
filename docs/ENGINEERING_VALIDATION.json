@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "app_version": "1.0.0rc4",
+  "date": "2026-10-06",
+  "requested_use": "Internal company use for final production gearbox design and load ratings",
+  "distribution_constraint": "Application, tests and bundled reference data must be publishable on GitHub; no proprietary standards or private reference package required",
+  "production_qualified": false,
+  "runtime": {
+    "python": "3.12.14",
+    "platform": "Windows x86_64"
+  },
+  "local_windows_source_tests": {
+    "tests": 115,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "local_source_test_seconds": 145.677,
+  "engineering_tests": {
+    "tests": 31,
+    "failures": 0,
+    "note": "Includes a rerun after final editor layout refinement"
+  },
+  "open_geometry_comparison": {
+    "reference": "https://github.com/looooo/freecad.gears",
+    "reference_license": "GPL-3.0-or-later",
+    "reference_commit": "83ec154b1925347622b61812f75d2ed51e956b9f",
+    "scope": "External gear reference/base/tip/root diameters, pressure angles and operating center distance only",
+    "comparisons": 72,
+    "maximum_absolute_error": 1.728029985770263e-08,
+    "tolerance": {
+      "relative": 2e-07,
+      "absolute": 1e-07
+    },
+    "passed": true
+  },
+  "local_source_desktop_smoke": {
+    "ok": true,
+    "errors": [],
+    "candidates": 60,
+    "cad_meshes": 15,
+    "elapsed_s": 13.922,
+    "simulation_points": 25,
+    "native_platform": "offscreen",
+    "engineering_study": {
+      "app_version": "1.0.0rc4",
+      "tabs_rendered": 4,
+      "verified_files": 3,
+      "input_power_w": 250.0,
+      "study_sha256": "6351727be05d242e0a8445d16b21249f8be1a491e9996a71ab658bbb123b8838",
+      "production_approved": false
+    },
+    "selected": "416647d929c4"
+  },
+  "native_packages": {
+    "status": "Final rc4 Windows build in progress; rc3 native results are historical"
+  },
+  "regression_ci": {
+    "status": "Pending rc4 implementation push"
+  },
+  "scope_limits": [
+    "72 independent scalar comparisons cover specified geometry quantities only.",
+    "Force, energy and revolution checks are analytical verification, not measured gearbox validation.",
+    "Efficiency remains assumed; exposure counts are not fatigue damage or service-life ratings.",
+    "Material, heat treatment, lubricant and supplier declarations are not verified allowables.",
+    "No ISO/AGMA compliance claim; no proprietary standard tables, text or illustrations bundled.",
+    "Fatigue/contact, shaft/bearing/assembly, thermal/manufacturing and physical qualification remain outstanding.",
+    "Native distribution is unsigned; interactive acceptance on company workstation images remains outstanding."
+  ],
+  "methods_document": "docs/OPEN_ENGINEERING.md",
+  "production_requirements": "docs/PRODUCTION_QUALIFICATION.md",
+  "historical_evidence": [
+    "docs/INTERNAL_VALIDATION.json",
+    "docs/VALIDATION_RC2.json"
+  ]
+}

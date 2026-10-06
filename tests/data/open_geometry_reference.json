@@ -1,0 +1,180 @@
+{
+  "reference": "https://github.com/looooo/freecad.gears",
+  "reference_license": "GPL-3.0-or-later",
+  "reference_commit": "83ec154b1925347622b61812f75d2ed51e956b9f",
+  "reference_runtime": "Separate comparison process; not an application dependency",
+  "fixture_origin": "Numerical outputs for GearForge-authored inputs; no upstream source, figures or document text copied",
+  "scope": "External gear reference/base/tip/root diameters, pressure angles and operating center distance only",
+  "tolerance": {
+    "relative": 2e-07,
+    "absolute": 1e-07
+  },
+  "cases": [
+    {
+      "name": "agreed-steel-spur-target",
+      "pair": {
+        "normal_module_mm": 2,
+        "pinion_teeth": 20,
+        "wheel_teeth": 100,
+        "normal_pressure_angle_deg": 20.0,
+        "pinion_helix_angle_deg": 0.0,
+        "pinion_profile_shift": 0.0,
+        "wheel_profile_shift": 0.0,
+        "face_width_mm": 20.0
+      },
+      "expected": {
+        "transverse_module_mm": 2.0,
+        "transverse_pressure_angle_deg": 20.0,
+        "operating_center_distance_mm": 120.0,
+        "operating_pressure_angle_deg": 20.0,
+        "pinion.reference_diameter_mm": 40.0,
+        "pinion.base_diameter_mm": 37.58770483143634,
+        "pinion.tip_diameter_mm": 44.0,
+        "pinion.root_diameter_mm": 35.0,
+        "wheel.reference_diameter_mm": 200.0,
+        "wheel.base_diameter_mm": 187.9385241571817,
+        "wheel.tip_diameter_mm": 204.0,
+        "wheel.root_diameter_mm": 195.0
+      }
+    },
+    {
+      "name": "spur-shift-positive",
+      "pair": {
+        "normal_module_mm": 1.5,
+        "pinion_teeth": 24,
+        "wheel_teeth": 72,
+        "normal_pressure_angle_deg": 20.0,
+        "pinion_helix_angle_deg": 0.0,
+        "pinion_profile_shift": 0.3,
+        "wheel_profile_shift": 0.1,
+        "face_width_mm": 20.0
+      },
+      "expected": {
+        "transverse_module_mm": 1.5,
+        "transverse_pressure_angle_deg": 20.0,
+        "operating_center_distance_mm": 72.58268545513114,
+        "operating_pressure_angle_deg": 21.227697812574416,
+        "pinion.reference_diameter_mm": 36.0,
+        "pinion.base_diameter_mm": 33.828934348292705,
+        "pinion.tip_diameter_mm": 39.865370910262286,
+        "pinion.root_diameter_mm": 33.15,
+        "wheel.reference_diameter_mm": 108.0,
+        "wheel.base_diameter_mm": 101.48680304487812,
+        "wheel.tip_diameter_mm": 111.26537091026228,
+        "wheel.root_diameter_mm": 104.55
+      }
+    },
+    {
+      "name": "spur-shift-balanced",
+      "pair": {
+        "normal_module_mm": 3,
+        "pinion_teeth": 30,
+        "wheel_teeth": 60,
+        "normal_pressure_angle_deg": 20.0,
+        "pinion_helix_angle_deg": 0.0,
+        "pinion_profile_shift": 0.2,
+        "wheel_profile_shift": -0.2,
+        "face_width_mm": 20.0
+      },
+      "expected": {
+        "transverse_module_mm": 3.0,
+        "transverse_pressure_angle_deg": 20.0,
+        "operating_center_distance_mm": 135.0,
+        "operating_pressure_angle_deg": 20.0,
+        "pinion.reference_diameter_mm": 90.0,
+        "pinion.base_diameter_mm": 84.57233587073176,
+        "pinion.tip_diameter_mm": 97.2,
+        "pinion.root_diameter_mm": 83.7,
+        "wheel.reference_diameter_mm": 180.0,
+        "wheel.base_diameter_mm": 169.14467174146353,
+        "wheel.tip_diameter_mm": 184.8,
+        "wheel.root_diameter_mm": 171.3
+      }
+    },
+    {
+      "name": "helical-right-30",
+      "pair": {
+        "normal_module_mm": 2,
+        "pinion_teeth": 24,
+        "wheel_teeth": 72,
+        "normal_pressure_angle_deg": 20.0,
+        "pinion_helix_angle_deg": 30,
+        "pinion_profile_shift": 0.0,
+        "wheel_profile_shift": 0.0,
+        "face_width_mm": 20.0
+      },
+      "expected": {
+        "transverse_module_mm": 2.309401076758503,
+        "transverse_pressure_angle_deg": 22.795877258858475,
+        "operating_center_distance_mm": 110.85125168440814,
+        "operating_pressure_angle_deg": 22.795877258858475,
+        "pinion.reference_diameter_mm": 55.42562584220407,
+        "pinion.base_diameter_mm": 51.09638746476628,
+        "pinion.tip_diameter_mm": 59.42562584220407,
+        "pinion.root_diameter_mm": 50.42562584220407,
+        "wheel.reference_diameter_mm": 166.27687752661222,
+        "wheel.base_diameter_mm": 153.28916239429887,
+        "wheel.tip_diameter_mm": 170.27687752661222,
+        "wheel.root_diameter_mm": 161.27687752661222
+      }
+    },
+    {
+      "name": "helical-left-shifted",
+      "pair": {
+        "normal_module_mm": 2.5,
+        "pinion_teeth": 28,
+        "wheel_teeth": 84,
+        "normal_pressure_angle_deg": 20.0,
+        "pinion_helix_angle_deg": -20,
+        "pinion_profile_shift": 0.2,
+        "wheel_profile_shift": 0.15,
+        "face_width_mm": 20.0
+      },
+      "expected": {
+        "transverse_module_mm": 2.6604444311897804,
+        "transverse_pressure_angle_deg": 21.17283218516298,
+        "operating_center_distance_mm": 149.84368682086776,
+        "operating_pressure_angle_deg": 22.00506117769248,
+        "pinion.reference_diameter_mm": 74.49244407331385,
+        "pinion.base_diameter_mm": 69.46384408631928,
+        "pinion.tip_diameter_mm": 80.46004142179397,
+        "pinion.root_diameter_mm": 69.24244407331385,
+        "wheel.reference_diameter_mm": 223.47733221994156,
+        "wheel.base_diameter_mm": 208.39153225895785,
+        "wheel.tip_diameter_mm": 229.19492956842168,
+        "wheel.root_diameter_mm": 217.97733221994156
+      }
+    },
+    {
+      "name": "helical-pressure-25",
+      "pair": {
+        "normal_module_mm": 1,
+        "pinion_teeth": 40,
+        "wheel_teeth": 80,
+        "normal_pressure_angle_deg": 25,
+        "pinion_helix_angle_deg": 15,
+        "pinion_profile_shift": -0.1,
+        "wheel_profile_shift": 0.3,
+        "face_width_mm": 20.0
+      },
+      "expected": {
+        "transverse_module_mm": 1.035276180410083,
+        "transverse_pressure_angle_deg": 25.76926213169049,
+        "operating_center_distance_mm": 62.31521836422006,
+        "operating_pressure_angle_deg": 26.145052659153134,
+        "pinion.reference_diameter_mm": 41.41104721640332,
+        "pinion.base_diameter_mm": 37.29280691330324,
+        "pinion.tip_diameter_mm": 43.20834229563348,
+        "pinion.root_diameter_mm": 38.711047216403315,
+        "wheel.reference_diameter_mm": 82.82209443280664,
+        "wheel.base_diameter_mm": 74.58561382660648,
+        "wheel.tip_diameter_mm": 85.4193895120368,
+        "wheel.root_diameter_mm": 80.92209443280663
+      }
+    }
+  ],
+  "comparisons": 72,
+  "maximum_absolute_error": 1.728029985770263e-08,
+  "failures": [],
+  "passed": true
+}

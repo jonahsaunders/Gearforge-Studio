@@ -23,7 +23,7 @@ def desktop_smoke(destination: Path, include_cad=False):
     def finish():
         if state["finished"]:return
         state["finished"]=True
-        result={"ok":not errors,"errors":errors,"candidates":len(window.candidates),"cad_meshes":len(window.viewer.meshes),"elapsed_s":round(time.monotonic()-started,3),"simulation_points":len(window.sweep["points"]) if window.selected else 0,"native_platform":"offscreen"}
+        result={"ok":not errors,"errors":errors,"candidates":len(window.candidates),"cad_meshes":len(window.viewer.meshes),"elapsed_s":round(time.monotonic()-started,3),"simulation_points":len(window.sweep["points"]) if window.selected else 0,"native_platform":"offscreen","engineering_study":state.get("engineering_study")}
         if window.selected:result["selected"]=window.selected.id
         (destination/"desktop-smoke.json").write_text(json.dumps(result,indent=2))
         if not errors:
@@ -51,6 +51,42 @@ def desktop_smoke(destination: Path, include_cad=False):
         window.nav.setCurrentRow(4)
         window.grab().save(str(destination/"simulation.png"))
         window.nav.setCurrentRow(0)
+        timer.stop()
+        # Exercise the study editor and its exporter in the installed/frozen app.
+        from .engineering_ui import EngineeringStudyDialog
+        from .engineering import EngineeringStudy, calculate_study, export_study
+        from .maintenance import verify_bundle
+        import math
+        study_window=EngineeringStudyDialog(window)
+        study_window.show_error=lambda error:errors.append(str(error))
+        try:
+            study_window.show()
+            if not study_window.calculate():raise ValueError("Engineering study calculation failed")
+            for index in range(study_window.tabs.count()):
+                study_window.tabs.setCurrentIndex(index)
+                app.processEvents()
+                capture=study_window.grab()
+                if capture.isNull():raise ValueError(f"Engineering study tab {index} did not render")
+                capture.save(str(destination/f"engineering-study-{index}.png"))
+            study=study_window.read_study()
+            study.save(destination/"target.gearforge-study")
+            loaded=EngineeringStudy.load(destination/"target.gearforge-study")
+            result=calculate_study(loaded)
+            if not math.isclose(result["duty_results"][0]["input_power_w"],250,rel_tol=1e-10):
+                raise ValueError("Engineering study target input did not round-trip")
+            if result["study_sha256"]!=study_window.result["study_sha256"]:
+                raise ValueError("Engineering study fingerprint did not round-trip")
+            export_study(loaded,destination/"engineering-calculation")
+            manifest=verify_bundle(destination/"engineering-calculation")
+            if result["production_approved"] or result["rated_life_hours"] is not None:
+                raise ValueError("Engineering study falsely claims a production rating")
+            state["engineering_study"]={"app_version":result["app_version"],"tabs_rendered":study_window.tabs.count(),
+                "verified_files":len(manifest["files"]),"input_power_w":result["duty_results"][0]["input_power_w"],
+                "study_sha256":result["study_sha256"],"production_approved":False}
+        except Exception as exc:
+            errors.append(f"Engineering study: {exc}")
+        finally:
+            study_window.dirty=False;study_window.close()
         finish()
     window.generate();timer.timeout.connect(tick);timer.start()
     app.exec()

@@ -1,0 +1,153 @@
+# Open engineering development
+
+The product owner requires the app, tests and bundled reference data to be
+publishable on GitHub. The project does not depend on access to paid standards,
+proprietary calculation packages, confidential material databases or unpublished
+reference results. Public availability alone is not an open-source license.
+
+GearForge's new calculation implementation is original application code under
+the repository's Apache-2.0 license. It implements mathematical geometry and
+statics relations; no third-party implementation, document, illustration or
+standard text is copied into the runtime. Existing runtime dependencies retain
+their licenses and release notices. New dependencies or copied datasets must
+have an explicit redistribution license and retained attribution before inclusion.
+
+## Accepted development target
+
+Start with an enclosed, single-stage steel spur gearbox at 250 W input,
+1,500 rpm, 5:1 reduction, 10,000 operating hours and 20–40°C ambient. Extend to
+two-stage spur/helical, polymers and printed processes, planetary and finally
+the other gear families. This is a development target, not a measured rating.
+
+The included study uses 20/100 teeth, 2 mm normal module and 20 mm face width
+as an editable calculation fixture. These are not selected supplier parts.
+The initial 95% mesh efficiency is an explicit assumption. The actual material
+grade, heat treatment, lubricant, bearing part numbers, reliability requirements,
+overload duty and qualification acceptance criteria remain to be established.
+
+## Use the engineering study
+
+In the desktop **Design → Engineering study…** opens the target fixture.
+**Design → Study selected stage…** transfers a generated spur/helical stage's
+geometry, required operating torque, speed, life and source declarations.
+For a multistage candidate, select a stage explicitly. The study covers that
+stage only and does not imply verification of the rest of the assembly.
+
+Edit geometry, allocate the complete operating life across duty rows, and
+record material/process and evidence references. Both negative speed and
+negative torque represent reverse motoring. Zero speed records a stationary
+load. Regenerative/braking operation requires another loss model and is rejected.
+Starts are recorded but do not yet produce a fatigue-damage calculation.
+
+```text
+python -m gearforge study new target.gearforge-study
+python -m gearforge study calculate target.gearforge-study --out target-calculation
+python -m gearforge verify target-calculation
+```
+
+The dedicated `.gearforge-study` format keeps analytical studies separate from
+prototype `.gearforge` projects. An export contains editable inputs, complete
+JSON results, a readable HTML report and an integrity manifest. Recalculation is
+required after any edit. The input fingerprint includes geometry, duty and source
+declarations; it is an integrity identifier, not a reviewer signature.
+
+## Analytical method: external-involute-1
+
+Inputs use millimetres, degrees, N·m, rpm, hours and °C. Internal angles use
+radians. The scope is a compatible external, parallel-axis involute gear pair
+in the normal system, with opposite helix hands, standard unit addendum and
+0.25-module clearance. Normal profile shifts and tip shortening are explicit.
+
+For normal module `mn`, normal pressure angle `an`, helix angle `b`, tooth
+counts `z1/z2` and normal profile shifts `x1/x2`:
+
+```text
+mt = mn / cos(b)
+at = atan(tan(an) / cos(b))
+inv(a) = tan(a) - a
+inv(aw) = inv(at) + 2 tan(an) (x1 + x2) / (z1 + z2)
+a0 = mt (z1 + z2) / 2
+a = a0 cos(at) / cos(aw)
+y = (a - a0) / mn
+k = x1 + x2 - y
+di = mt zi
+dbi = di cos(at)
+dwi = 2 a zi / (z1 + z2)
+dai = di + 2 mn (1 + xi - k)
+dfi = di - 2 mn (1.25 - xi)
+```
+
+The operating angle uses a bracketed inverse-involute solution. Contact ratio
+comes from the available involute path divided by the transverse base pitch;
+overlap is `face_width * abs(sin(b)) / (pi * mn)`. Below-base-circle contact,
+pointed tips and approximate rack-generation undercut are reported. The helical
+undercut check uses an equivalent spur approximation and does not replace cutter
+simulation. The initial development envelope is 15–25° normal pressure angle,
+up to 30° helix and transverse contact ratio 1–2.5; bounds are scope controls,
+not proof that all designs within them have been validated.
+
+Mesh loads follow torque equilibrium on the operating pitch circle:
+
+```text
+Ft = 2000 T / dw1
+|Fr| = abs(Ft) tan(aw)
+bw = atan((a / a0) tan(b))
+Fa = Ft tan(bw)
+power_W = T rpm 2 pi / 60
+revolutions = abs(rpm) 60 hours
+```
+
+The force signs use pinion torque/helix-hand convention. They are not global
+shaft-coordinate reactions. The common mesh force is ideal and quasi-static;
+assumed efficiency only estimates transmitted power/torque and loss power.
+Stationary output torque after efficiency is left unavailable. Friction force
+distribution, dynamics, load sharing, misalignment and external shaft forces are
+outside this calculation. Revolutions are exposure, not fatigue damage. Loss
+power is not a temperature or thermal-capacity prediction.
+
+## Reproduce the independent geometry comparison
+
+[FreeCAD Gears](https://github.com/looooo/freecad.gears) is an openly licensed
+GPL-3.0-or-later reference. The comparison runs its pure Python geometry in a
+separate process from a clean checkout pinned to
+`83ec154b1925347622b61812f75d2ed51e956b9f`. It is not installed or bundled as a
+GearForge runtime dependency. Its source and license remain in its own checkout.
+
+```text
+git clone https://github.com/looooo/freecad.gears.git reference/freecad.gears
+git -C reference/freecad.gears checkout 83ec154b1925347622b61812f75d2ed51e956b9f
+python scripts/verify_open_reference.py --reference-checkout reference/freecad.gears
+```
+
+The script compares 72 scalar dimensions/angles across six GearForge-authored
+spur/helical cases, including profile shifts and both helix hands. Its output
+records the exact reference revision, inputs, outputs, scope and tolerances.
+`tests/data/open_geometry_reference.json` retains these numerical results for
+offline regression. It contains no copied implementation or document text.
+The reference's profile-shift inputs are converted to the transverse system;
+its independently calculated center distance determines tip shortening.
+
+The comparison verifies reference/base/tip/root diameters, pressure angles and
+operating center distance within the recorded tolerance. It does **not** verify
+fatigue strength, tooth contact under deformation, material allowables or life.
+Additional tests check hand-derived power/force/exposure cases, reversal/rest,
+invalid inputs, edit invalidation, save failures and export integrity.
+
+Public manufacturer explanations of the same relations are linked for context:
+[geometry](https://khkgears.net/new/gear_knowledge/gear_technical_reference/calculation_gear_dimensions.html)
+and [gear forces](https://khkgears.net/new/gear_knowledge/gear_technical_reference/gear_forces.html).
+Their documents and images are not bundled or represented as openly licensed.
+
+## Remaining production work
+
+Develop and independently verify open fatigue/contact, bearing, shaft, assembly,
+thermal and manufacturing methods, with explicit supported domains and uncertainty.
+Use redistributable material and test datasets whose provenance is known; never
+derive a production allowable from a material name or free-text note. Provide a
+reviewed physical-test protocol and record actual results. Engineering approval
+must bind the exact inputs, method version and manufacturing definition.
+
+No ISO/AGMA compliance or certification is claimed. If a future customer requires
+a specific standard, that requirement needs an explicit, separately supported
+compliance assessment. It is not silently satisfied by similar formulas or an
+open-source implementation's name.

@@ -1,4 +1,4 @@
-# Release status — 1.0.0rc3
+# Release status — 1.0.0rc4
 
 This is an implemented and tested desktop **release candidate**. It is not a finished
 commercially validated gearbox design product. The remaining work below is concrete
@@ -9,9 +9,16 @@ and material; no installer, model or calculation should imply it is already comp
 The rc3 changes add strict project input validation, reliable recovery/save behavior,
 per-user data locking, verified backup/restore, traceable exports, production-rating
 status and dependency security/release evidence. See [deployment](INTERNAL_DEPLOYMENT.md),
-[current software evidence](INTERNAL_VALIDATION.json) and the
+[current software evidence](../VALIDATION.json) and the
 [production qualification work](PRODUCTION_QUALIFICATION.md). The requested final
 production gearbox design and load-rating scope is still unqualified.
+
+The rc4 engineering study adds original external spur/helical geometry, profile
+shifts, quasi-static mesh forces, duty spectra, save/load and calculation exports.
+It also corrects the existing search's helical transverse pressure-angle usage.
+Independent geometry comparisons run against a pinned, separately checked-out
+FreeCAD Gears. No proprietary standards or restricted reference data are required.
+See [the method and verification scope](OPEN_ENGINEERING.md).
 
 ## Implemented
 
@@ -51,7 +58,7 @@ production gearbox design and load-rating scope is still unqualified.
    integrations. The six seed gears and generic bearing table are intentionally limited.
 6. Produce production drawings with fits, surface finish, pin/keyway/retention details
    and GD&T. SVG outputs are reference layouts and schedules only.
-7. Review current platform results in `INTERNAL_VALIDATION.json` and CI. Complete
+7. Review version-specific platform results linked from `VALIDATION.json` and CI. Complete
    interactive acceptance on the actual company workstation image. Sign Windows packages and
    notarize macOS packages using the product owner's credentials. Native Linux smoke
    tests are recorded in the validation artifact when that bundle was built.
@@ -68,9 +75,10 @@ configuration; inventing endpoints or silently charging/purchasing would be inco
 
 ## Evidence
 
-See `docs/INTERNAL_VALIDATION.json` in the release kit for current test results,
-runtime, export and native-package checks. `docs/VALIDATION_RC2.json` preserves
-historical evidence for the previous version only. Tests cover all family searches, numerical
+See root `VALIDATION.json` for current test and native-package evidence.
+`docs/INTERNAL_VALIDATION.json` preserves rc3 evidence and `docs/VALIDATION_RC2.json`
+preserves rc2 evidence; those historical passes do not validate a newer build.
+Tests cover all family searches, numerical
 constraints, project/catalog round-trips, worker/desktop workflows, real CAD solids,
 interference, real STEP imports, PDF signatures and output manifests. They do not
 establish mechanical fatigue life, wear, real printer accuracy or production readiness.

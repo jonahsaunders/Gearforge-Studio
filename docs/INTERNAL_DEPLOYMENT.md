@@ -1,6 +1,6 @@
 # Internal company deployment
 
-GearForge Studio 1.0.0rc3 is an offline desktop tool for **prototype exploration
+GearForge Studio 1.0.0rc4 is an offline desktop tool for **prototype exploration
 and engineering review**. This deployment guide does not approve a gearbox for
 production, certify a load rating, or replace the company's engineering process.
 The application retains visible prototype/concept labels in reports and exports.
@@ -29,7 +29,8 @@ sync folder. Use approved storage for saved projects and completed exports.
    the source, package, test evidence, dependency inventory and notices together.
 2. Check the platform's CI tests and frozen-app smoke evidence. A source test
    pass is not proof that a packaged executable works. Review
-   `docs/INTERNAL_VALIDATION.json` for the evidence produced for this change.
+   root `VALIDATION.json` for version-specific evidence. `docs/INTERNAL_VALIDATION.json`
+   records the historical rc3 build only.
 3. Review the exact `licenses/DEPENDENCIES.json`, `requirements-runtime.txt`,
    `vulnerability-audit.json` and `sbom.cdx.json`. Inventory covers the declared
    runtime closure, including libraries excluded from the frozen application.
@@ -50,7 +51,7 @@ There is no automatic production rollout.
 ## Install and launch
 
 For an approved native archive, extract the **entire** directory to a
-version-specific location such as `C:\CompanyApps\GearForge\1.0.0rc3`. Keep
+version-specific location such as `C:\CompanyApps\GearForge\1.0.0rc4`. Keep
 `GearForgeStudio.exe` and `_internal` together. Launch the executable. Runtime
 operation does not require an internet connection or Python installation.
 
@@ -140,6 +141,9 @@ approval. Keep approvals in the company's existing review system.
   step the simulation, cancel a CAD job, and confirm another search still works.
 - Save and reopen a project with company terminology and non-ASCII text. Change
   requirements and confirm export is blocked until regeneration.
+- Open **Design → Engineering study**, calculate the target, edit its duty,
+  confirm old results disappear, then save/reopen and verify its exported bundle.
+  Back up `.gearforge-study` files separately; they are not part of catalog backup.
 - Import the approved supplier catalog. Test that an invalid import preserves
   existing records and that a successful import clears previous results.
 - Export a report-only and a full prototype package into new directories; verify

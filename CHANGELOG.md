@@ -1,5 +1,21 @@
 # Unreleased
 
+# 1.0.0rc4 — 2026-10-06
+
+- Add a desktop engineering-study editor and batch commands for the agreed
+  250 W, 1,500 rpm, 5:1 steel-spur development target.
+- Calculate normal-system spur/helical geometry with profile shifts, operating
+  center distance, contact ratios, tooth dimensions and geometric findings.
+- Calculate signed quasi-static mesh loads, power balance and duty exposure;
+  preserve editable inputs, method revision and a hash in calculation exports.
+- Import a selected spur/helical stage using its required operating load.
+- Correct helical contact-ratio and shaft-load screens to use the transverse
+  pressure angle, consistent with the existing CAD implementation.
+- Compare 72 dimensions/angles against a pinned, openly licensed FreeCAD Gears
+  revision. The external reference is not a runtime dependency or bundled code.
+- Require GitHub-publishable code, tests and bundled data. Proprietary standards
+  are not a development dependency; production load/life ratings remain absent.
+
 # 1.0.0rc3 — 2026-10-06
 
 - Upgrade PySide6/Qt to 6.11.2 for upstream security fixes.

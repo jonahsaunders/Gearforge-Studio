@@ -23,7 +23,7 @@ The native build tooling collects installed dependency license files into
 a complete legal audit. Check the exact dependency lock and binary composition for
 the target release. No commercial Qt license is supplied by this project.
 
-For rc3, collection follows the full installed runtime dependency graph, including
+Collection follows the full installed runtime dependency graph, including
 SciPy, Numba, llvmlite and the Trame dependency chain. `DEPENDENCIES.json` records
 package versions, license metadata, upstream URLs and copied texts;
 `requirements-runtime.txt` records the resolved versions. The release workflow
@@ -37,6 +37,18 @@ retain the rights granted by those terms. Keep notices and applicable library
 source/replacement information with the deployment. See
 https://www.qt.io/development/open-source-lgpl-obligations for upstream guidance;
 the company must review the exact deployment and any additional distribution.
+
+The optional engineering verification script runs a separately checked-out
+[FreeCAD Gears](https://github.com/looooo/freecad.gears) (GPL-3.0-or-later) at commit
+`83ec154b1925347622b61812f75d2ed51e956b9f`. That project's source is not copied into,
+installed with or bundled in GearForge. The repository stores numerical outputs
+from GearForge-authored synthetic inputs and the reproducible comparison adapter.
+Those comparisons cover specific geometry quantities, not gearbox load ratings.
+
+The analytical engineering module is an original implementation. Linked KHK
+technical pages are public reading material, not declared open-source content;
+their document text, figures and tables are not redistributed. No proprietary
+standard text, standard factor table or restricted reference result is bundled.
 
 Primary technical/source references:
 

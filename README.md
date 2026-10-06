@@ -9,7 +9,7 @@ with 3D printed parts, catalog gears, or combinations of both. It combines a
 native Qt workspace, discrete design search, engineering screening, a component
 catalog, dimensional print calibration, rigid-body CAD animation and design exports.
 
-**Current version: 1.0.0rc3 · Python 3.12 recommended · Apache-2.0 application code**
+**Current version: 1.0.0rc4 · Python 3.12 recommended · Apache-2.0 application code**
 
 > **Release status:** This is a tested software release candidate for prototype
 > engineering. Its calculations are preliminary screens, not certified ISO/AGMA
@@ -23,6 +23,14 @@ and [production qualification gap](docs/PRODUCTION_QUALIFICATION.md). **Final
 production gearbox design and verified service-load ratings are not available.**
 The `qualify` command and each export record this explicitly; production-required
 exports fail until a verified rating implementation exists.
+
+The new **Design → Engineering study** workspace adds editable spur/helical
+geometry, profile shifts, operating duty, mesh forces and traceable calculation
+reports. Its first development target is 250 W at 1,500 rpm, 5:1 reduction and
+10,000 hours. All application code, examples and comparison fixtures are intended
+for public GitHub distribution; no paid standard or private calculation package
+is required. See the [open engineering guide](docs/OPEN_ENGINEERING.md) for the
+method, reproducible FreeCAD Gears comparisons and exact verification scope.
 
 ![GearForge design workspace with a two-stage gearbox](screenshots/desktop.png)
 
@@ -55,6 +63,9 @@ exports fail until a verified rating implementation exists.
 - **Engineering screens:** Review ratio error, available torque, backlash,
   printable tooth dimensions, contact ratio, tooth bending, shaft stress/deflection
   and generic bearing capacity/life estimates with their assumptions.
+- **Engineering studies:** Save a separate design basis, profile-shifted external
+  pair and operating-duty spectrum; calculate forces, energy and revolution
+  exposure; export inputs, readable results and an integrity manifest.
 - **Catalog components:** Use source-traceable seed records or import a validated
   CSV catalog. Unknown prices stay unknown; supplier conditions remain visible.
 - **Native desktop workspace:** Platform controls and system fonts, appearance
@@ -137,7 +148,7 @@ report and SBOM. This is not a hash-locked wheel archive for every platform.
 | Linux x86_64 | Source and frozen executable checked with Qt offscreen; search, CAD preview and simulation workspace passed |
 | Linux portable bundle | Built on glibc 2.39; targets Ubuntu 24.04-class systems with glibc 2.39 or newer |
 | Interactive Linux desktop | Requires X11/Wayland display libraries; no interactive display was available for the recorded checks |
-| Windows x86_64 | rc3 regression tests run locally; see [current evidence](docs/INTERNAL_VALIDATION.json) for native package validation |
+| Windows x86_64 | See [current evidence](VALIDATION.json) for exact version-specific regression and native package checks |
 | macOS | macOS 14 build target, `.app` metadata and document integration configured; native/Finder/VoiceOver validation pending |
 
 The native assets are unsigned. The macOS runner builds its own architecture,
@@ -433,14 +444,15 @@ python -m pytest -q --junitxml=build/test-results.xml
 Remove-Item Env:QT_QPA_PLATFORM
 ```
 
-The original rc2 baseline passed **48 tests**, with an additional final GUI pass.
-The earlier suite passed **49 tests** on Linux offscreen. Current rc3 evidence
-is recorded in [INTERNAL_VALIDATION.json](docs/INTERNAL_VALIDATION.json).
+Version-specific regression and native package evidence is indexed in
+[VALIDATION.json](VALIDATION.json). The rc4 additions include independent open
+geometry comparisons and desktop study workflows; rc3 and rc2 results remain
+historical records and do not validate a newer build.
 Coverage includes numerical constraints, catalogs/projects, CLI/worker flows,
 real CAD solids/interference/STEP round-trips, export manifests, timed motion,
 planetary relations, power balance, stale results and reduced-motion behavior.
 A deliberately misaligned gear phase is a negative control for collision detection.
-See [VALIDATION.json](VALIDATION.json) for historical rc2 evidence.
+See [open engineering](docs/OPEN_ENGINEERING.md) for the numerical reference scope.
 
 The [regression workflow](https://github.com/jonahsaunders/Gearforge-Studio/actions/workflows/ci.yml)
 checks all three target operating systems and uploads test results. Headless
@@ -480,8 +492,8 @@ windowed executable and a file-based worker protocol. Windows also includes
 For the current release:
 
 ```bash
-git tag -a v1.0.0rc3 -m "GearForge Studio 1.0.0rc3"
-git push origin v1.0.0rc3
+git tag -a v1.0.0rc4 -m "GearForge Studio 1.0.0rc4"
+git push origin v1.0.0rc4
 ```
 
 The tag must match package/runtime versions. Manual builds on `main` upload
@@ -508,7 +520,7 @@ includes them automatically and preserves file permissions:
 ```bash
 git init -b main
 git add .
-git commit -m "Add GearForge Studio 1.0.0rc3"
+git commit -m "Add GearForge Studio 1.0.0rc4"
 git remote add origin https://github.com/jonahsaunders/Gearforge-Studio.git
 git push -u origin main
 ```

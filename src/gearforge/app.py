@@ -15,7 +15,7 @@ from PySide6.QtGui import QAction, QColor, QDesktopServices, QFont, QIcon, QKeyS
 from PySide6.QtWidgets import (
     QApplication, QCheckBox, QComboBox, QDialog, QDialogButtonBox, QDoubleSpinBox,
     QFileDialog, QFormLayout, QFrame, QGridLayout, QHBoxLayout, QHeaderView, QLabel,
-    QLineEdit, QListWidget, QMainWindow, QMessageBox, QProgressBar, QPushButton,
+    QLineEdit, QListWidget, QMainWindow, QMessageBox, QProgressBar, QPushButton, QInputDialog,
     QScrollArea, QSlider, QSplitter, QStackedWidget, QTableWidget, QTableWidgetItem,
     QSizePolicy, QTabWidget, QTextBrowser, QTextEdit, QVBoxLayout, QWidget,
 )
@@ -148,7 +148,7 @@ class MainWindow(QMainWindow):
             file.addAction(action)
             self.command_actions[title]=action
         design=self.menuBar().addMenu("Design")
-        for title,callback,shortcut in [("Generate designs",self.generate,"Ctrl+Return"),("Load CAD preview",self.load_preview,"Ctrl+Shift+L"),("Sample tooth meshing…",self.check_mesh,None),("Compare selected rows",self.compare,None)]:
+        for title,callback,shortcut in [("Engineering study…",self.engineering_study,None),("Study selected stage…",self.study_selected_stage,None),("Generate designs",self.generate,"Ctrl+Return"),("Load CAD preview",self.load_preview,"Ctrl+Shift+L"),("Sample tooth meshing…",self.check_mesh,None),("Compare selected rows",self.compare,None)]:
             action=QAction(title,self);action.triggered.connect(callback)
             if shortcut:action.setShortcut(shortcut)
             design.addAction(action)
@@ -169,6 +169,25 @@ class MainWindow(QMainWindow):
         action.triggered.connect(lambda:QMessageBox.information(self,"GearForge Studio",f"GearForge Studio {__version__}\n\nDesktop release candidate. Spur, helical and planetary prototype CAD; bevel, worm and cycloidal concept searches.\n\nEngineering calculations are preliminary screens, not certified load ratings. No network or telemetry.\n\nApplication code: Apache-2.0. Uses PySide6/Qt under LGPLv3 terms; bundled dependencies retain their own licenses."))
         helpmenu.addAction(action)
         licenses=QAction("Open third-party license notices…",self);licenses.triggered.connect(self.open_licenses);helpmenu.addAction(licenses)
+
+    def engineering_study(self):
+        from .engineering_ui import EngineeringStudyDialog
+        EngineeringStudyDialog(self).exec()
+
+    def study_selected_stage(self):
+        from .engineering import study_for_stage
+        from .engineering_ui import EngineeringStudyDialog
+        from .models import Requirements
+        try:
+            payload=self.ready_payload();index=0
+            if len(self.selected.stages)>1:
+                choices=[f"Stage {i+1}: {s.driver.teeth} / {s.driven.teeth} teeth" for i,s in enumerate(self.selected.stages)]
+                choice,ok=QInputDialog.getItem(self,"Study selected stage","Gear stage",choices,0,False)
+                if not ok:return
+                index=choices.index(choice)
+            study=study_for_stage(self.selected,Requirements(**payload["requirements"]),index)
+            dialog=EngineeringStudyDialog(self);dialog.set_study(study);dialog.dirty=True;dialog.exec()
+        except (ValueError,TypeError) as exc:self.error(exc)
 
     def open_licenses(self):
         path=Path(sys._MEIPASS)/"licenses" if getattr(sys,"frozen",False) else Path(__file__).resolve().parents[2]/"release-licenses"
@@ -566,6 +585,7 @@ class MainWindow(QMainWindow):
             enabled=idle and valid and (title=="Export selected design…" or self.selected.export_level!="concept")
             self.command_actions[title].setEnabled(enabled)
         self.command_actions["Generate designs"].setEnabled(idle)
+        self.command_actions["Study selected stage…"].setEnabled(idle and valid and self.selected.family in ("spur","helical"))
         self.cad_button.setEnabled(self.command_actions["Load CAD preview"].isEnabled())
         self.export_button.setEnabled(self.command_actions["Export selected design…"].isEnabled())
         self.mesh_check_button.setEnabled(self.command_actions["Sample tooth meshing…"].isEnabled())

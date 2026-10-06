@@ -6,6 +6,8 @@ recursive-include packaging *.py *.spec *.sh *.bat *.command
 recursive-include packaging/licenses *.txt
 recursive-include scripts *.py
 recursive-include tests *.py
+recursive-include tests/data *.json
 recursive-include examples *.gearforge
+recursive-include examples *.gearforge-study
 prune examples/exported-*
 recursive-include src/gearforge/data *.csv *.json *.svg *.png

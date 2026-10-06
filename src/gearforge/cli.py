@@ -76,6 +76,13 @@ def main(argv=None):
     smoke.add_argument("--cad",action="store_true")
     new = subs.add_parser("new",help="Create a default project")
     new.add_argument("path",type=Path)
+    study = subs.add_parser("study",help="Create or calculate a traceable spur/helical engineering study")
+    study_commands = study.add_subparsers(dest="study_command",required=True)
+    study_new = study_commands.add_parser("new",help="Create the agreed 250 W, 1500 rpm, 5:1 qualification target")
+    study_new.add_argument("path",type=Path)
+    study_calculate = study_commands.add_parser("calculate",help="Export geometry, quasi-static loads and duty exposure; no production rating")
+    study_calculate.add_argument("path",type=Path)
+    study_calculate.add_argument("--out",type=Path,required=True)
     search = subs.add_parser("search",help="Search a project and save candidate JSON")
     search.add_argument("project",type=Path)
     search.add_argument("--catalog",type=Path)
@@ -115,6 +122,16 @@ def main(argv=None):
             if args.path.exists():raise FileExistsError("Project already exists")
             Project().save(args.path)
             print(args.path)
+            return 0
+        if args.command == "study":
+            from .engineering import EngineeringStudy, export_study
+            if args.study_command == "new":
+                if args.path.exists() or args.path.is_symlink():raise FileExistsError("Study already exists")
+                EngineeringStudy().save(args.path)
+                print(args.path)
+            else:
+                result=export_study(EngineeringStudy.load(args.path),args.out)
+                print(json.dumps(result,indent=2))
             return 0
         if args.command in ("verify","backup","restore"):
             from .maintenance import verify_bundle, backup_data, restore_data
