@@ -1,6 +1,6 @@
 # Internal company deployment
 
-GearForge Studio 1.0.0rc8 is an offline desktop tool for **prototype exploration
+GearForge Studio 1.0.0rc9 is an offline desktop tool for **prototype exploration
 and engineering review**. This deployment guide does not approve a gearbox for
 production, certify a load rating, or replace the company's engineering process.
 The application retains visible prototype/concept labels in reports and exports.
@@ -51,7 +51,7 @@ There is no automatic production rollout.
 ## Install and launch
 
 For an approved native archive, extract the **entire** directory to a
-version-specific location such as `C:\CompanyApps\GearForge\1.0.0rc8`. Keep
+version-specific location such as `C:\CompanyApps\GearForge\1.0.0rc9`. Keep
 `GearForgeStudio.exe` and `_internal` together. Launch the executable. Runtime
 operation does not require an internet connection or Python installation.
 
@@ -213,3 +213,17 @@ private vulnerability reporting. No vendor response-time commitment is implied.
   Confirm opposite flanks and pinion/wheel cycle counts remain separate.
 - Review [the contact method and reference scope](CONTACT_ANALYSIS.md). The example
   curve, elastic limit and unity factors are invented arithmetic inputs.
+
+## Thermal study acceptance
+
+- Open **Design → Thermal network and cooling duty…**, load **Synthetic example**
+  and calculate. Inspect all six tabs and the entered/settled histories for each body.
+- Confirm the synthetic gear-body peak is about 60.79234545°C and the overall
+  assessment remains incomplete. The example has invented losses and cooling data.
+- Rename/add/remove bodies and heat-transfer paths and confirm phase inputs follow
+  those edits. Reorder phases and confirm the entered trajectory changes.
+- Clear a required loss/capacity value and confirm dependent trajectories are
+  unavailable. Remove cooling and inspect the lack of a unique settled cycle.
+- Save/reopen `.gearforge-thermal`, export and verify the assessment manifest.
+  Review [thermal method/domain](THERMAL_ANALYSIS.md), including the distinction
+  between calculated maxima and conservative bounds for every repeated cycle.

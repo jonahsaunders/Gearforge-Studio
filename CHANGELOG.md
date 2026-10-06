@@ -1,5 +1,19 @@
 # Unreleased
 
+# 1.0.0rc9 — 2026-10-06
+
+- Add original passive thermal networks with editable bodies, heat paths and
+  ordered phases. Keep heat capacities, losses and conductances explicit.
+- Solve piecewise-constant heat balance using symmetric modes and energy
+  integrals. Isolate continuous temperature extrema independently of plot samples.
+- Add settled repeated-cycle temperatures and conservative bounds covering all
+  warm-up cycles; distinguish bound exceedance from a calculated limit crossing.
+- Add six desktop tabs, topology/phase editing, temperature diagrams, CLI,
+  strict study files and traceable exports. Unknown inputs remain unavailable.
+- Verify 3,539 values against a separate SciPy Radau/shooting calculation using
+  original fixtures. No property table, loss map or runtime dependency is added.
+- Production thermal, lubrication and physical gearbox qualification remain.
+
 # 1.0.0rc8 — 2026-10-06
 
 - Add external spur Hertz contact pressure, half-width and sliding diagrams with

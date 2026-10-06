@@ -1,4 +1,4 @@
-# Release status — 1.0.0rc8
+# Release status — 1.0.0rc9
 
 This is an implemented and tested desktop **release candidate**. It is not a finished
 commercially validated gearbox design product. The remaining work below is concrete
@@ -35,6 +35,10 @@ The rc8 [tooth-contact study](CONTACT_ANALYSIS.md) adds spur Hertz pressure and
 sliding diagrams, explicit sharing assumptions and bounded declared pressure-life
 curves. Its 208 open-reference comparisons verify contact arithmetic, not actual
 load distribution, material durability or production gearbox life.
+The rc9 [thermal study](THERMAL_ANALYSIS.md) adds declared passive thermal networks,
+continuous extrema, energy balance and settled/repeated-duty warm-up bounds.
+Its 3,539 separate ODE comparisons verify numerical heat balance; measured losses,
+cooling coefficients, lubricant adequacy and physical thermal qualification remain.
 
 ## Implemented
 

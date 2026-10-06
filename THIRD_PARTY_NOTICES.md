@@ -95,3 +95,13 @@ is bundled. The reference checkout retains its MIT license. GearForge-authored
 inputs and numerical result fixtures are distributed under Apache-2.0. No pressure-
 life data in the synthetic example represents a supplier or measured material.
 See [contact methods and reproduction](docs/CONTACT_ANALYSIS.md).
+
+## Open thermal comparison reference
+
+The thermal network and comparison adapter are original Apache-2.0 implementations.
+An isolated reference uses BSD-3-Clause SciPy 1.18.1 Radau integration and shooting
+closure to solve directly assembled heat flows. It does not import GearForge's
+modal solver. Original numerical fixtures contain no third-party implementation,
+material property table or measured proprietary loss/cooling data. Existing NumPy/
+SciPy dependency notices remain applicable; no new runtime dependency is added.
+See [thermal methods and reproduction](docs/THERMAL_ANALYSIS.md).

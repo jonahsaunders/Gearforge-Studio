@@ -1,0 +1,3 @@
+# Isolated numerical reference only; no new application dependency.
+numpy==2.4.6
+scipy==1.18.1

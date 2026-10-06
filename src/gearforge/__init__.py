@@ -1,2 +1,2 @@
 """GearForge Studio. All internal dimensions are millimetres, N and N·m."""
-__version__ = "1.0.0rc8"
+__version__ = "1.0.0rc9"

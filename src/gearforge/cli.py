@@ -125,6 +125,14 @@ def main(argv=None):
     contact_from.add_argument("path",type=Path);contact_from.add_argument("--out",type=Path,required=True)
     contact_calculate = contact_commands.add_parser("calculate",help="Export contact path, pressure and separate flank exposure; no production rating")
     contact_calculate.add_argument("path",type=Path);contact_calculate.add_argument("--out",type=Path,required=True)
+    thermal = subs.add_parser("thermal",help="Assess declared heat losses, thermal paths and ordered cooling duty")
+    thermal_commands = thermal.add_subparsers(dest="thermal_command",required=True)
+    thermal_new = thermal_commands.add_parser("new",help="Create unknown thermal inputs for the development gear study")
+    thermal_new.add_argument("path",type=Path);thermal_new.add_argument("--synthetic-example",action="store_true")
+    thermal_from = thermal_commands.add_parser("from-study",help="Retain a gear study with fresh heat/cooling inputs")
+    thermal_from.add_argument("path",type=Path);thermal_from.add_argument("--out",type=Path,required=True)
+    thermal_calculate = thermal_commands.add_parser("calculate",help="Export thermal histories, continuous extrema and energy balance; no production rating")
+    thermal_calculate.add_argument("path",type=Path);thermal_calculate.add_argument("--out",type=Path,required=True)
     search = subs.add_parser("search",help="Search a project and save candidate JSON")
     search.add_argument("project",type=Path)
     search.add_argument("--catalog",type=Path)
@@ -226,6 +234,19 @@ def main(argv=None):
                 if args.contact_command=="from-study":study=contact_from_study(EngineeringStudy.load(args.path))
                 elif args.synthetic_example:study=synthetic_contact_example()
                 else:study=contact_from_study(EngineeringStudy())
+                study.save(path);print(path)
+            return 0
+        if args.command == "thermal":
+            from .thermal import ThermalStudy,thermal_from_study,synthetic_thermal_example,export_thermal_study
+            from .engineering import EngineeringStudy
+            if args.thermal_command == "calculate":
+                print(json.dumps(export_thermal_study(ThermalStudy.load(args.path),args.out),indent=2))
+            else:
+                path=args.out if args.thermal_command=="from-study" else args.path
+                if path.exists() or path.is_symlink():raise FileExistsError("Thermal study already exists")
+                if args.thermal_command=="from-study":study=thermal_from_study(EngineeringStudy.load(args.path))
+                elif args.synthetic_example:study=synthetic_thermal_example()
+                else:study=thermal_from_study(EngineeringStudy())
                 study.save(path);print(path)
             return 0
         if args.command in ("verify","backup","restore"):

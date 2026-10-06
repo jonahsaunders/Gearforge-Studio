@@ -66,6 +66,9 @@ def main():
         contact=evidence.get("contact_study") or {}
         if contact.get("app_version")!=version or contact.get("tabs_rendered")!=6 or contact.get("diagrams_rendered")!=4 or contact.get("verified_files")!=3:
             raise RuntimeError("Native contact study smoke failed: "+str(contact))
+        thermal=evidence.get("thermal_study") or {}
+        if thermal.get("app_version")!=version or thermal.get("tabs_rendered")!=6 or thermal.get("diagrams_rendered")!=12 or thermal.get("verified_files")!=3:
+            raise RuntimeError("Native thermal study smoke failed: "+str(thermal))
     output=ROOT/"release-assets";output.mkdir(exist_ok=True)
     if system!="darwin":
         platform_note=("Use GearForgeCLI.exe for console commands and diagnostics.\n" if system=="windows"

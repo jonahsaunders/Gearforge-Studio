@@ -26,6 +26,7 @@ def desktop_smoke(destination: Path, include_cad=False):
         result={"ok":not errors,"errors":errors,"candidates":len(window.candidates),"cad_meshes":len(window.viewer.meshes),"elapsed_s":round(time.monotonic()-started,3),"simulation_points":len(window.sweep["points"]) if window.selected else 0,"native_platform":"offscreen","engineering_study":state.get("engineering_study"),"shaft_study":state.get("shaft_study"),"bearing_study":state.get("bearing_study")}
         result["fatigue_study"]=state.get("fatigue_study")
         result["contact_study"]=state.get("contact_study")
+        result["thermal_study"]=state.get("thermal_study")
         if window.selected:result["selected"]=window.selected.id
         (destination/"desktop-smoke.json").write_text(json.dumps(result,indent=2))
         if not errors:
@@ -210,6 +211,40 @@ def desktop_smoke(destination: Path, include_cad=False):
             errors.append(f'Contact study: {exc}')
         finally:
             contact_window.dirty=False;contact_window.close()
+        from .thermal_ui import ThermalStudyDialog
+        from .thermal import ThermalStudy,synthetic_thermal_example,calculate_thermal_study,export_thermal_study
+        thermal_window=ThermalStudyDialog(window,synthetic_thermal_example())
+        thermal_window.show_error=lambda error:errors.append(str(error))
+        try:
+            thermal_window.show()
+            if not thermal_window.calculate():raise ValueError('Thermal assessment failed')
+            for index in range(thermal_window.tabs.count()):
+                thermal_window.tabs.setCurrentIndex(index);app.processEvents();capture=thermal_window.grab()
+                if capture.isNull():raise ValueError(f'Thermal study tab {index} did not render')
+                capture.save(str(destination/f'thermal-study-{index}.png'))
+            thermal_window.tabs.setCurrentIndex(3);diagrams=0
+            for cycle in range(2):
+                thermal_window.cycle_selector.setCurrentIndex(cycle)
+                for phase in range(thermal_window.plot_phase.count()):
+                    thermal_window.plot_phase.setCurrentIndex(phase)
+                    for body in range(thermal_window.plot_body.count()):
+                        thermal_window.plot_body.setCurrentIndex(body);app.processEvents();capture=thermal_window.grab()
+                        if capture.isNull() or not thermal_window.plot.points:raise ValueError('Thermal trajectory failed to render')
+                        capture.save(str(destination/f'thermal-history-{cycle}-{phase}-{body}.png'));diagrams+=1
+            thermal=thermal_window.read_study();thermal.save(destination/'example.gearforge-thermal')
+            loaded_thermal=ThermalStudy.load(destination/'example.gearforge-thermal');thermal_result=calculate_thermal_study(loaded_thermal)
+            if thermal_result['study_sha256']!=thermal_window.result['study_sha256']:raise ValueError('Thermal inputs did not round-trip')
+            export_thermal_study(loaded_thermal,destination/'thermal-calculation');manifest=verify_bundle(destination/'thermal-calculation')
+            maximum=thermal_result['nodes'][0]['calculated_maximum_c']
+            if not math.isclose(maximum,60.79234545102813,rel_tol=1e-10):raise ValueError('Synthetic thermal peak changed')
+            if thermal_result['production_approved'] or thermal_result['rated_gearbox_life_hours'] is not None:raise ValueError('Thermal study falsely approves gearbox life')
+            state['thermal_study']={'app_version':thermal_result['app_version'],'tabs_rendered':thermal_window.tabs.count(),
+                'diagrams_rendered':diagrams,'verified_files':len(manifest['files']),'synthetic_gear_peak_c':maximum,
+                'study_sha256':thermal_result['study_sha256'],'production_approved':False}
+        except Exception as exc:
+            errors.append(f'Thermal study: {exc}')
+        finally:
+            thermal_window.dirty=False;thermal_window.close()
         finish()
     window.generate();timer.timeout.connect(tick);timer.start()
     app.exec()

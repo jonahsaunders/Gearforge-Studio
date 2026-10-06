@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "app_version": "1.0.0rc9",
+  "date": "2026-10-06",
+  "status": "local source tests and independent thermal comparison passed; cross-platform and native package checks pending",
+  "production_qualified": false,
+  "methods": "docs/THERMAL_ANALYSIS.md",
+  "distribution_constraint": "Original GitHub-publishable implementation and numerical fixtures; separate BSD SciPy reference; no restricted data",
+  "local_windows_source_tests": {
+    "tests": 258,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "local_post_report_edit_tests": {
+    "tests": 24,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "local_source_test_scope": "Full local suite passed; after report-only range-check improvements, all 24 thermal tests and the complete source desktop smoke were rerun.",
+  "local_source_desktop_smoke": {
+    "ok": true,
+    "errors": [],
+    "candidates": 60,
+    "cad_meshes": 15,
+    "elapsed_s": 16.047,
+    "simulation_points": 25,
+    "native_platform": "offscreen",
+    "engineering_study": {
+      "app_version": "1.0.0rc9",
+      "tabs_rendered": 4,
+      "verified_files": 3,
+      "input_power_w": 250.0,
+      "study_sha256": "6351727be05d242e0a8445d16b21249f8be1a491e9996a71ab658bbb123b8838",
+      "production_approved": false
+    },
+    "shaft_study": {
+      "app_version": "1.0.0rc9",
+      "tabs_rendered": 6,
+      "verified_files": 3,
+      "maximum_equilibrium_residual": 0.0,
+      "study_sha256": "5786457039a04580d2d7bec531f69b4e904f7cc0f044d8afa92daad40321ec7e",
+      "production_approved": false
+    },
+    "bearing_study": {
+      "app_version": "1.0.0rc9",
+      "tabs_rendered": 5,
+      "verified_files": 3,
+      "synthetic_basic_l10_hours": 18295.51049310608,
+      "study_sha256": "f73a5b330272ed1758d70f9711f62b1ba50f7e3459f0f64a15b6b639c0995f94",
+      "production_approved": false
+    },
+    "fatigue_study": {
+      "app_version": "1.0.0rc9",
+      "tabs_rendered": 5,
+      "verified_files": 3,
+      "nasa_example_corrected_endpoint_mpa": 125.06778394565542,
+      "study_sha256": "7ac9696d45671f4941e4973b93ddd55725a2c8eeccf05e8365f867390b996ece",
+      "production_approved": false
+    },
+    "contact_study": {
+      "app_version": "1.0.0rc9",
+      "tabs_rendered": 6,
+      "diagrams_rendered": 4,
+      "verified_files": 3,
+      "synthetic_peak_pressure_mpa": 342.5004364419622,
+      "study_sha256": "ae257b3248ced8e6985884a2269cde8db7cd129e2c17e0a9c1c5817593a33456",
+      "production_approved": false
+    },
+    "thermal_study": {
+      "app_version": "1.0.0rc9",
+      "tabs_rendered": 6,
+      "diagrams_rendered": 12,
+      "verified_files": 3,
+      "synthetic_gear_peak_c": 60.79234545102813,
+      "study_sha256": "c09e9947f8c0ab7ad47d44a1fd40ece6c488a66e14719c30140c9393b26e0c78",
+      "production_approved": false
+    },
+    "selected": "416647d929c4"
+  },
+  "independent_thermal_comparison": {
+    "reference": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.solve_ivp.html",
+    "reference_method": "SciPy Radau integration and independent shooting closure",
+    "reference_version": "1.18.1",
+    "reference_license": "BSD-3-Clause",
+    "provenance": "Original GearForge thermal topology, inputs and reference adapter. Separate direct heat-flow ODE; no GearForge matrices, modes or root isolator in the reference process.",
+    "scope": "Temperatures at display/critical times and generated, rejected and stored energy for entered and independently solved periodic cycles in eight original networks. No physical loss, cooling or material qualification.",
+    "comparisons": 3539,
+    "maximum_temperature_absolute_error_c": 2.893330020015128e-10,
+    "maximum_energy_relative_error": 2.2163522773933058e-12,
+    "tolerance": {
+      "temperature": {
+        "relative": 2e-09,
+        "absolute_c": 2e-07
+      },
+      "energy": {
+        "relative": 2e-08,
+        "absolute_j": 2e-05
+      }
+    },
+    "passed": true
+  },
+  "limitations": [
+    "Passive isothermal bodies with piecewise-constant capacities/conductances/heat inputs only; actual loss maps and cooling coefficients are not supplied.",
+    "Original synthetic fixtures are numerical examples, not measured material, lubricant or gearbox data.",
+    "The independent ODE reference verifies numerical temperature/energy behavior for declared networks, not physical thermal qualification.",
+    "Repeated-cycle equilibrium is distinct from transient warm-up. Conservative all-cycle bounds can exceed a limit without proving an actual crossing.",
+    "Nonlinear radiation/losses, spatial hot spots, lubricant film, actual material data, tooth-root/transient fatigue, manufacturing and physical assembly qualification remain.",
+    "Unsigned native packages require acceptance on actual company workstation images."
+  ]
+}

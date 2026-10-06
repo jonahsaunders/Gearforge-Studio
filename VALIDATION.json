@@ -1,9 +1,10 @@
 {
   "schema_version": 1,
-  "app_version": "1.0.0rc8",
-  "release_status": "open spur contact study release candidate; production gearbox ratings remain unqualified",
-  "current_evidence": "docs/CONTACT_VALIDATION.json",
+  "app_version": "1.0.0rc9",
+  "release_status": "open thermal-network release candidate; production gearbox ratings remain unqualified",
+  "current_evidence": "docs/THERMAL_VALIDATION.json",
   "historical_evidence": [
+    "docs/CONTACT_VALIDATION.json",
     "docs/FATIGUE_VALIDATION.json",
     "docs/BEARING_VALIDATION.json",
     "docs/SHAFT_VALIDATION.json",

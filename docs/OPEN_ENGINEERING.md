@@ -21,6 +21,10 @@ The [tooth-contact extension](CONTACT_ANALYSIS.md) uses original Hertz arithmeti
 original synthetic pressure-life inputs and a separate MIT SlipPY reference solver.
 Its numerical fixtures contain no copied implementation or restricted tables.
 
+The [thermal-network extension](THERMAL_ANALYSIS.md) uses original heat-balance
+and modal arithmetic, with independent BSD-licensed SciPy ODE verification.
+Synthetic losses, capacities and cooling inputs are not material/property data.
+
 ## Accepted development target
 
 Start with an enclosed, single-stage steel spur gearbox at 250 W input,
