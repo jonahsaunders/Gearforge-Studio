@@ -96,8 +96,8 @@ autosave**, then save to a normal project location. Logs may contain paths and
 error details; share them under the company's data-handling rules.
 
 Close the application, then run the maintenance commands from the approved
-Python environment (the same commands also dispatch through the native binary;
-on Windows it has no console output, so use the Python CLI for scripted reports):
+Python environment, or use `GearForgeCLI.exe` from the Windows native package
+in place of `python -m gearforge` for visible diagnostics and scripted reports:
 
 ```powershell
 python -m gearforge backup --data-dir "$env:LOCALAPPDATA\Company\GearForge" --out "D:\Backups\GearForge-2026-10-06"

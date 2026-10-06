@@ -20,7 +20,7 @@ for name in ("LICENSE", "THIRD_PARTY_NOTICES.md", "docs/RELEASE_STATUS.md", "doc
 binaries = collect_dynamic_libs("OCP")
 a = Analysis([str(project / "packaging/entry.py")],
     pathex=[str(project / "src")], binaries=binaries, datas=datas,
-    hiddenimports=collect_submodules("gearforge"),
+    hiddenimports=collect_submodules("gearforge")+["casadi._casadi"],
     excludes=["torch", "tensorflow", "pandas", "matplotlib", "IPython", "notebook", "jupyter", "cv2"],
     noarchive=False)
 pyz = PYZ(a.pure)

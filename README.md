@@ -456,7 +456,7 @@ python -m build
 python scripts/collect_licenses.py
 python -m pip_audit --no-deps --disable-pip -r release-licenses/requirements-runtime.txt --format json --output release-licenses/vulnerability-audit.json
 python -m pip_audit --no-deps --disable-pip -r release-licenses/requirements-runtime.txt --format cyclonedx-json --output release-licenses/sbom.cdx.json
-python -m PyInstaller packaging/gearforge.spec --noconfirm
+python scripts/build_native.py
 python scripts/native_archive.py --smoke
 python scripts/build_release.py
 ```
@@ -468,7 +468,8 @@ with `README.md` at its root and includes a per-file SHA-256 list.
 The result includes wheel/source distributions, target-native archives,
 checksums and a source release kit. Keep dependency notices with native bundles.
 The macOS spec generates an `.app` with project document metadata; Windows uses a
-windowed executable and a file-based worker protocol.
+windowed executable and a file-based worker protocol. Windows also includes
+`GearForgeCLI.exe` for console commands, backup/restore and visible diagnostics.
 
 | Workflow | Trigger | Result |
 | --- | --- | --- |

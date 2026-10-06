@@ -1,6 +1,7 @@
 """Archive the target-native build and emit SHA256; never upload anything."""
 from pathlib import Path
 import argparse
+import os
 import hashlib
 import platform
 import subprocess
@@ -24,7 +25,10 @@ def main():
             if destination.resolve().parent != (ROOT/"build").resolve():raise ValueError("Unsafe smoke output path")
             import shutil;shutil.rmtree(destination)
         diagnostic_executable=folder/"GearForgeCLI.exe" if system=="windows" else executable
-        process=subprocess.run([str(diagnostic_executable),"smoke","--out",str(destination),"--cad"],capture_output=True,text=True,timeout=180)
+        environment=os.environ.copy()
+        if system=="windows" and environment.get("QT_QPA_PLATFORM")=="offscreen":
+            environment.setdefault("QT_QPA_FONTDIR",str(Path(os.environ["SystemRoot"])/"Fonts"))
+        process=subprocess.run([str(diagnostic_executable),"smoke","--out",str(destination),"--cad"],capture_output=True,text=True,timeout=180,env=environment)
         (ROOT/"build"/"frozen-smoke.log").write_text(process.stdout+process.stderr,encoding="utf-8")
         if process.returncode:
             raise RuntimeError("Native smoke failed: "+process.stderr[-4000:])
@@ -49,7 +53,9 @@ def main():
         if not evidence["ok"] or evidence["simulation_points"]!=25:raise RuntimeError(evidence)
     output=ROOT/"release-assets";output.mkdir(exist_ok=True)
     if system!="darwin":
-        (folder/"START_HERE.txt").write_text("GearForge Studio "+version+" — unsigned release candidate\n\nLaunch GearForgeStudio"+(".exe" if system=="windows" else "")+" in this folder. Keep _internal alongside it.\nLinux target: x86_64, Ubuntu 24.04 class / glibc 2.39+.\nUse Help > About and Help > Open third-party license notices.\nSimulations are kinematic and quasi-static; no certified load rating.\n")
+        platform_note=("Use GearForgeCLI.exe for console commands and diagnostics.\n" if system=="windows"
+                       else "Linux target: x86_64, Ubuntu 24.04 class / glibc 2.39+.\n")
+        (folder/"START_HERE.txt").write_text("GearForge Studio "+version+" — unsigned release candidate\n\nLaunch GearForgeStudio"+(".exe" if system=="windows" else "")+" in this folder. Keep _internal alongside it.\n"+platform_note+"Use Help > About and Help > Open third-party license notices.\nSimulations are kinematic and quasi-static; no verified production load rating.\n",encoding="utf-8")
     stem=f"GearForge-Studio-{version}-{system}-{arch}-unsigned"
     if system=="linux":
         path=output/(stem+".tar.gz")

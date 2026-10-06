@@ -39,7 +39,7 @@ jobs:
       - run: python scripts/collect_licenses.py
       - run: python -m pip_audit --no-deps --disable-pip -r release-licenses/requirements-runtime.txt --format json --output release-licenses/vulnerability-audit.json
       - run: python -m pip_audit --no-deps --disable-pip -r release-licenses/requirements-runtime.txt --format cyclonedx-json --output release-licenses/sbom.cdx.json
-      - run: python -m PyInstaller packaging/gearforge.spec --noconfirm
+      - run: python scripts/build_native.py
       - run: python scripts/native_archive.py --smoke
       - if: runner.os == 'Linux'
         run: python scripts/build_release.py
@@ -56,6 +56,8 @@ jobs:
             build/test-results.xml
             build/frozen-smoke/desktop-smoke.json
             build/frozen-smoke/*.png
+            build/frozen-smoke.log
+            build/desktop-worker-result.json
             release-licenses/DEPENDENCIES.json
             release-licenses/requirements-runtime.txt
             release-licenses/vulnerability-audit.json
