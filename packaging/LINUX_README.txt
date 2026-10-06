@@ -6,6 +6,9 @@ The executable includes its Python, Qt and CAD dependencies.
 Target: Linux x86_64 with glibc 2.39 or newer (Ubuntu 24.04 class systems).
 The bundle was tested in a headless Linux environment using Qt offscreen. An
 interactive X11/Wayland desktop and its system display libraries are required.
+On Ubuntu 24.04, install the Qt runtime libraries with:
+  sudo apt-get install libegl1 libgl1 libopengl0 libxkbcommon0 libxcb-cursor0
+EGL/OpenGL libraries are required even for Qt's offscreen desktop tests.
 Qt's X11 plugin requires libxcb-cursor.so.0; distributions commonly provide it
 as libxcb-cursor0. This host does not have that system library, so interactive
 desktop startup could not be tested here. Qt offscreen desktop/search/CAD worker

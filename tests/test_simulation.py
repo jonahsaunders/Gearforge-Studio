@@ -77,11 +77,15 @@ def test_sampled_real_tooth_intersections(catalog,profile,light_requirements):
 
 
 @pytest.mark.gui
-def test_accessible_controls_native_appearance_and_preserved_mesh(tmp_path,catalog,profile,light_requirements):
+@pytest.mark.parametrize("reduce_motion", [False, True])
+def test_accessible_controls_native_appearance_and_preserved_mesh(tmp_path,catalog,profile,light_requirements,monkeypatch,reduce_motion):
     from PySide6.QtWidgets import QApplication,QLabel
     from PySide6.QtCore import Qt
     from PySide6.QtTest import QTest
     from gearforge.app import MainWindow
+    # Runner accessibility preferences are external state. Exercise both settings
+    # explicitly while leaving the application's system preference support intact.
+    monkeypatch.setattr("gearforge.app.system_reduced_motion", lambda: reduce_motion)
     app=QApplication.instance() or QApplication([])
     w=MainWindow(tmp_path);w.show();app.processEvents()
     assert w.fields['input_rpm'].accessibleName()=='Input speed'
@@ -93,7 +97,9 @@ def test_accessible_controls_native_appearance_and_preserved_mesh(tmp_path,catal
     w.viewer.set_candidate(c)
     mesh={'name':c.layout[0]['name'],'center':[0,0,0],'shaft':0,'source':'print','color':[.1,.5,.9],'vertices':[[0,0,0],[1,0,0],[0,1,0]],'triangles':[[0,1,2]]}
     w.viewer.set_meshes([mesh]);w.viewer.animate(True)
-    assert w.viewer.timer.isActive() and len(w.viewer.meshes)==1
+    assert w.reduced_motion is reduce_motion
+    assert w.viewer.timer.isActive() is not reduce_motion
+    assert len(w.viewer.meshes)==1
     w.viewer.reduced_motion=True;w.viewer.animate(True)
     assert not w.viewer.timer.isActive()
     w.viewer.step();assert w.viewer.phase!=0 and len(w.viewer.meshes)==1

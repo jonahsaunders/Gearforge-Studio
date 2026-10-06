@@ -1,3 +1,13 @@
+# Unreleased
+
+- Install Qt's Linux runtime libraries in regression and release workflows,
+  including the EGL library required by headless desktop tests.
+- Exercise animation with Reduce Motion both enabled and disabled, independent
+  of the CI host's accessibility preferences.
+- Add six actual app captures to the README: exploded hybrid, planetary and
+  helical CAD, component catalog, print calibration and design report. Refresh
+  the design/simulation images and include a reproducible capture script.
+
 # 1.0.0rc2 — 2026-10-06
 
 Native appearance, accessible controls, keyboard/document behavior, deterministic

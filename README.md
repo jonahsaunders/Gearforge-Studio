@@ -1,5 +1,7 @@
 # GearForge Studio
 
+[![Desktop regression tests](https://github.com/jonahsaunders/Gearforge-Studio/actions/workflows/ci.yml/badge.svg)](https://github.com/jonahsaunders/Gearforge-Studio/actions/workflows/ci.yml)
+
 **Generate, compare, simulate and export gearbox prototypes from operating requirements.**
 
 GearForge Studio is an offline desktop application for exploring gearboxes made
@@ -21,6 +23,7 @@ catalog, dimensional print calibration, rigid-body CAD animation and design expo
 ## Contents
 
 - [Features](#features)
+- [App gallery](#app-gallery)
 - [Supported designs and manufacturing modes](#supported-designs-and-manufacturing-modes)
 - [Requirements and platform status](#requirements-and-platform-status)
 - [Install and launch](#install-and-launch)
@@ -61,6 +64,27 @@ catalog, dimensional print calibration, rigid-body CAD animation and design expo
 
 The search is a bounded discrete exploration of the implemented templates. It
 returns a ranked shortlist with Pareto flags; it does not prove global optimality.
+
+## App gallery
+
+These are captures of the running Qt application with real generated CAD and
+example projects. They were captured on Linux using Qt's offscreen platform;
+native controls, fonts and menus vary by operating system.
+
+| Gearbox previews | Supporting workspaces |
+| --- | --- |
+| **Exploded hybrid assembly** — inspect the separation of gears, shafts and hardware.<br>![Exploded hybrid gearbox with real CAD meshes](screenshots/exploded.png) | **Component catalog** — review source-traceable supplier dimensions and ratings.<br>![Component catalog with six source-traceable KHK records](screenshots/catalog.png) |
+| **Planetary prototype** — fixed ring, sun input and three planets.<br>![Generated planetary gearbox prototype CAD](screenshots/planetary.png) | **Print calibration** — record material assumptions, clearances and coupon measurements.<br>![Print profile and dimensional calibration workspace](screenshots/calibration.png) |
+| **Helical prototype** — generated gears with opposite helix hands.<br>![Generated helical gearbox prototype CAD](screenshots/helical.png) | **Design report** — review the selected design's calculations and assumptions.<br>![Design report with engineering assumptions and selected gearbox data](screenshots/report.png) |
+
+Regenerate all eight README images with an installed development environment:
+
+```bash
+python scripts/capture_screenshots.py
+```
+
+The capture script uses a temporary project-data directory and the included
+examples. It does not change your saved projects or catalog.
 
 ## Supported designs and manufacturing modes
 
@@ -123,6 +147,16 @@ cd Gearforge-Studio
 ```
 
 ### Linux and macOS
+
+On Ubuntu 24.04, install the Qt runtime libraries before launching the GUI or
+running desktop tests. Qt still loads EGL/OpenGL libraries in offscreen mode:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y libegl1 libgl1 libopengl0 libxkbcommon0 libxcb-cursor0
+```
+
+Then create the Python environment (on macOS, start here):
 
 ```bash
 python3 -m venv .venv
@@ -386,15 +420,19 @@ python -m pytest -q --junitxml=build/test-results.xml
 Remove-Item Env:QT_QPA_PLATFORM
 ```
 
-The recorded rc2 full suite passed **48 tests**, with an additional final GUI pass.
+The original rc2 baseline passed **48 tests**, with an additional final GUI pass.
+The current suite passed **49 tests** on Linux offscreen after making the GUI
+test cover both Reduce Motion settings explicitly.
 Coverage includes numerical constraints, catalogs/projects, CLI/worker flows,
 real CAD solids/interference/STEP round-trips, export manifests, timed motion,
 planetary relations, power balance, stale results and reduced-motion behavior.
 A deliberately misaligned gear phase is a negative control for collision detection.
 See [VALIDATION.json](VALIDATION.json) for exact evidence and untested targets.
 
-These local results do not imply that the included remote CI workflows have run
-or that physical gearbox load/life has been validated.
+The [regression workflow](https://github.com/jonahsaunders/Gearforge-Studio/actions/workflows/ci.yml)
+checks all three target operating systems and uploads test results. Headless
+desktop tests do not establish interactive platform usability or physical
+gearbox load/life validation.
 
 ## Build packages and GitHub releases
 
@@ -474,6 +512,7 @@ and the [release guide](docs/GITHUB_RELEASE.md).
 | --- | --- |
 | Installation cannot find compatible wheels | Use 64-bit Python 3.12 in a fresh environment; check the platform and core version constraints |
 | GUI cannot start on Linux | Run from a graphical session; inspect Qt display-library errors. The recorded host lacked `libxcb-cursor.so.0`, commonly supplied by `libxcb-cursor0` |
+| Tests report missing `libEGL.so.1` | Install the Ubuntu Qt runtime libraries listed under Install and launch; `QT_QPA_PLATFORM=offscreen` does not remove this shared-library requirement |
 | GUI is invisible after tests | Remove `QT_QPA_PLATFORM=offscreen` from the normal launch environment |
 | No feasible candidates | Review rejection explanations; check ratio, envelope, torque, module, backlash, mode and catalog constraints |
 | CAD/export requests regeneration | Requirements, profile or catalog changed; generate a new shortlist |
@@ -491,10 +530,10 @@ and the [release guide](docs/GITHUB_RELEASE.md).
 | `src/gearforge/data/` | Source-traceable seed catalog and application icon |
 | `tests/` | Numerical, data, CAD, GUI, worker and release regression tests |
 | `examples/` | Editable `.gearforge` examples for supported families/modes |
-| `screenshots/` | Design and simulation workspace previews |
+| `screenshots/` | Eight actual app captures: design, simulation, CAD variants, catalog, calibration and report |
 | `docs/` | Architecture, simulation methods, GUI audit and release instructions |
 | `packaging/` | Native build spec, launcher templates and supplemental license texts |
-| `scripts/` | Version checks, license collection, package/archive creation |
+| `scripts/` | Version checks, license collection, package/archive creation and reproducible app captures |
 | `.github/` | Test/release workflows and contribution templates |
 | `VALIDATION.json` | Recorded test/platform evidence and outstanding validation |
 
