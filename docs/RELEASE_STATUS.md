@@ -1,4 +1,4 @@
-# Release status — 1.0.0rc7
+# Release status — 1.0.0rc8
 
 This is an implemented and tested desktop **release candidate**. It is not a finished
 commercially validated gearbox design product. The remaining work below is concrete
@@ -31,6 +31,10 @@ The rc7 [shaft fatigue study](SHAFT_FATIGUE.md) adds selected-section rotating
 bending/steady-torque arithmetic, explicit material evidence and a public NASA
 worked example. Transient fatigue, actual material allowables and whole-shaft
 qualification remain unresolved.
+The rc8 [tooth-contact study](CONTACT_ANALYSIS.md) adds spur Hertz pressure and
+sliding diagrams, explicit sharing assumptions and bounded declared pressure-life
+curves. Its 208 open-reference comparisons verify contact arithmetic, not actual
+load distribution, material durability or production gearbox life.
 
 ## Implemented
 

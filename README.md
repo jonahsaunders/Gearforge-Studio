@@ -9,7 +9,7 @@ with 3D printed parts, catalog gears, or combinations of both. It combines a
 native Qt workspace, discrete design search, engineering screening, a component
 catalog, dimensional print calibration, rigid-body CAD animation and design exports.
 
-**Current version: 1.0.0rc7 · Python 3.12 recommended · Apache-2.0 application code**
+**Current version: 1.0.0rc8 · Python 3.12 recommended · Apache-2.0 application code**
 
 > **Release status:** This is a tested software release candidate for prototype
 > engineering. Its calculations are preliminary screens, not certified ISO/AGMA
@@ -31,6 +31,12 @@ reports. Its first development target is 250 W at 1,500 rpm, 5:1 reduction and
 for public GitHub distribution; no paid standard or private calculation package
 is required. See the [open engineering guide](docs/OPEN_ENGINEERING.md) for the
 method, reproducible FreeCAD Gears comparisons and exact verification scope.
+
+**Tooth contact and surface fatigue** adds spur contact-pressure diagrams,
+explicit load-sharing assumptions and bounded pressure-life curves for each gear.
+It tracks opposite flanks and each member's actual tooth cycles. The original
+implementation is checked against openly licensed SlipPY; the bundled example
+uses invented data, not material allowables. See the [contact guide](docs/CONTACT_ANALYSIS.md).
 
 **Shaft fatigue and material evidence** adds explicit material curves, critical
 section cuts, application factors and rotating-bending/steady-torque fatigue
@@ -509,8 +515,8 @@ windowed executable and a file-based worker protocol. Windows also includes
 For the current release:
 
 ```bash
-git tag -a v1.0.0rc7 -m "GearForge Studio 1.0.0rc7"
-git push origin v1.0.0rc7
+git tag -a v1.0.0rc8 -m "GearForge Studio 1.0.0rc8"
+git push origin v1.0.0rc8
 ```
 
 The tag must match package/runtime versions. Manual builds on `main` upload
@@ -537,7 +543,7 @@ includes them automatically and preserves file permissions:
 ```bash
 git init -b main
 git add .
-git commit -m "Add GearForge Studio 1.0.0rc7"
+git commit -m "Add GearForge Studio 1.0.0rc8"
 git remote add origin https://github.com/jonahsaunders/Gearforge-Studio.git
 git push -u origin main
 ```

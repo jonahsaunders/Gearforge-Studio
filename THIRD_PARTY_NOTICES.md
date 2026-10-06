@@ -83,3 +83,15 @@ identifies the NASA-authored work as US-government work with public use permitte
 The scanned report, third-party figures and material/factor tables are not
 bundled. Original source, tests and adapter code remain Apache-2.0. Historical
 example values are not material allowables. See `docs/SHAFT_FATIGUE.md`.
+
+## Open tooth-contact comparison reference
+
+The original Hertz implementation and numerical fixtures use a separately checked
+out [SlipPY](https://github.com/FrictionTribologyEnigma/slippy) reference, revision
+`a4fbb447fc494d0480661ee41ef15fdc82e7423c`, MIT License, Copyright (c) 2018
+FrictionTribologyEnigma. The original adapter invokes its documented line-contact
+API in a separate process. No SlipPY source, documentation or runtime dependency
+is bundled. The reference checkout retains its MIT license. GearForge-authored
+inputs and numerical result fixtures are distributed under Apache-2.0. No pressure-
+life data in the synthetic example represents a supplier or measured material.
+See [contact methods and reproduction](docs/CONTACT_ANALYSIS.md).

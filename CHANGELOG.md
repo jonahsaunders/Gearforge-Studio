@@ -1,5 +1,18 @@
 # Unreleased
 
+# 1.0.0rc8 — 2026-10-06
+
+- Add external spur Hertz contact pressure, half-width and sliding diagrams with
+  explicit full-load envelope or ideal equal-pair sharing. Exact one-sided
+  interval limits determine maxima, independently of display samples.
+- Add separate material/temperature evidence, pressure-life curves, scalar load
+  factors and cycle accounting for each gear and torque flank. Keep curve
+  extrapolation, unsupported contacts and production ratings unavailable.
+- Add six desktop tabs, study transfer, CLI, strict saved inputs and traceable
+  calculation exports; exercise every tab and all four native diagrams.
+- Compare 208 values against a pinned MIT SlipPY solver in a separate process.
+  Bundle only original numerical fixtures; add no runtime dependency.
+
 # 1.0.0rc7 — 2026-10-06
 
 - Add open shaft fatigue studies with material provenance, exact critical-section

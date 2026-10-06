@@ -96,7 +96,7 @@ class EngineeringStudyDialog(QDialog):
         self.status = QLabel(); self.status.setWordWrap(True); layout.addWidget(self.status)
         actions = QHBoxLayout()
         for label, callback in (("Open study…", self.open_study), ("Save study…", self.save_study),
-                                ("Calculate", self.calculate), ("Study shaft loads…", self.study_shaft), ("Export calculation…", self.export), ("Close", self.reject)):
+                                ("Calculate", self.calculate), ("Study shaft loads…", self.study_shaft), ("Study tooth contact…", self.study_contact), ("Export calculation…", self.export), ("Close", self.reject)):
             button = QPushButton(label); button.clicked.connect(callback); actions.addWidget(button)
         layout.addLayout(actions)
         for row_form in (form, context_form):
@@ -177,6 +177,13 @@ class EngineeringStudyDialog(QDialog):
             return True
         except (ValueError, TypeError, OverflowError) as exc:
             self.result = None; self.report.clear(); self.show_error(exc); return False
+
+    def study_contact(self):
+        from .contact import contact_from_study
+        from .contact_ui import ContactStudyDialog
+        try:study=contact_from_study(self.read_study())
+        except (ValueError,TypeError) as exc:self.show_error(exc);return False
+        dialog=ContactStudyDialog(self,study);dialog.dirty=True;dialog.exec();return True
 
     def study_shaft(self):
         from .shafts import shaft_from_gear_study

@@ -63,6 +63,9 @@ def main():
         fatigue=evidence.get("fatigue_study") or {}
         if fatigue.get("app_version")!=version or fatigue.get("tabs_rendered")!=5 or fatigue.get("verified_files")!=3:
             raise RuntimeError("Native fatigue study smoke failed: "+str(fatigue))
+        contact=evidence.get("contact_study") or {}
+        if contact.get("app_version")!=version or contact.get("tabs_rendered")!=6 or contact.get("diagrams_rendered")!=4 or contact.get("verified_files")!=3:
+            raise RuntimeError("Native contact study smoke failed: "+str(contact))
     output=ROOT/"release-assets";output.mkdir(exist_ok=True)
     if system!="darwin":
         platform_note=("Use GearForgeCLI.exe for console commands and diagnostics.\n" if system=="windows"

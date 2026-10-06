@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "app_version": "1.0.0rc8",
+  "date": "2026-10-06",
+  "status": "local source tests and open contact comparison passed; cross-platform and native package checks pending",
+  "production_qualified": false,
+  "methods": "docs/CONTACT_ANALYSIS.md",
+  "distribution_constraint": "GitHub-publishable original implementation and numerical fixtures; separate MIT reference; no restricted data",
+  "local_windows_source_tests": {
+    "tests": 234,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "local_source_desktop_smoke": {
+    "ok": true,
+    "errors": [],
+    "candidates": 60,
+    "cad_meshes": 15,
+    "elapsed_s": 23.313,
+    "simulation_points": 25,
+    "native_platform": "offscreen",
+    "engineering_study": {
+      "app_version": "1.0.0rc8",
+      "tabs_rendered": 4,
+      "verified_files": 3,
+      "input_power_w": 250.0,
+      "study_sha256": "6351727be05d242e0a8445d16b21249f8be1a491e9996a71ab658bbb123b8838",
+      "production_approved": false
+    },
+    "shaft_study": {
+      "app_version": "1.0.0rc8",
+      "tabs_rendered": 6,
+      "verified_files": 3,
+      "maximum_equilibrium_residual": 0.0,
+      "study_sha256": "5786457039a04580d2d7bec531f69b4e904f7cc0f044d8afa92daad40321ec7e",
+      "production_approved": false
+    },
+    "bearing_study": {
+      "app_version": "1.0.0rc8",
+      "tabs_rendered": 5,
+      "verified_files": 3,
+      "synthetic_basic_l10_hours": 18295.51049310608,
+      "study_sha256": "f73a5b330272ed1758d70f9711f62b1ba50f7e3459f0f64a15b6b639c0995f94",
+      "production_approved": false
+    },
+    "fatigue_study": {
+      "app_version": "1.0.0rc8",
+      "tabs_rendered": 5,
+      "verified_files": 3,
+      "nasa_example_corrected_endpoint_mpa": 125.06778394565542,
+      "study_sha256": "7ac9696d45671f4941e4973b93ddd55725a2c8eeccf05e8365f867390b996ece",
+      "production_approved": false
+    },
+    "contact_study": {
+      "app_version": "1.0.0rc8",
+      "tabs_rendered": 6,
+      "diagrams_rendered": 4,
+      "verified_files": 3,
+      "synthetic_peak_pressure_mpa": 342.5004364419622,
+      "study_sha256": "ae257b3248ced8e6985884a2269cde8db7cd129e2c17e0a9c1c5817593a33456",
+      "production_approved": false
+    },
+    "selected": "416647d929c4"
+  },
+  "independent_contact_comparison": {
+    "reference": "https://github.com/FrictionTribologyEnigma/slippy",
+    "reference_commit": "a4fbb447fc494d0480661ee41ef15fdc82e7423c",
+    "reference_license": "MIT",
+    "scope": "Effective modulus/radius, Hertz contact half-width and peak pressure in original cylinder cases and critical cuts of six spur-study fixtures. Does not independently validate geometry, physical sharing, factors or fatigue life.",
+    "provenance": "Original GearForge inputs and adapter; separate pinned reference process in SI units; no reference source bundled",
+    "comparisons": 208,
+    "maximum_relative_error": 4.007867195766908e-16,
+    "tolerance": {
+      "relative": 1e-10,
+      "absolute": 1e-12
+    },
+    "passed": true
+  },
+  "limitations": [
+    "Elastic external-spur Hertz arithmetic only; envelope/equal-pair sharing is not a verified tooth-stiffness or edge-contact solution.",
+    "Original synthetic material curves, elastic limits and factors are arithmetic fixtures, not actual material allowables or measured durability data.",
+    "A live MIT reference verifies Hertz arithmetic using provided radii/loads; it does not independently verify tooth geometry, sharing, material data or surface life.",
+    "No pressure-life extrapolation, infinite-life claim, helical contact or tooth-root/transient fatigue rating.",
+    "Actual material evidence, load distribution, thermal/lubrication, manufacturing and physical assembly qualification remain.",
+    "Native packages remain unsigned; interactive acceptance on actual company workstation images remains."
+  ]
+}

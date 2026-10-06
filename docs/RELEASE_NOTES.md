@@ -1,30 +1,28 @@
-# GearForge Studio 1.0.0rc7
+# GearForge Studio 1.0.0rc8
 
-This release candidate adds shaft fatigue and material evidence to the open
-gear, shaft and bearing studies. Choose exact critical-section cuts, declare
-material/operating data and application factors, and calculate bounded
-rotating-bending/steady-torque fatigue blocks using a public NASA method.
+This release candidate adds tooth-contact and surface-fatigue studies to the open
+gear, shaft, bearing and shaft-fatigue workflows. Inspect external spur contact
+pressure, half-width and ideal sliding across the path of contact, with explicit
+load-sharing assumptions and separate material evidence for each gear.
 
-- Edit material provenance, finite-life curve range, critical sections and
-  duty conditions in five desktop tabs or batch commands.
-- Recalculate retained shaft loads at exact left/right section cuts, including
-  load and diameter discontinuities. Plot sampling cannot alter stress.
-- Keep axial/hollow/transient fatigue, out-of-range curves and missing data
-  explicit. No endurance plateau, infinite-life claim or strength from a name.
-- Preserve stationary peaks in static checks. Rotation cycles do not count
-  startup, reversal or load-transition fatigue.
-- Save strict editable studies and export complete evidence, JSON, HTML and
-  integrity manifests. Input edits invalidate prior results.
-- Check 100 values against independent 60-digit Decimal arithmetic and the
-  public NASA RP-1123 worked example. Historical numbers are not material
-  allowables; no restricted source tables or paid standards are bundled.
+- Calculate continuous peak pressure from exact interval limits, including
+  load-sharing jumps. Display samples do not determine the maximum.
+- Enter applicable pressure-life curves, temperatures, effective width and load
+  factors. Interpolate only inside the curve; missing evidence stays unassessed.
+- Count each tooth's gear revolutions and accumulate opposite torque flanks
+  separately. Stationary peaks still receive elastic-pressure checks.
+- Edit six desktop tabs and four diagrams, transfer a gear study, save strict
+  inputs and export complete JSON/HTML assessments and integrity manifests.
+- Compare 208 values against a pinned, separate MIT SlipPY reference. The app,
+  adapter and original numerical fixtures can be published on GitHub; no paid
+  standard, restricted material table or new runtime dependency is required.
 
-See [shaft fatigue](SHAFT_FATIGUE.md), [bearing analysis](BEARING_ANALYSIS.md),
-[shaft load paths](SHAFT_ANALYSIS.md) and [open geometry](OPEN_ENGINEERING.md).
-Root `VALIDATION.json` identifies current software evidence; earlier records
-are historical. Native archives remain unsigned.
+See [tooth contact](CONTACT_ANALYSIS.md), [shaft fatigue](SHAFT_FATIGUE.md),
+[bearings](BEARING_ANALYSIS.md), [shaft loads](SHAFT_ANALYSIS.md) and
+[open geometry](OPEN_ENGINEERING.md). Root `VALIDATION.json` identifies the
+version-specific software evidence. Native archives remain unsigned.
 
 **Final production gearbox design and service-load ratings remain unqualified.**
-Actual material data, transient fatigue, tooth fatigue/contact, thermal and
-lubrication, manufacturing and physical durability qualification remain.
-Production-required exports continue to reject unqualified designs.
+Actual material data, tooth stiffness/load distribution, tooth-root and transient
+fatigue, thermal/lubrication, manufacturing and physical durability qualification
+remain. Production-required exports continue to reject unqualified designs.

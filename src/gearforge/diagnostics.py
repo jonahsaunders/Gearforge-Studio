@@ -25,6 +25,7 @@ def desktop_smoke(destination: Path, include_cad=False):
         state["finished"]=True
         result={"ok":not errors,"errors":errors,"candidates":len(window.candidates),"cad_meshes":len(window.viewer.meshes),"elapsed_s":round(time.monotonic()-started,3),"simulation_points":len(window.sweep["points"]) if window.selected else 0,"native_platform":"offscreen","engineering_study":state.get("engineering_study"),"shaft_study":state.get("shaft_study"),"bearing_study":state.get("bearing_study")}
         result["fatigue_study"]=state.get("fatigue_study")
+        result["contact_study"]=state.get("contact_study")
         if window.selected:result["selected"]=window.selected.id
         (destination/"desktop-smoke.json").write_text(json.dumps(result,indent=2))
         if not errors:
@@ -175,6 +176,40 @@ def desktop_smoke(destination: Path, include_cad=False):
             errors.append(f'Fatigue study: {exc}')
         finally:
             fatigue_window.dirty=False;fatigue_window.close()
+        from .contact_ui import ContactStudyDialog
+        from .contact import ContactStudy,synthetic_contact_example,calculate_contact_study,export_contact_study
+        contact_window=ContactStudyDialog(window,synthetic_contact_example())
+        contact_window.show_error=lambda error:errors.append(str(error))
+        try:
+            contact_window.show()
+            if not contact_window.calculate():raise ValueError('Contact assessment failed')
+            for index in range(contact_window.tabs.count()):
+                contact_window.tabs.setCurrentIndex(index);app.processEvents();capture=contact_window.grab()
+                if capture.isNull():raise ValueError(f'Contact study tab {index} did not render')
+                capture.save(str(destination/f'contact-study-{index}.png'))
+            contact_window.tabs.setCurrentIndex(3)
+            for index in range(contact_window.quantity.count()):
+                contact_window.quantity.setCurrentIndex(index);app.processEvents();capture=contact_window.grab()
+                if capture.isNull():raise ValueError(f'Contact diagram {index} did not render')
+                capture.save(str(destination/f'contact-path-{index}.png'))
+            contact=contact_window.read_study();contact.save(destination/'example.gearforge-contact')
+            loaded_contact=ContactStudy.load(destination/'example.gearforge-contact')
+            contact_result=calculate_contact_study(loaded_contact)
+            if contact_result['study_sha256']!=contact_window.result['study_sha256']:
+                raise ValueError('Contact inputs did not round-trip')
+            export_contact_study(loaded_contact,destination/'contact-calculation')
+            manifest=verify_bundle(destination/'contact-calculation')
+            pressure=contact_result['cases'][0]['peak_hertz_pressure_mpa']
+            if not math.isclose(pressure,342.5004364419622,rel_tol=1e-10):raise ValueError('Synthetic contact pressure changed')
+            if contact_result['production_approved'] or contact_result['rated_gearbox_life_hours'] is not None:
+                raise ValueError('Contact assessment falsely approves gearbox life')
+            state['contact_study']={'app_version':contact_result['app_version'],'tabs_rendered':contact_window.tabs.count(),
+                'diagrams_rendered':contact_window.quantity.count(),'verified_files':len(manifest['files']),
+                'synthetic_peak_pressure_mpa':pressure,'study_sha256':contact_result['study_sha256'],'production_approved':False}
+        except Exception as exc:
+            errors.append(f'Contact study: {exc}')
+        finally:
+            contact_window.dirty=False;contact_window.close()
         finish()
     window.generate();timer.timeout.connect(tick);timer.start()
     app.exec()

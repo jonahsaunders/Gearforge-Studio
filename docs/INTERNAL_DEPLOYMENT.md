@@ -1,6 +1,6 @@
 # Internal company deployment
 
-GearForge Studio 1.0.0rc7 is an offline desktop tool for **prototype exploration
+GearForge Studio 1.0.0rc8 is an offline desktop tool for **prototype exploration
 and engineering review**. This deployment guide does not approve a gearbox for
 production, certify a load rating, or replace the company's engineering process.
 The application retains visible prototype/concept labels in reports and exports.
@@ -51,7 +51,7 @@ There is no automatic production rollout.
 ## Install and launch
 
 For an approved native archive, extract the **entire** directory to a
-version-specific location such as `C:\CompanyApps\GearForge\1.0.0rc7`. Keep
+version-specific location such as `C:\CompanyApps\GearForge\1.0.0rc8`. Keep
 `GearForgeStudio.exe` and `_internal` together. Launch the executable. Runtime
 operation does not require an internet connection or Python installation.
 
@@ -199,3 +199,17 @@ private vulnerability reporting. No vendor response-time commitment is implied.
 - Review the finite-life range and omitted transient/critical-section coverage.
   The example is not material allowables or production approval. See
   [shaft fatigue methods](SHAFT_FATIGUE.md).
+
+## Tooth-contact study acceptance
+
+- Open **Design → Tooth contact and surface fatigue…**, load **Synthetic example**,
+  calculate and inspect both material tabs, duty, contact path, provenance and assessment.
+- Switch all four contact-path diagrams. Confirm the example reports about
+  342.500436 MPa peak pressure and remains an unqualified synthetic study.
+- Change material data or a load factor and confirm prior results and diagrams clear.
+- Remove required factors, use an unsupported helical pair or move pressure beyond
+  the entered life curve and confirm missing results stay explicitly unavailable.
+- Save/reopen `.gearforge-contact`, export its assessment and verify the manifest.
+  Confirm opposite flanks and pinion/wheel cycle counts remain separate.
+- Review [the contact method and reference scope](CONTACT_ANALYSIS.md). The example
+  curve, elastic limit and unity factors are invented arithmetic inputs.

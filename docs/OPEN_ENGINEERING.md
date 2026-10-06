@@ -17,6 +17,10 @@ available NASA-authored method and a numerical worked example. See
 [shaft fatigue and its redistribution basis](SHAFT_FATIGUE.md). Public access
 does not by itself authorize copying third-party tables from a document.
 
+The [tooth-contact extension](CONTACT_ANALYSIS.md) uses original Hertz arithmetic,
+original synthetic pressure-life inputs and a separate MIT SlipPY reference solver.
+Its numerical fixtures contain no copied implementation or restricted tables.
+
 ## Accepted development target
 
 Start with an enclosed, single-stage steel spur gearbox at 250 W input,

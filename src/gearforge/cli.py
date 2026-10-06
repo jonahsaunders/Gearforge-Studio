@@ -116,6 +116,15 @@ def main(argv=None):
     fatigue_calculate = fatigue_commands.add_parser("calculate",help="Export bounded stress-life arithmetic and evidence gaps; no production rating")
     fatigue_calculate.add_argument("path",type=Path)
     fatigue_calculate.add_argument("--out",type=Path,required=True)
+    contact = subs.add_parser("contact",help="Assess tooth contact pressure and declared surface-fatigue curves")
+    contact_commands = contact.add_subparsers(dest="contact_command",required=True)
+    contact_new = contact_commands.add_parser("new",help="Create blank material and contact factors for the development gear pair")
+    contact_new.add_argument("path",type=Path)
+    contact_new.add_argument("--synthetic-example",action="store_true",help="Use original invented material/fatigue data for arithmetic only")
+    contact_from = contact_commands.add_parser("from-study",help="Retain a gear study with fresh contact material and factor data")
+    contact_from.add_argument("path",type=Path);contact_from.add_argument("--out",type=Path,required=True)
+    contact_calculate = contact_commands.add_parser("calculate",help="Export contact path, pressure and separate flank exposure; no production rating")
+    contact_calculate.add_argument("path",type=Path);contact_calculate.add_argument("--out",type=Path,required=True)
     search = subs.add_parser("search",help="Search a project and save candidate JSON")
     search.add_argument("project",type=Path)
     search.add_argument("--catalog",type=Path)
@@ -204,6 +213,19 @@ def main(argv=None):
                 if args.fatigue_command=="from-shaft":study=fatigue_from_shaft(ShaftStudy.load(args.path))
                 elif args.nasa_example:study=nasa_example()
                 else:study=fatigue_from_shaft(shaft_from_gear_study(EngineeringStudy()))
+                study.save(path);print(path)
+            return 0
+        if args.command == "contact":
+            from .contact import ContactStudy,contact_from_study,synthetic_contact_example,export_contact_study
+            from .engineering import EngineeringStudy
+            if args.contact_command == "calculate":
+                print(json.dumps(export_contact_study(ContactStudy.load(args.path),args.out),indent=2))
+            else:
+                path=args.out if args.contact_command=="from-study" else args.path
+                if path.exists() or path.is_symlink():raise FileExistsError("Contact study already exists")
+                if args.contact_command=="from-study":study=contact_from_study(EngineeringStudy.load(args.path))
+                elif args.synthetic_example:study=synthetic_contact_example()
+                else:study=contact_from_study(EngineeringStudy())
                 study.save(path);print(path)
             return 0
         if args.command in ("verify","backup","restore"):
