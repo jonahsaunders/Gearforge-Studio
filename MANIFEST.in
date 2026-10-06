@@ -1,5 +1,5 @@
 include README.md CHANGELOG.md LICENSE THIRD_PARTY_NOTICES.md
-include CONTRIBUTING.md SECURITY.md constraints-release.txt
+include CONTRIBUTING.md SECURITY.md constraints-release.txt VALIDATION.json
 recursive-include .github *.yml *.md
 recursive-include docs *.md *.json
 recursive-include packaging *.py *.spec *.sh *.bat *.command

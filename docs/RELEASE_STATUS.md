@@ -68,8 +68,9 @@ configuration; inventing endpoints or silently charging/purchasing would be inco
 
 ## Evidence
 
-See `VALIDATION.json` in the release kit for the actual test commands/results, checked
-runtime, exported sample files and checksums. Tests cover all family searches, numerical
+See `docs/INTERNAL_VALIDATION.json` in the release kit for current test results,
+runtime, export and native-package checks. `docs/VALIDATION_RC2.json` preserves
+historical evidence for the previous version only. Tests cover all family searches, numerical
 constraints, project/catalog round-trips, worker/desktop workflows, real CAD solids,
 interference, real STEP imports, PDF signatures and output manifests. They do not
 establish mechanical fatigue life, wear, real printer accuracy or production readiness.

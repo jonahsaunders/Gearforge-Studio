@@ -508,7 +508,7 @@ includes them automatically and preserves file permissions:
 ```bash
 git init -b main
 git add .
-git commit -m "Add GearForge Studio 1.0.0rc2"
+git commit -m "Add GearForge Studio 1.0.0rc3"
 git remote add origin https://github.com/jonahsaunders/Gearforge-Studio.git
 git push -u origin main
 ```
@@ -551,7 +551,7 @@ and the [release guide](docs/GITHUB_RELEASE.md).
 | `packaging/` | Native build spec, launcher templates and supplemental license texts |
 | `scripts/` | Version checks, license collection, package/archive creation and reproducible app captures |
 | `.github/` | Test/release workflows and contribution templates |
-| `VALIDATION.json` | Recorded test/platform evidence and outstanding validation |
+| `VALIDATION.json` | Index of current software evidence and historical validation |
 
 ## Contributing and licensing
 

@@ -2,11 +2,215 @@
   "schema_version": 1,
   "app_version": "1.0.0rc3",
   "date": "2026-10-06",
+  "tested_implementation_commit": "391781b7790850d8642f2e707f3f04fb248c2150",
   "requested_use": "internal company use for final production gearbox design and load ratings",
   "production_qualified": false,
-  "source_tests": {"status": "passed_before_final_qt_upgrade", "tests": 84, "python": "3.12.14", "platform": "Windows 11 x86_64", "qt": "6.8.3"},
-  "final_runtime_validation": {"qt": "6.11.2", "status": "in_progress"},
-  "runtime_dependency_audit": {"distributions": 48, "reported_vulnerabilities": 0, "missing_license_texts": 0, "native_advisory_review": "See SECURITY.md; package scan is not exhaustive native coverage"},
-  "native_windows": {"status": "in_progress", "signed": false},
-  "remaining_engineering_requirements": "See PRODUCTION_QUALIFICATION.md; first production scope, authorized methods/reference cases, supplier/material/test evidence and engineering release are required."
+  "runtime": {
+    "python": "3.12.14",
+    "dependencies": {
+      "PySide6-Essentials": "6.11.2",
+      "cadquery": "2.8.0",
+      "cadquery-ocp": "7.9.3.1.1",
+      "vtk": "9.6.2",
+      "reportlab": "4.4.9"
+    }
+  },
+  "local_windows_source_tests": {
+    "tests": 84,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "time": 116.474
+  },
+  "regression_ci": {
+    "status": "passed",
+    "commit": "391781b7790850d8642f2e707f3f04fb248c2150",
+    "run_url": "https://github.com/jonahsaunders/Gearforge-Studio/actions/runs/37504724414",
+    "platforms": {
+      "Linux-X64": {
+        "tests": {
+          "tests": 84,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "time": 161.737
+        },
+        "runtime_audit": {
+          "distributions": 48,
+          "reported_vulnerabilities": 0
+        }
+      },
+      "macOS-ARM64": {
+        "tests": {
+          "tests": 84,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "time": 132.972
+        },
+        "runtime_audit": {
+          "distributions": 48,
+          "reported_vulnerabilities": 0
+        }
+      },
+      "Windows-X64": {
+        "tests": {
+          "tests": 84,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "time": 212.642
+        },
+        "runtime_audit": {
+          "distributions": 48,
+          "reported_vulnerabilities": 0
+        }
+      }
+    }
+  },
+  "native_release_ci": {
+    "status": "passed",
+    "commit": "391781b7790850d8642f2e707f3f04fb248c2150",
+    "run_url": "https://github.com/jonahsaunders/Gearforge-Studio/actions/runs/37504717383",
+    "platforms": {
+      "Linux-X64": {
+        "tests": {
+          "tests": 84,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "time": 202.912
+        },
+        "frozen_desktop_cad_smoke": {
+          "ok": true,
+          "errors": [],
+          "candidates": 60,
+          "cad_meshes": 15,
+          "elapsed_s": 19.761,
+          "simulation_points": 25,
+          "native_platform": "offscreen",
+          "selected": "416647d929c4"
+        },
+        "runtime_audit": {
+          "distributions": 48,
+          "reported_vulnerabilities": 0
+        }
+      },
+      "macOS-ARM64": {
+        "tests": {
+          "tests": 84,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "time": 211.631
+        },
+        "frozen_desktop_cad_smoke": {
+          "ok": true,
+          "errors": [],
+          "candidates": 60,
+          "cad_meshes": 15,
+          "elapsed_s": 71.088,
+          "simulation_points": 25,
+          "native_platform": "offscreen",
+          "selected": "416647d929c4"
+        },
+        "runtime_audit": {
+          "distributions": 48,
+          "reported_vulnerabilities": 0
+        }
+      },
+      "Windows-X64": {
+        "tests": {
+          "tests": 84,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0,
+          "time": 213.189
+        },
+        "frozen_desktop_cad_smoke": {
+          "ok": true,
+          "errors": [],
+          "candidates": 60,
+          "cad_meshes": 15,
+          "elapsed_s": 25.281,
+          "simulation_points": 25,
+          "native_platform": "offscreen",
+          "selected": "416647d929c4"
+        },
+        "runtime_audit": {
+          "distributions": 48,
+          "reported_vulnerabilities": 0
+        }
+      }
+    },
+    "publication": "Branch workflow built artifacts only; no tag or public release created"
+  },
+  "local_windows_native": {
+    "status": "passed",
+    "signed": false,
+    "archive": "GearForge-Studio-1.0.0rc3-windows-x86_64-unsigned.zip",
+    "sha256": "3e7968b66d9014381955b9ae482da2d17d55f20b9ab4bb41b00f613b696dd6ad",
+    "frozen_desktop_cad_smoke": {
+      "ok": true,
+      "errors": [],
+      "candidates": 60,
+      "cad_meshes": 15,
+      "elapsed_s": 14.0,
+      "simulation_points": 25,
+      "native_platform": "offscreen",
+      "selected": "416647d929c4"
+    },
+    "windowed_file_worker": "passed separately from console diagnostics",
+    "full_cad_export": {
+      "status": "passed",
+      "total_files": 33,
+      "verified_manifest_entries": 32,
+      "formats_include": [
+        "STEP",
+        "STL",
+        "3MF",
+        "PDF"
+      ]
+    },
+    "backup_verify_restore": {
+      "status": "passed",
+      "fixture_files": [
+        "catalog.sqlite",
+        "settings.ini"
+      ]
+    },
+    "production_gate": {
+      "qualification_exit": 2,
+      "required_production_export_exit": 1,
+      "output_directory_created": false
+    }
+  },
+  "wheel_install": {
+    "status": "passed",
+    "method": "Installed current wheel without dependencies into a separate target, confirmed import path, ran outside source tree with pinned runtime dependencies",
+    "desktop_cad_smoke": {
+      "ok": true,
+      "errors": [],
+      "candidates": 60,
+      "cad_meshes": 15,
+      "elapsed_s": 13.844,
+      "simulation_points": 25,
+      "native_platform": "offscreen",
+      "selected": "416647d929c4"
+    }
+  },
+  "runtime_dependency_audit": {
+    "distributions": 48,
+    "reported_vulnerabilities": 0,
+    "missing_license_texts": 0,
+    "native_advisory_review": "See SECURITY.md; Python package scan is not exhaustive native-library coverage"
+  },
+  "not_validated": [
+    "Final production gearbox design, service-load capacity, fatigue, wear, thermal limits and life",
+    "Material/process and supplier rating-condition evidence",
+    "Independent standards-based reference cases, complete assembly and physical qualification",
+    "Interactive acceptance on the actual company workstation image, accessibility and downstream CAD tools",
+    "Code signing, macOS notarization and company distribution/license approval"
+  ],
+  "remaining_engineering_requirements": "See PRODUCTION_QUALIFICATION.md; first application scope, authorized methods/reference cases, supplier/material/test evidence and engineering release are required."
 }
