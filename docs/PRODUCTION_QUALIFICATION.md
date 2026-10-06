@@ -2,13 +2,15 @@
 
 **Status: not qualified for final production gearbox design or service-load
 ratings.** The requested commercial outcome is not yet achieved. Version
-1.0.0rc9 includes open external spur/helical geometry, quasi-static forces,
+1.0.0rc10 includes open external spur/helical geometry, quasi-static forces,
 operating duty, explicit shaft/bearing load paths and basic per-bearing fatigue
 arithmetic against declared ratings, plus selected-section rotating-bending
 and steady-torque shaft fatigue studies with explicit material evidence. Spur
 Hertz contact studies now add explicit sharing and bounded pressure-life curves.
 Thermal networks now resolve declared heat losses and cooling paths through
 ordered phases and repeated cycles, with conservative warm-up bounds.
+Rack-generated spur profiles now define rounded-cutter roots and their involute
+joins, with analytic regularity checks and sampled manufacturing-study exports.
 These do not establish gearbox fatigue
 strength, adjusted bearing service life or production service-load ratings.
 
@@ -85,8 +87,8 @@ public abstracts are insufficient to implement or verify its complete procedure.
 | Materials | Traceable fatigue/contact/wear data over the qualified process, temperature, life and lubrication envelope; uncertainty and batch controls | Shaft fatigue studies retain explicit material evidence and curve bounds; no qualified material allowables supplied. Existing search still uses illustrative printed / conditional catalog values |
 | Full assembly | Bearings from actual supplier data, shaft fatigue, key/pin/clamp retention, housing/fasteners/mounts, external loads and tolerances | Explicit shaft reactions/motion, bearing duty arithmetic and selected-section rotating-bending/steady-torque studies implemented; actual supplier selection, adjusted life, transient/whole-shaft fatigue, retention and housing remain |
 | Thermal and tribology | Validated losses, temperature, lubrication, wear/creep and applicable scuffing limits across duty | Open passive thermal network, continuous extrema, energy balance and repeated-duty bounds implemented. Actual loss maps/cooling coefficients, nonlinear/local hot spots, lubrication and physical thermal validation remain |
-| Manufacturing | Production tooth/root definition, fit/tolerance stack, drawings, retention details, inspection and quality criteria | Sampled tooth CAD and reference layouts |
-| Calculation verification | Independent worked cases, trusted reference results, tolerance-based comparisons, failure/boundary cases and independent review | 72 geometry comparisons against FreeCAD Gears, 1,452 shaft comparisons against PyNiteFEA, 218 bearing arithmetic checks and 100 shaft-fatigue comparisons with independent arithmetic/public NASA example, and 208 Hertz comparisons against MIT SlipPY, and 3,539 thermal quantities against separate SciPy ODE/shooting calculations; no physical material-fatigue or assembly-rating qualification |
+| Manufacturing | Production tooth/root definition, fit/tolerance stack, drawings, retention details, inspection and quality criteria | Explicit rounded-rack spur root profiles, undercut/fold rejection, active-path checks and sampled DXF/SVG/CSV added; complete production drawings, tolerances, finishing and inspection remain. Prototype CAD still uses its earlier approximation |
+| Calculation verification | Independent worked cases, trusted reference results, tolerance-based comparisons, failure/boundary cases and independent review | 72 geometry comparisons against FreeCAD Gears, 1,452 shaft comparisons against PyNiteFEA, 218 bearing arithmetic checks and 100 shaft-fatigue comparisons with independent arithmetic/public NASA example, and 208 Hertz comparisons against MIT SlipPY, and 3,539 thermal quantities against separate SciPy ODE/shooting calculations, and 266 root-profile rays against independent numerical cutter poses; no physical material-fatigue or assembly-rating qualification |
 | Product validation | Guarded qualification tests under a reviewed plan covering applicable loads, life, temperature, wear and representative manufacturing variation | Physical evidence unavailable |
 | Engineering release | Controlled evidence linked to exact inputs, model version, manufacturing definition and reviewer approval; change-triggered requalification | Hash-traceable prototype and engineering-study packages; no approval override |
 

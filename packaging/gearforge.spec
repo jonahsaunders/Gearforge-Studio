@@ -15,7 +15,7 @@ for distribution in ("PySide6-Essentials", "shiboken6", "reportlab", "cadquery",
 license_dir = project / "release-licenses"
 if license_dir.exists():
     datas.append((str(license_dir), "licenses"))
-for name in ("LICENSE", "THIRD_PARTY_NOTICES.md", "docs/RELEASE_STATUS.md", "docs/INTERNAL_DEPLOYMENT.md", "docs/PRODUCTION_QUALIFICATION.md", "docs/OPEN_ENGINEERING.md", "docs/SHAFT_ANALYSIS.md", "docs/BEARING_ANALYSIS.md", "docs/SHAFT_FATIGUE.md", "docs/CONTACT_ANALYSIS.md", "docs/THERMAL_ANALYSIS.md"):
+for name in ("LICENSE", "THIRD_PARTY_NOTICES.md", "docs/RELEASE_STATUS.md", "docs/INTERNAL_DEPLOYMENT.md", "docs/PRODUCTION_QUALIFICATION.md", "docs/OPEN_ENGINEERING.md", "docs/SHAFT_ANALYSIS.md", "docs/BEARING_ANALYSIS.md", "docs/SHAFT_FATIGUE.md", "docs/CONTACT_ANALYSIS.md", "docs/THERMAL_ANALYSIS.md", "docs/TOOTH_PROFILES.md"):
     datas.append((str(project / name), "documentation"))
 binaries = collect_dynamic_libs("OCP")
 a = Analysis([str(project / "packaging/entry.py")],

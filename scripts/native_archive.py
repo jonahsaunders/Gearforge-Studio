@@ -69,6 +69,9 @@ def main():
         thermal=evidence.get("thermal_study") or {}
         if thermal.get("app_version")!=version or thermal.get("tabs_rendered")!=6 or thermal.get("diagrams_rendered")!=12 or thermal.get("verified_files")!=3:
             raise RuntimeError("Native thermal study smoke failed: "+str(thermal))
+        tooth=evidence.get("tooth_profile") or {}
+        if tooth.get("app_version")!=version or tooth.get("tabs_rendered")!=4 or tooth.get("diagrams_rendered")!=2 or tooth.get("verified_files")!=6:
+            raise RuntimeError("Native tooth profile smoke failed: "+str(tooth))
     output=ROOT/"release-assets";output.mkdir(exist_ok=True)
     if system!="darwin":
         platform_note=("Use GearForgeCLI.exe for console commands and diagnostics.\n" if system=="windows"

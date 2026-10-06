@@ -96,9 +96,14 @@ class EngineeringStudyDialog(QDialog):
         self.status = QLabel(); self.status.setWordWrap(True); layout.addWidget(self.status)
         actions = QHBoxLayout()
         for label, callback in (("Open study…", self.open_study), ("Save study…", self.save_study),
-                                ("Calculate", self.calculate), ("Study shaft loads…", self.study_shaft), ("Study tooth contact…", self.study_contact), ("Study temperatures…", self.study_thermal), ("Export calculation…", self.export), ("Close", self.reject)):
+                                ("Calculate", self.calculate), ("Export calculation…", self.export), ("Close", self.reject)):
             button = QPushButton(label); button.clicked.connect(callback); actions.addWidget(button)
         layout.addLayout(actions)
+        studies = QHBoxLayout()
+        for label, callback in (("Study shaft loads…", self.study_shaft), ("Study tooth contact…", self.study_contact),
+                                ("Study temperatures…", self.study_thermal), ("Study tooth roots…", self.study_tooth)):
+            button = QPushButton(label); button.clicked.connect(callback); studies.addWidget(button)
+        layout.addLayout(studies)
         for row_form in (form, context_form):
             for row in range(row_form.rowCount()):
                 label_item = row_form.itemAt(row, QFormLayout.LabelRole)
@@ -177,6 +182,13 @@ class EngineeringStudyDialog(QDialog):
             return True
         except (ValueError, TypeError, OverflowError) as exc:
             self.result = None; self.report.clear(); self.show_error(exc); return False
+
+    def study_tooth(self):
+        from .tooth_profile import profile_from_study
+        from .tooth_ui import ToothProfileDialog
+        try:study=profile_from_study(self.read_study())
+        except (ValueError,TypeError) as exc:self.show_error(exc);return False
+        dialog=ToothProfileDialog(self,study);dialog.dirty=True;dialog.exec();return True
 
     def study_contact(self):
         from .contact import contact_from_study

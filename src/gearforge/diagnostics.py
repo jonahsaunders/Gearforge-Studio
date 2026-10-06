@@ -27,6 +27,7 @@ def desktop_smoke(destination: Path, include_cad=False):
         result["fatigue_study"]=state.get("fatigue_study")
         result["contact_study"]=state.get("contact_study")
         result["thermal_study"]=state.get("thermal_study")
+        result["tooth_profile"]=state.get("tooth_profile")
         if window.selected:result["selected"]=window.selected.id
         (destination/"desktop-smoke.json").write_text(json.dumps(result,indent=2))
         if not errors:
@@ -245,6 +246,34 @@ def desktop_smoke(destination: Path, include_cad=False):
             errors.append(f'Thermal study: {exc}')
         finally:
             thermal_window.dirty=False;thermal_window.close()
+        from .tooth_ui import ToothProfileDialog
+        from .tooth_profile import ToothProfileStudy,synthetic_profile_example,calculate_profile_study,export_profile_study
+        tooth_window=ToothProfileDialog(window,synthetic_profile_example())
+        tooth_window.show_error=lambda error:errors.append(str(error))
+        try:
+            tooth_window.show()
+            if not tooth_window.calculate() or not tooth_window.result['profile_available']:raise ValueError('Generated tooth profile failed')
+            for index in range(tooth_window.tabs.count()):
+                tooth_window.tabs.setCurrentIndex(index);app.processEvents();capture=tooth_window.grab()
+                if capture.isNull():raise ValueError(f'Tooth profile tab {index} did not render')
+                capture.save(str(destination/f'tooth-profile-{index}.png'))
+            tooth_window.tabs.setCurrentIndex(1)
+            for view in range(2):
+                tooth_window.view.setCurrentIndex(view);app.processEvents();capture=tooth_window.grab()
+                if capture.isNull():raise ValueError('Generated tooth diagram did not render')
+                capture.save(str(destination/f'tooth-geometry-{view}.png'))
+            tooth=tooth_window.read_study();tooth.save(destination/'example.gearforge-tooth')
+            loaded=ToothProfileStudy.load(destination/'example.gearforge-tooth');tooth_result=calculate_profile_study(loaded)
+            if tooth_result['study_sha256']!=tooth_window.result['study_sha256']:raise ValueError('Tooth inputs did not round-trip')
+            export_profile_study(loaded,destination/'tooth-calculation');manifest=verify_bundle(destination/'tooth-calculation')
+            start=tooth_result['geometry']['involute_start_radius_mm']
+            if not math.isclose(start,18.820066532283924,rel_tol=1e-10):raise ValueError('Generated involute start changed')
+            if tooth_result['production_approved']:raise ValueError('Tooth profile falsely approves a production rating')
+            state['tooth_profile']={'app_version':tooth_result['app_version'],'tabs_rendered':tooth_window.tabs.count(),
+                'diagrams_rendered':2,'verified_files':len(manifest['files']),'involute_start_radius_mm':start,
+                'study_sha256':tooth_result['study_sha256'],'production_approved':False}
+        except Exception as exc:errors.append(f'Tooth profile: {exc}')
+        finally:tooth_window.dirty=False;tooth_window.close()
         finish()
     window.generate();timer.timeout.connect(tick);timer.start()
     app.exec()

@@ -1,6 +1,6 @@
 # Internal company deployment
 
-GearForge Studio 1.0.0rc9 is an offline desktop tool for **prototype exploration
+GearForge Studio 1.0.0rc10 is an offline desktop tool for **prototype exploration
 and engineering review**. This deployment guide does not approve a gearbox for
 production, certify a load rating, or replace the company's engineering process.
 The application retains visible prototype/concept labels in reports and exports.
@@ -51,7 +51,7 @@ There is no automatic production rollout.
 ## Install and launch
 
 For an approved native archive, extract the **entire** directory to a
-version-specific location such as `C:\CompanyApps\GearForge\1.0.0rc9`. Keep
+version-specific location such as `C:\CompanyApps\GearForge\1.0.0rc10`. Keep
 `GearForgeStudio.exe` and `_internal` together. Launch the executable. Runtime
 operation does not require an internet connection or Python installation.
 
@@ -227,3 +227,16 @@ private vulnerability reporting. No vendor response-time commitment is implied.
 - Save/reopen `.gearforge-thermal`, export and verify the assessment manifest.
   Review [thermal method/domain](THERMAL_ANALYSIS.md), including the distinction
   between calculated maxima and conservative bounds for every repeated cycle.
+
+## Tooth-profile acceptance
+
+- Open **Design → Rack-generated tooth roots…**, choose **Synthetic example**
+  and calculate. Inspect all four tabs and both tooth/whole-gear views.
+- Confirm the synthetic involute starts at radius 18.8200665323 mm and the
+  17.5 mm root joins it smoothly. These are numerical fixture dimensions.
+- Remove cutter radius and confirm no profile is generated. Transfer a 12-tooth,
+  unshifted pair and confirm undercut prevents a supported outline.
+- Save/reopen `.gearforge-tooth`, export and verify the six-file manifest.
+  Inspect millimetre units and closed outlines in the company's DXF consumer.
+- Review actual cutter evidence, finishing, root tolerances and inspection
+  separately; geometry output does not establish tooth bending or fatigue strength.

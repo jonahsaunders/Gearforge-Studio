@@ -1,5 +1,17 @@
 # Unreleased
 
+# 1.0.0rc10 — 2026-10-06
+
+- Add original rounded-rack spur tooth envelopes, continuous analytic fillets,
+  involute joins, explicit tooth-thickness reduction and actual cutter evidence.
+- Reject undercut/cusped/folded profiles using analytic regularity minima;
+  compare the retained pair's nominal active path with the generated involute start.
+- Add a four-tab editor, tooth/whole-gear views, strict study files, CLI and
+  sampled DXF/SVG/CSV exports with complete inputs and integrity manifests.
+- Independently compare 266 radial intersections against numerical cutter-pose
+  optimization in seven original fixtures. No restricted data or new runtime dependency.
+- Tooth-root stresses, fatigue, manufacturing acceptance and physical qualification remain.
+
 # 1.0.0rc9 — 2026-10-06
 
 - Add original passive thermal networks with editable bodies, heat paths and

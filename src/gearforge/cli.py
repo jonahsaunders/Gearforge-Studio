@@ -133,6 +133,15 @@ def main(argv=None):
     thermal_from.add_argument("path",type=Path);thermal_from.add_argument("--out",type=Path,required=True)
     thermal_calculate = thermal_commands.add_parser("calculate",help="Export thermal histories, continuous extrema and energy balance; no production rating")
     thermal_calculate.add_argument("path",type=Path);thermal_calculate.add_argument("--out",type=Path,required=True)
+    tooth = subs.add_parser("tooth",help="Study rack-generated spur roots and export sampled profiles")
+    tooth_commands = tooth.add_subparsers(dest="tooth_command",required=True)
+    tooth_new = tooth_commands.add_parser("new",help="Create unknown cutter inputs or an explicit synthetic example")
+    tooth_new.add_argument("path",type=Path);tooth_new.add_argument("--synthetic-example",action="store_true")
+    tooth_from = tooth_commands.add_parser("from-study",help="Retain gear geometry with fresh cutter evidence")
+    tooth_from.add_argument("path",type=Path);tooth_from.add_argument("--out",type=Path,required=True)
+    tooth_from.add_argument("--role",choices=["pinion","wheel"],default="pinion")
+    tooth_calculate = tooth_commands.add_parser("calculate",help="Export analytic dimensions, sampled DXF/SVG and coordinates; no production rating")
+    tooth_calculate.add_argument("path",type=Path);tooth_calculate.add_argument("--out",type=Path,required=True)
     search = subs.add_parser("search",help="Search a project and save candidate JSON")
     search.add_argument("project",type=Path)
     search.add_argument("--catalog",type=Path)
@@ -173,6 +182,16 @@ def main(argv=None):
             Project().save(args.path)
             print(args.path)
             return 0
+        if args.command == "tooth":
+            from .tooth_profile import ToothProfileStudy,profile_from_study,synthetic_profile_example,export_profile_study
+            from .engineering import EngineeringStudy
+            if args.tooth_command in ("new","from-study"):
+                destination=args.path if args.tooth_command=="new" else args.out
+                if destination.exists() or destination.is_symlink():raise FileExistsError("Tooth study already exists")
+                study=(synthetic_profile_example() if args.synthetic_example else ToothProfileStudy()) if args.tooth_command=="new" else profile_from_study(EngineeringStudy.load(args.path),args.role)
+                study.save(destination);print(destination);return 0
+            result=export_profile_study(ToothProfileStudy.load(args.path),args.out)
+            print(json.dumps(result,indent=2));return 0
         if args.command == "study":
             from .engineering import EngineeringStudy, export_study
             if args.study_command == "new":

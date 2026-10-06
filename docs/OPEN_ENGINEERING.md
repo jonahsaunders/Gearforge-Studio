@@ -25,6 +25,11 @@ The [thermal-network extension](THERMAL_ANALYSIS.md) uses original heat-balance
 and modal arithmetic, with independent BSD-licensed SciPy ODE verification.
 Synthetic losses, capacities and cooling inputs are not material/property data.
 
+The [rack-generated tooth profile](TOOTH_PROFILES.md) uses original rolling
+kinematics and a rounded cutter. Independent ray/cutter intersections verify
+266 radii using BSD SciPy numerical minimization; no cutter table or restricted
+manufacturing data is bundled.
+
 ## Accepted development target
 
 Start with an enclosed, single-stage steel spur gearbox at 250 W input,

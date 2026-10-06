@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "app_version": "1.0.0rc10",
+  "date": "2026-10-06",
+  "status": "local source and independent geometry checks passed; cross-platform/native verification in progress",
+  "production_qualified": false,
+  "methods": "docs/TOOTH_PROFILES.md",
+  "distribution_constraint": "Original GitHub-publishable implementation, adapters and fixtures; BSD SciPy reference; no restricted data",
+  "local_windows_source_tests": {
+    "tests": 279,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "local_tooth_tests_after_adding_dxf_import_regression": {
+    "tests": 22,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "local_test_scope": "Full 279-test source suite passed. Added one DXF import/solid-volume regression, then all 22 tooth tests passed; final CI suite has 280 tests.",
+  "local_source_desktop_smoke": {
+    "ok": true,
+    "errors": [],
+    "candidates": 60,
+    "cad_meshes": 15,
+    "elapsed_s": 20.062,
+    "simulation_points": 25,
+    "native_platform": "offscreen",
+    "engineering_study": {
+      "app_version": "1.0.0rc10",
+      "tabs_rendered": 4,
+      "verified_files": 3,
+      "input_power_w": 250.0,
+      "study_sha256": "6351727be05d242e0a8445d16b21249f8be1a491e9996a71ab658bbb123b8838",
+      "production_approved": false
+    },
+    "shaft_study": {
+      "app_version": "1.0.0rc10",
+      "tabs_rendered": 6,
+      "verified_files": 3,
+      "maximum_equilibrium_residual": 0.0,
+      "study_sha256": "5786457039a04580d2d7bec531f69b4e904f7cc0f044d8afa92daad40321ec7e",
+      "production_approved": false
+    },
+    "bearing_study": {
+      "app_version": "1.0.0rc10",
+      "tabs_rendered": 5,
+      "verified_files": 3,
+      "synthetic_basic_l10_hours": 18295.51049310608,
+      "study_sha256": "f73a5b330272ed1758d70f9711f62b1ba50f7e3459f0f64a15b6b639c0995f94",
+      "production_approved": false
+    },
+    "fatigue_study": {
+      "app_version": "1.0.0rc10",
+      "tabs_rendered": 5,
+      "verified_files": 3,
+      "nasa_example_corrected_endpoint_mpa": 125.06778394565542,
+      "study_sha256": "7ac9696d45671f4941e4973b93ddd55725a2c8eeccf05e8365f867390b996ece",
+      "production_approved": false
+    },
+    "contact_study": {
+      "app_version": "1.0.0rc10",
+      "tabs_rendered": 6,
+      "diagrams_rendered": 4,
+      "verified_files": 3,
+      "synthetic_peak_pressure_mpa": 342.5004364419622,
+      "study_sha256": "ae257b3248ced8e6985884a2269cde8db7cd129e2c17e0a9c1c5817593a33456",
+      "production_approved": false
+    },
+    "thermal_study": {
+      "app_version": "1.0.0rc10",
+      "tabs_rendered": 6,
+      "diagrams_rendered": 12,
+      "verified_files": 3,
+      "synthetic_gear_peak_c": 60.79234545102813,
+      "study_sha256": "c09e9947f8c0ab7ad47d44a1fd40ece6c488a66e14719c30140c9393b26e0c78",
+      "production_approved": false
+    },
+    "tooth_profile": {
+      "app_version": "1.0.0rc10",
+      "tabs_rendered": 4,
+      "diagrams_rendered": 2,
+      "verified_files": 6,
+      "involute_start_radius_mm": 18.820066532283924,
+      "study_sha256": "d2844cdf282f91a4e6ece791bb62a12efddf983745f2e4c201502f57daa01bfe",
+      "production_approved": false
+    },
+    "selected": "416647d929c4"
+  },
+  "independent_tooth_comparison": {
+    "passed": true,
+    "comparisons": 266,
+    "reference": "Independent ray intersections and SciPy bounded pose minimization",
+    "scipy_version": "1.18.1",
+    "reference_license": "BSD-3-Clause",
+    "maximum_absolute_error_mm": 2.674482857401017e-11,
+    "tolerance": {
+      "relative": 2e-09,
+      "absolute_mm": 2e-07
+    },
+    "scope": "Original seven non-undercut spur cutter fixtures; geometry only, no manufacturing or strength qualification."
+  },
+  "limitations": [
+    "Non-undercut external symmetric spur cutter only; unsupported envelopes produce no geometry.",
+    "Adaptive DXF/SVG/CSV sampling is not a certified maximum chord-error bound or a manufacturing tolerance.",
+    "Reference cutting geometry establishes no actual cutter/process, tooth-root stress, fatigue strength or production load rating.",
+    "Actual material/cutter data, root/transient fatigue, 3D distribution, loss/cooling maps, lubrication, tolerances and physical durability remain.",
+    "Unsigned native packages require workstation acceptance."
+  ]
+}

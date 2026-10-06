@@ -105,3 +105,12 @@ modal solver. Original numerical fixtures contain no third-party implementation,
 material property table or measured proprietary loss/cooling data. Existing NumPy/
 SciPy dependency notices remain applicable; no new runtime dependency is added.
 See [thermal methods and reproduction](docs/THERMAL_ANALYSIS.md).
+
+## Open rack-cutter profile comparison
+
+The rolling-rack implementation, numerical cutting adapter and seven synthetic
+fixtures are original Apache-2.0 work. Independent ray intersections and pose
+optimization run in a separate process using BSD-3-Clause SciPy 1.18.1.
+No cutter tables, external gear implementation or restricted manufacturing data
+are copied or bundled. Existing SciPy/NumPy notices remain applicable.
+See [tooth profiles](docs/TOOTH_PROFILES.md).

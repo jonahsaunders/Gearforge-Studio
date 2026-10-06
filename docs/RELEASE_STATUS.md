@@ -1,4 +1,4 @@
-# Release status — 1.0.0rc9
+# Release status — 1.0.0rc10
 
 This is an implemented and tested desktop **release candidate**. It is not a finished
 commercially validated gearbox design product. The remaining work below is concrete
@@ -104,3 +104,7 @@ Tests cover all family searches, numerical
 constraints, project/catalog round-trips, worker/desktop workflows, real CAD solids,
 interference, real STEP imports, PDF signatures and output manifests. They do not
 establish mechanical fatigue life, wear, real printer accuracy or production readiness.
+
+The rc10 [rack-cutter profiles](TOOTH_PROFILES.md) add explicit generated spur
+roots and sampled geometry exports. See `TOOTH_VALIDATION.json` for current
+verification; earlier thermal/native records apply to rc9 only.

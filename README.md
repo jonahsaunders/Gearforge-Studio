@@ -9,7 +9,7 @@ with 3D printed parts, catalog gears, or combinations of both. It combines a
 native Qt workspace, discrete design search, engineering screening, a component
 catalog, dimensional print calibration, rigid-body CAD animation and design exports.
 
-**Current version: 1.0.0rc9 · Python 3.12 recommended · Apache-2.0 application code**
+**Current version: 1.0.0rc10 · Python 3.12 recommended · Apache-2.0 application code**
 
 > **Release status:** This is a tested software release candidate for prototype
 > engineering. Its calculations are preliminary screens, not certified ISO/AGMA
@@ -31,6 +31,12 @@ reports. Its first development target is 250 W at 1,500 rpm, 5:1 reduction and
 for public GitHub distribution; no paid standard or private calculation package
 is required. See the [open engineering guide](docs/OPEN_ENGINEERING.md) for the
 method, reproducible FreeCAD Gears comparisons and exact verification scope.
+
+**Rack-generated tooth roots** adds explicit spur cutter geometry, a generated
+root joined to the involute, analytic undercut/fold rejection and a check against
+the nominal active contact path. Inspect the tooth or whole gear and export
+sampled DXF/SVG/CSV alongside complete calculation evidence. See the
+[tooth-profile guide](docs/TOOTH_PROFILES.md).
 
 **Thermal network and cooling duty** adds editable bodies, heat-transfer paths,
 ordered heating/cooling phases, continuous temperature extrema and energy balances.
@@ -520,8 +526,8 @@ windowed executable and a file-based worker protocol. Windows also includes
 For the current release:
 
 ```bash
-git tag -a v1.0.0rc9 -m "GearForge Studio 1.0.0rc9"
-git push origin v1.0.0rc9
+git tag -a v1.0.0rc10 -m "GearForge Studio 1.0.0rc10"
+git push origin v1.0.0rc10
 ```
 
 The tag must match package/runtime versions. Manual builds on `main` upload
@@ -548,7 +554,7 @@ includes them automatically and preserves file permissions:
 ```bash
 git init -b main
 git add .
-git commit -m "Add GearForge Studio 1.0.0rc9"
+git commit -m "Add GearForge Studio 1.0.0rc10"
 git remote add origin https://github.com/jonahsaunders/Gearforge-Studio.git
 git push -u origin main
 ```

@@ -1,9 +1,10 @@
 {
   "schema_version": 1,
-  "app_version": "1.0.0rc9",
-  "release_status": "open thermal-network release candidate; production gearbox ratings remain unqualified",
-  "current_evidence": "docs/THERMAL_VALIDATION.json",
+  "app_version": "1.0.0rc10",
+  "release_status": "rack-generated tooth profile release candidate; production gearbox ratings remain unqualified",
+  "current_evidence": "docs/TOOTH_VALIDATION.json",
   "historical_evidence": [
+    "docs/THERMAL_VALIDATION.json",
     "docs/CONTACT_VALIDATION.json",
     "docs/FATIGUE_VALIDATION.json",
     "docs/BEARING_VALIDATION.json",
