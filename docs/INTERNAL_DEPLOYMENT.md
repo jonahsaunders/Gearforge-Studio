@@ -1,6 +1,6 @@
 # Internal company deployment
 
-GearForge Studio 1.0.0rc6 is an offline desktop tool for **prototype exploration
+GearForge Studio 1.0.0rc7 is an offline desktop tool for **prototype exploration
 and engineering review**. This deployment guide does not approve a gearbox for
 production, certify a load rating, or replace the company's engineering process.
 The application retains visible prototype/concept labels in reports and exports.
@@ -51,7 +51,7 @@ There is no automatic production rollout.
 ## Install and launch
 
 For an approved native archive, extract the **entire** directory to a
-version-specific location such as `C:\CompanyApps\GearForge\1.0.0rc6`. Keep
+version-specific location such as `C:\CompanyApps\GearForge\1.0.0rc7`. Keep
 `GearForgeStudio.exe` and `_internal` together. Launch the executable. Runtime
 operation does not require an internet connection or Python installation.
 
@@ -186,3 +186,16 @@ private vulnerability reporting. No vendor response-time commitment is implied.
 - Save/reopen `.gearforge-bearing`, export its assessment and verify the manifest.
 - Keep these files with project backups. Synthetic inputs and basic per-bearing
   L10 never establish production gearbox life. See [method scope](BEARING_ANALYSIS.md).
+
+## Shaft-fatigue study acceptance
+
+- Open **Design → Shaft fatigue and material evidence…** and **Worked example**.
+  Confirm the historical NASA fixture is visibly labeled as example data.
+- Inspect material evidence, critical-section cuts and every retained duty case.
+  Clear a strength input and confirm the damage becomes unassessed. Change a
+  load model to unsupported and confirm it cannot retain a fatigue result.
+- Save/reopen `.gearforge-fatigue`, export the assessment and verify its manifest.
+  Preserve these files in project backups, separately from the catalog database.
+- Review the finite-life range and omitted transient/critical-section coverage.
+  The example is not material allowables or production approval. See
+  [shaft fatigue methods](SHAFT_FATIGUE.md).
