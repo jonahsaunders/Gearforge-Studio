@@ -94,6 +94,17 @@ def main(argv=None):
     shaft_calculate = shaft_commands.add_parser("calculate",help="Export bearing loads, elastic motion and nominal shaft stress")
     shaft_calculate.add_argument("path",type=Path)
     shaft_calculate.add_argument("--out",type=Path,required=True)
+    bearing = subs.add_parser("bearing",help="Assess explicit bearing ratings against a retained shaft duty study")
+    bearing_commands = bearing.add_subparsers(dest="bearing_command",required=True)
+    bearing_new = bearing_commands.add_parser("new",help="Create blank bearing definitions for the development shaft")
+    bearing_new.add_argument("path",type=Path)
+    bearing_new.add_argument("--synthetic-example",action="store_true",help="Use original invented ratings for verification only")
+    bearing_from = bearing_commands.add_parser("from-shaft",help="Retain a shaft study and create blank bearing data for every case")
+    bearing_from.add_argument("path",type=Path)
+    bearing_from.add_argument("--out",type=Path,required=True)
+    bearing_calculate = bearing_commands.add_parser("calculate",help="Export per-bearing basic fatigue and explicit operating-limit checks")
+    bearing_calculate.add_argument("path",type=Path)
+    bearing_calculate.add_argument("--out",type=Path,required=True)
     search = subs.add_parser("search",help="Search a project and save candidate JSON")
     search.add_argument("project",type=Path)
     search.add_argument("--catalog",type=Path)
@@ -155,6 +166,20 @@ def main(argv=None):
                 source=EngineeringStudy() if args.shaft_command=="new" else EngineeringStudy.load(args.path)
                 shaft_from_gear_study(source,getattr(args,"role","pinion")).save(path)
                 print(path)
+            return 0
+        if args.command == "bearing":
+            from .bearings import BearingStudy, bearings_from_shaft, synthetic_bearing_example, export_bearing_study
+            from .shafts import ShaftStudy, shaft_from_gear_study
+            from .engineering import EngineeringStudy
+            if args.bearing_command == "calculate":
+                print(json.dumps(export_bearing_study(BearingStudy.load(args.path),args.out),indent=2))
+            else:
+                path=args.out if args.bearing_command=="from-shaft" else args.path
+                if path.exists() or path.is_symlink():raise FileExistsError("Bearing study already exists")
+                if args.bearing_command=="from-shaft":study=bearings_from_shaft(ShaftStudy.load(args.path))
+                elif args.synthetic_example:study=synthetic_bearing_example()
+                else:study=bearings_from_shaft(shaft_from_gear_study(EngineeringStudy()))
+                study.save(path);print(path)
             return 0
         if args.command in ("verify","backup","restore"):
             from .maintenance import verify_bundle, backup_data, restore_data

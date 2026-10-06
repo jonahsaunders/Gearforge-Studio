@@ -156,3 +156,9 @@ No ISO/AGMA compliance or certification is claimed. If a future customer require
 a specific standard, that requirement needs an explicit, separately supported
 compliance assessment. It is not silently satisfied by similar formulas or an
 open-source implementation's name.
+
+The [bearing duty assessment](BEARING_ANALYSIS.md) uses the recalculated load path
+with explicit bearing capacities, case factors and operating limits. Its open
+verification adapter checks basic fatigue arithmetic against 60-digit Decimal
+results from original synthetic cases; supplier factors and service life remain
+outside that verification. No restricted supplier table is included.

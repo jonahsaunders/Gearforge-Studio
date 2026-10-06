@@ -34,6 +34,7 @@ jobs:
       - run: python -m pip install -c constraints-release.txt --upgrade pip
       - run: python -m pip install -c constraints-release.txt '.[dev]' pip-audit
       - run: python -m pip check
+      - run: python scripts/verify_bearing_reference.py
       - run: python -m pytest -q --junitxml=build/test-results.xml
       - run: python -m build
       - run: python scripts/collect_licenses.py
@@ -54,6 +55,7 @@ jobs:
           name: evidence-${{ runner.os }}-${{ runner.arch }}
           path: |
             build/test-results.xml
+            build/bearing-reference-comparison.json
             build/frozen-smoke/desktop-smoke.json
             build/frozen-smoke/*.png
             build/frozen-smoke.log

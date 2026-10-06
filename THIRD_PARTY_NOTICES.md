@@ -67,3 +67,9 @@ Primary technical/source references:
 - https://www.khkgears.us/catalog/product/SSG1-40
 - https://www.khkgears.us/catalog/product/MSGA1-40
 - https://khkgears.net/pdf/spur-tech.pdf
+
+The bearing assessment and high-precision verification adapter are original
+GearForge implementations. The adapter uses Python standard-library Decimal.
+Bundled capacities/factors are synthetic, not a manufacturer product table.
+Linked Schaeffler/SKF documents provide public mathematical context; their text,
+tables and figures are not redistributed. No paid standard is required.

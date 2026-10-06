@@ -57,6 +57,9 @@ def main():
         shaft=evidence.get("shaft_study") or {}
         if shaft.get("app_version")!=version or shaft.get("tabs_rendered")!=6 or shaft.get("verified_files")!=3:
             raise RuntimeError("Native shaft study smoke failed: "+str(shaft))
+        bearing=evidence.get("bearing_study") or {}
+        if bearing.get("app_version")!=version or bearing.get("tabs_rendered")!=5 or bearing.get("verified_files")!=3:
+            raise RuntimeError("Native bearing study smoke failed: "+str(bearing))
     output=ROOT/"release-assets";output.mkdir(exist_ok=True)
     if system!="darwin":
         platform_note=("Use GearForgeCLI.exe for console commands and diagnostics.\n" if system=="windows"

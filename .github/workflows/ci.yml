@@ -77,6 +77,7 @@ jobs:
       - run: python scripts/collect_licenses.py
       - run: python -m pip_audit --no-deps --disable-pip -r release-licenses/requirements-runtime.txt --format json --output release-licenses/vulnerability-audit.json
       - run: python scripts/check_version.py
+      - run: python scripts/verify_bearing_reference.py
       - run: python -m pytest -q --junitxml=build/test-results.xml
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
@@ -84,6 +85,7 @@ jobs:
           name: tests-${{ runner.os }}-${{ runner.arch }}
           path: |
             build/test-results.xml
+            build/bearing-reference-comparison.json
             release-licenses/DEPENDENCIES.json
             release-licenses/requirements-runtime.txt
             release-licenses/vulnerability-audit.json

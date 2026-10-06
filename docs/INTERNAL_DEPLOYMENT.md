@@ -1,6 +1,6 @@
 # Internal company deployment
 
-GearForge Studio 1.0.0rc5 is an offline desktop tool for **prototype exploration
+GearForge Studio 1.0.0rc6 is an offline desktop tool for **prototype exploration
 and engineering review**. This deployment guide does not approve a gearbox for
 production, certify a load rating, or replace the company's engineering process.
 The application retains visible prototype/concept labels in reports and exports.
@@ -51,7 +51,7 @@ There is no automatic production rollout.
 ## Install and launch
 
 For an approved native archive, extract the **entire** directory to a
-version-specific location such as `C:\CompanyApps\GearForge\1.0.0rc5`. Keep
+version-specific location such as `C:\CompanyApps\GearForge\1.0.0rc6`. Keep
 `GearForgeStudio.exe` and `_internal` together. Launch the executable. Runtime
 operation does not require an internet connection or Python installation.
 
@@ -177,3 +177,12 @@ Assign an internal support owner, update-review cadence and incident channel.
 For a defect record version, OS, steps, a sanitized example project, and relevant
 logs; do not publish company designs in public issues. Use `SECURITY.md` for
 private vulnerability reporting. No vendor response-time commitment is implied.
+
+## Bearing-study acceptance
+
+- Open **Design → Bearing duty and capacity…** and a supplied synthetic example.
+- Verify both bearings, all duty conditions and the retained shaft source; change
+  a capacity to an unknown value and confirm the life result becomes unassessed.
+- Save/reopen `.gearforge-bearing`, export its assessment and verify the manifest.
+- Keep these files with project backups. Synthetic inputs and basic per-bearing
+  L10 never establish production gearbox life. See [method scope](BEARING_ANALYSIS.md).

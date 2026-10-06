@@ -142,7 +142,7 @@ class ShaftStudyDialog(QDialog):
         self.status=QLabel();self.status.setWordWrap(True);layout.addWidget(self.status)
         buttons=QHBoxLayout();layout.addLayout(buttons)
         for label,callback in (('Open shaft study…',self.open_study),('Save shaft study…',self.save_study),
-                               ('Calculate',self.calculate),('Export calculation…',self.export),('Close',self.reject)):
+                               ('Calculate',self.calculate),('Assess bearings…',self.assess_bearings),('Export calculation…',self.export),('Close',self.reject)):
             button=QPushButton(label);button.clicked.connect(callback);buttons.addWidget(button)
         self.set_study(study or ShaftStudy())
 
@@ -271,6 +271,13 @@ class ShaftStudyDialog(QDialog):
         self.summary.setText(f"Bearing A: radial {a['radial_load_n']:.6g} N, axial {a['axial_load_n']:.6g} N. Bearing B: radial {b['radial_load_n']:.6g} N, axial {b['axial_load_n']:.6g} N. Maximum deflection {m['deflection_magnitude_mm']['value']:.6g} mm at X={m['deflection_magnitude_mm']['position_mm']:.6g} mm. Nominal surface stress {m['nominal_surface_von_mises_mpa']['value']:.6g} MPa.\n"+' '.join(case['findings']))
 
     def show_error(self,error):QMessageBox.warning(self,'Shaft study',str(error))
+
+    def assess_bearings(self):
+        from .bearings import bearings_from_shaft
+        from .bearing_ui import BearingStudyDialog
+        try:study=bearings_from_shaft(self.read_study())
+        except (ValueError,TypeError) as exc:self.show_error(exc);return False
+        dialog=BearingStudyDialog(self,study);dialog.dirty=True;dialog.exec();return True
 
     def save_study(self):
         try:study=self.read_study()

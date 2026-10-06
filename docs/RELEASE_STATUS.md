@@ -1,4 +1,4 @@
-# Release status — 1.0.0rc5
+# Release status — 1.0.0rc6
 
 This is an implemented and tested desktop **release candidate**. It is not a finished
 commercially validated gearbox design product. The remaining work below is concrete
@@ -24,7 +24,9 @@ The rc5 shaft study resolves explicit three-axis forces/couples through two
 bearing supports and stepped solid/hollow sections. It adds bearing reactions,
 elastic motion, nominal stress, diagrams and traceable exports, with 1,452
 independent finite-element comparisons. See [shaft analysis](SHAFT_ANALYSIS.md).
-Actual bearing capacity and shaft fatigue remain unassessed.
+The rc6 [bearing assessment](BEARING_ANALYSIS.md) adds explicit capacity inputs,
+basic per-bearing fatigue arithmetic and operating-limit checks across duty.
+Actual supplier selection, adjusted service life and shaft fatigue remain unqualified.
 
 ## Implemented
 
@@ -84,7 +86,8 @@ configuration; inventing endpoints or silently charging/purchasing would be inco
 See root `VALIDATION.json` for current test and native-package evidence.
 `docs/INTERNAL_VALIDATION.json` preserves rc3 evidence and `docs/VALIDATION_RC2.json`
 preserves rc2 evidence; `docs/ENGINEERING_VALIDATION.json` records rc4. Those
-historical passes do not validate a newer build.
+historical passes do not validate a newer build. `docs/SHAFT_VALIDATION.json`
+preserves rc5; `docs/BEARING_VALIDATION.json` records rc6.
 Tests cover all family searches, numerical
 constraints, project/catalog round-trips, worker/desktop workflows, real CAD solids,
 interference, real STEP imports, PDF signatures and output manifests. They do not

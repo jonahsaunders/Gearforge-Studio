@@ -1,0 +1,158 @@
+{
+  "name": "Synthetic bearing arithmetic example \u2014 not a supplier selection",
+  "shaft": {
+    "name": "250 W steel spur qualification target \u2014 pinion shaft",
+    "length_mm": 120.0,
+    "bearing_a_mm": 0.0,
+    "bearing_b_mm": 120.0,
+    "axial_locator": "a",
+    "sections": [
+      {
+        "start_mm": 0.0,
+        "end_mm": 120.0,
+        "outer_diameter_mm": 12.0,
+        "inner_diameter_mm": 0.0,
+        "youngs_modulus_mpa": 200000.0,
+        "shear_modulus_mpa": 76923.07692307692,
+        "material_basis": "Illustrative steel elastic moduli; confirm actual material and temperature"
+      }
+    ],
+    "cases": [
+      {
+        "name": "Continuous rated-input target",
+        "rpm": 1500.0,
+        "duration_hours": 10000.0,
+        "ambient_c": 25.0,
+        "loads": [
+          {
+            "name": "Gear mesh",
+            "position_mm": 60.0,
+            "axial_n": 0.0,
+            "force_y_n": -28.96383096089061,
+            "force_z_n": -79.57747154594767,
+            "torque_nm": -1.5915494309189535,
+            "moment_y_nm": 0.0,
+            "moment_z_nm": -0.0
+          },
+          {
+            "name": "Coupling torque",
+            "position_mm": 0.0,
+            "axial_n": 0.0,
+            "force_y_n": 0.0,
+            "force_z_n": 0.0,
+            "torque_nm": 1.5915494309189535,
+            "moment_y_nm": 0.0,
+            "moment_z_nm": 0.0
+          }
+        ]
+      }
+    ],
+    "source_study": {
+      "name": "250 W steel spur qualification target",
+      "pair": {
+        "normal_module_mm": 2.0,
+        "pinion_teeth": 20,
+        "wheel_teeth": 100,
+        "normal_pressure_angle_deg": 20.0,
+        "pinion_helix_angle_deg": 0.0,
+        "pinion_profile_shift": 0.0,
+        "wheel_profile_shift": 0.0,
+        "face_width_mm": 20.0
+      },
+      "duty": [
+        {
+          "name": "Continuous rated-input target",
+          "input_rpm": 1500.0,
+          "input_torque_nm": 1.5915494309189535,
+          "duration_hours": 10000.0,
+          "ambient_c": 25.0,
+          "starts": 0
+        }
+      ],
+      "target_life_hours": 10000.0,
+      "ambient_min_c": 20.0,
+      "ambient_max_c": 40.0,
+      "assumed_efficiency": 0.95,
+      "material_process": "Catalog steel gears; supplier grade and heat treatment to be selected",
+      "lubrication": "Enclosed lubricated housing; lubricant and quantity to be specified",
+      "standard_basis": "Open analytical involute geometry and quasi-static statics; method external-involute-1. No standards-compliance claim.",
+      "evidence_references": "",
+      "notes": "Development and qualification target, not an approved operating rating.",
+      "schema_version": 1
+    },
+    "source_description": "Initially derived from pinion mesh loads; source fingerprint 6351727be05d242e0a8445d16b21249f8be1a491e9996a71ab658bbb123b8838. Loads remain editable.",
+    "notes": "Initial shaft/support dimensions are an editable layout, not supplier or manufacturing geometry. Ideal mesh forces and balancing coupling torque exclude the distribution of friction losses. Both shaft axes share X; +Y points from pinion to wheel; +Z completes the right-handed frame. Include external coupling/belt forces and actual sections before component selection.",
+    "schema_version": 1
+  },
+  "bearings": [
+    {
+      "position": "a",
+      "kind": "deep_groove_ball",
+      "manufacturer": "",
+      "designation": "GearForge synthetic radial ball fixture",
+      "bore_mm": 12.0,
+      "dynamic_capacity_n": 500.0,
+      "static_capacity_n": 250.0,
+      "speed_limit_rpm": 5000.0,
+      "minimum_dynamic_load_n": 5.0,
+      "axial_limit_n": 50.0,
+      "misalignment_limit_rad": 0.001,
+      "minimum_temperature_c": 20.0,
+      "maximum_temperature_c": 80.0,
+      "required_static_safety": 2.0,
+      "data_status": "synthetic",
+      "source_reference": "Original GearForge synthetic verification inputs; no manufacturer product",
+      "rating_conditions": "Invented constant limits for testing only; not material or supplier evidence",
+      "redistribution_basis": "GearForge-authored fixture, Apache-2.0"
+    },
+    {
+      "position": "b",
+      "kind": "deep_groove_ball",
+      "manufacturer": "",
+      "designation": "GearForge synthetic radial ball fixture",
+      "bore_mm": 12.0,
+      "dynamic_capacity_n": 500.0,
+      "static_capacity_n": 250.0,
+      "speed_limit_rpm": 5000.0,
+      "minimum_dynamic_load_n": 5.0,
+      "axial_limit_n": 50.0,
+      "misalignment_limit_rad": 0.001,
+      "minimum_temperature_c": 20.0,
+      "maximum_temperature_c": 80.0,
+      "required_static_safety": 2.0,
+      "data_status": "synthetic",
+      "source_reference": "Original GearForge synthetic verification inputs; no manufacturer product",
+      "rating_conditions": "Invented constant limits for testing only; not material or supplier evidence",
+      "redistribution_basis": "GearForge-authored fixture, Apache-2.0"
+    }
+  ],
+  "cases": [
+    {
+      "case_name": "Continuous rated-input target",
+      "position": "a",
+      "motion": "continuous_rotation",
+      "operating_temperature_c": 40.0,
+      "installation_misalignment_rad": 0.0,
+      "dynamic_x": null,
+      "dynamic_y": null,
+      "static_x": null,
+      "static_y": null,
+      "factor_basis": ""
+    },
+    {
+      "case_name": "Continuous rated-input target",
+      "position": "b",
+      "motion": "continuous_rotation",
+      "operating_temperature_c": 40.0,
+      "installation_misalignment_rad": 0.0,
+      "dynamic_x": null,
+      "dynamic_y": null,
+      "static_x": null,
+      "static_y": null,
+      "factor_basis": ""
+    }
+  ],
+  "required_hours": 10000.0,
+  "notes": "Enter exact bearing rating conditions and every load case. Basic L10 is a per-bearing population estimate, not gearbox service life.",
+  "schema_version": 1
+}

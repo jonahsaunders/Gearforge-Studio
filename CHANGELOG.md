@@ -1,5 +1,19 @@
 # Unreleased
 
+# 1.0.0rc6 — 2026-10-06
+
+- Add bearing assessments linked to complete, recalculated shaft studies.
+- Calculate basic per-bearing L10 exposure across changing load/speed, reverse
+  duty and stationary peaks. Require case-specific combined-load factors.
+- Check explicit static safety, speed, minimum load, temperature, axial load,
+  bore and misalignment limits; retain unknown inputs as unassessed.
+- Add five desktop tabs, CLI commands, strict study files, source declarations
+  and complete assessment exports with integrity manifests.
+- Verify 218 values with separate 60-digit Decimal arithmetic; bundle only
+  original synthetic examples and no manufacturer factor/rating table.
+- Exercise bearing save/reload, all tabs, basic-life arithmetic and exports in
+  native package checks. Production gearbox life remains unqualified.
+
 # 1.0.0rc5 — 2026-10-06
 
 - Add explicit shaft/support geometry, stepped solid or hollow sections, and

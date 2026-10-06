@@ -1,9 +1,14 @@
 {
   "schema_version": 1,
-  "app_version": "1.0.0rc5",
-  "release_status": "shaft and bearing load-path release candidate; not qualified for production gearbox design or load ratings",
-  "current_evidence": "docs/SHAFT_VALIDATION.json",
-  "historical_evidence": ["docs/ENGINEERING_VALIDATION.json", "docs/INTERNAL_VALIDATION.json", "docs/VALIDATION_RC2.json"],
+  "app_version": "1.0.0rc6",
+  "release_status": "bearing duty assessment release candidate; production gearbox ratings remain unqualified",
+  "current_evidence": "docs/BEARING_VALIDATION.json",
+  "historical_evidence": [
+    "docs/SHAFT_VALIDATION.json",
+    "docs/ENGINEERING_VALIDATION.json",
+    "docs/INTERNAL_VALIDATION.json",
+    "docs/VALIDATION_RC2.json"
+  ],
   "production_qualified": false,
   "engineering_requirements": "docs/PRODUCTION_QUALIFICATION.md"
 }

@@ -23,7 +23,7 @@ def desktop_smoke(destination: Path, include_cad=False):
     def finish():
         if state["finished"]:return
         state["finished"]=True
-        result={"ok":not errors,"errors":errors,"candidates":len(window.candidates),"cad_meshes":len(window.viewer.meshes),"elapsed_s":round(time.monotonic()-started,3),"simulation_points":len(window.sweep["points"]) if window.selected else 0,"native_platform":"offscreen","engineering_study":state.get("engineering_study"),"shaft_study":state.get("shaft_study")}
+        result={"ok":not errors,"errors":errors,"candidates":len(window.candidates),"cad_meshes":len(window.viewer.meshes),"elapsed_s":round(time.monotonic()-started,3),"simulation_points":len(window.sweep["points"]) if window.selected else 0,"native_platform":"offscreen","engineering_study":state.get("engineering_study"),"shaft_study":state.get("shaft_study"),"bearing_study":state.get("bearing_study")}
         if window.selected:result["selected"]=window.selected.id
         (destination/"desktop-smoke.json").write_text(json.dumps(result,indent=2))
         if not errors:
@@ -115,6 +115,36 @@ def desktop_smoke(destination: Path, include_cad=False):
             errors.append(f"Shaft study: {exc}")
         finally:
             shaft_window.dirty=False;shaft_window.close()
+        from .bearing_ui import BearingStudyDialog
+        from .bearings import BearingStudy,synthetic_bearing_example,calculate_bearing_study,export_bearing_study
+        bearing_window=BearingStudyDialog(window,synthetic_bearing_example())
+        bearing_window.show_error=lambda error:errors.append(str(error))
+        try:
+            bearing_window.show()
+            if not bearing_window.calculate():raise ValueError("Bearing assessment failed")
+            for index in range(bearing_window.tabs.count()):
+                bearing_window.tabs.setCurrentIndex(index);app.processEvents()
+                capture=bearing_window.grab()
+                if capture.isNull():raise ValueError(f"Bearing study tab {index} did not render")
+                capture.save(str(destination/f"bearing-study-{index}.png"))
+            bearing=bearing_window.read_study();bearing.save(destination/"target.gearforge-bearing")
+            loaded_bearing=BearingStudy.load(destination/"target.gearforge-bearing")
+            bearing_result=calculate_bearing_study(loaded_bearing)
+            if bearing_result['study_sha256']!=bearing_window.result['study_sha256']:
+                raise ValueError('Bearing study did not round-trip')
+            export_bearing_study(loaded_bearing,destination/'bearing-calculation')
+            manifest=verify_bundle(destination/'bearing-calculation')
+            life=bearing_result['bearings'][0]['basic_l10_repeated_duty_hours']
+            if not math.isclose(life,18295.51049310608,rel_tol=1e-10):raise ValueError('Synthetic bearing life arithmetic changed')
+            if bearing_result['production_approved'] or bearing_result['rated_gearbox_life_hours'] is not None:
+                raise ValueError('Bearing assessment falsely approves gearbox life')
+            state['bearing_study']={'app_version':bearing_result['app_version'],'tabs_rendered':bearing_window.tabs.count(),
+                'verified_files':len(manifest['files']),'synthetic_basic_l10_hours':life,
+                'study_sha256':bearing_result['study_sha256'],'production_approved':False}
+        except Exception as exc:
+            errors.append(f'Bearing study: {exc}')
+        finally:
+            bearing_window.dirty=False;bearing_window.close()
         finish()
     window.generate();timer.timeout.connect(tick);timer.start()
     app.exec()

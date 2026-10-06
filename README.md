@@ -9,7 +9,7 @@ with 3D printed parts, catalog gears, or combinations of both. It combines a
 native Qt workspace, discrete design search, engineering screening, a component
 catalog, dimensional print calibration, rigid-body CAD animation and design exports.
 
-**Current version: 1.0.0rc5 · Python 3.12 recommended · Apache-2.0 application code**
+**Current version: 1.0.0rc6 · Python 3.12 recommended · Apache-2.0 application code**
 
 > **Release status:** This is a tested software release candidate for prototype
 > engineering. Its calculations are preliminary screens, not certified ISO/AGMA
@@ -37,6 +37,11 @@ sections, external forces and couples, individual bearing reactions, deflection,
 twist and nominal stress. Transfer a gear study's duty into either shaft and
 inspect its load-path diagrams. See the [shaft analysis guide](docs/SHAFT_ANALYSIS.md)
 and its independently reproduced PyNiteFEA comparisons.
+
+**Bearing duty and capacity** recalculates shaft reactions against explicit
+bearing ratings and limits. It tracks per-case fatigue exposure, stationary
+peak loads, static safety, speed, temperature and misalignment. Missing inputs
+remain unassessed; original examples are synthetic. See the [bearing guide](docs/BEARING_ANALYSIS.md).
 
 ![GearForge design workspace with a two-stage gearbox](screenshots/desktop.png)
 
@@ -498,8 +503,8 @@ windowed executable and a file-based worker protocol. Windows also includes
 For the current release:
 
 ```bash
-git tag -a v1.0.0rc5 -m "GearForge Studio 1.0.0rc5"
-git push origin v1.0.0rc5
+git tag -a v1.0.0rc6 -m "GearForge Studio 1.0.0rc6"
+git push origin v1.0.0rc6
 ```
 
 The tag must match package/runtime versions. Manual builds on `main` upload
@@ -526,7 +531,7 @@ includes them automatically and preserves file permissions:
 ```bash
 git init -b main
 git add .
-git commit -m "Add GearForge Studio 1.0.0rc5"
+git commit -m "Add GearForge Studio 1.0.0rc6"
 git remote add origin https://github.com/jonahsaunders/Gearforge-Studio.git
 git push -u origin main
 ```

@@ -1,0 +1,2339 @@
+{
+  "reference": "Original closed-form beam reactions and 60-digit Decimal bearing arithmetic",
+  "provenance": "GearForge-authored synthetic inputs and independent adapter; Apache-2.0; Python standard library Decimal",
+  "scope": "Equivalent loads, per-case basic life/damage/static safety, repeated-duty fatigue sums; no supplier-factor validation or physical life evidence",
+  "tolerance": {
+    "relative": 1e-10,
+    "absolute": 1e-12
+  },
+  "comparisons": 218,
+  "maximum_absolute_error": 2.2649765014648438e-06,
+  "maximum_relative_error": 3.66950101154367e-15,
+  "passed": true,
+  "failures": [],
+  "cases": [
+    {
+      "name": "ball-constant",
+      "study": {
+        "name": "ball-constant",
+        "shaft": {
+          "name": "Shaft and bearing load study",
+          "length_mm": 120.0,
+          "bearing_a_mm": 0.0,
+          "bearing_b_mm": 120.0,
+          "axial_locator": "a",
+          "sections": [
+            {
+              "start_mm": 0.0,
+              "end_mm": 120.0,
+              "outer_diameter_mm": 12.0,
+              "inner_diameter_mm": 0.0,
+              "youngs_modulus_mpa": 200000.0,
+              "shear_modulus_mpa": 76923.07692307692,
+              "material_basis": "Illustrative steel elastic moduli; confirm actual material and temperature"
+            }
+          ],
+          "cases": [
+            {
+              "name": "Case 1",
+              "rpm": 1000.0,
+              "duration_hours": 1.0,
+              "ambient_c": 25.0,
+              "loads": [
+                {
+                  "name": "External load",
+                  "position_mm": 60.0,
+                  "axial_n": 0.0,
+                  "force_y_n": -200.0,
+                  "force_z_n": 0.0,
+                  "torque_nm": 0.0,
+                  "moment_y_nm": 0.0,
+                  "moment_z_nm": 0.0
+                }
+              ]
+            }
+          ],
+          "source_study": null,
+          "source_description": "Manual load definition",
+          "notes": "Ideal rigid supports and elastic shaft. Specify actual section dimensions, support positions and material properties.",
+          "schema_version": 1
+        },
+        "bearings": [
+          {
+            "position": "a",
+            "kind": "deep_groove_ball",
+            "manufacturer": "",
+            "designation": "GearForge synthetic radial ball fixture",
+            "bore_mm": 12.0,
+            "dynamic_capacity_n": 1000.0,
+            "static_capacity_n": 1000.0,
+            "speed_limit_rpm": 5000.0,
+            "minimum_dynamic_load_n": 5.0,
+            "axial_limit_n": 50.0,
+            "misalignment_limit_rad": 0.001,
+            "minimum_temperature_c": 20.0,
+            "maximum_temperature_c": 80.0,
+            "required_static_safety": 2.0,
+            "data_status": "synthetic",
+            "source_reference": "Original GearForge synthetic verification inputs; no manufacturer product",
+            "rating_conditions": "Invented constant limits for testing only; not material or supplier evidence",
+            "redistribution_basis": "GearForge-authored fixture, Apache-2.0"
+          },
+          {
+            "position": "b",
+            "kind": "deep_groove_ball",
+            "manufacturer": "",
+            "designation": "GearForge synthetic radial ball fixture",
+            "bore_mm": 12.0,
+            "dynamic_capacity_n": 1000.0,
+            "static_capacity_n": 1000.0,
+            "speed_limit_rpm": 5000.0,
+            "minimum_dynamic_load_n": 5.0,
+            "axial_limit_n": 50.0,
+            "misalignment_limit_rad": 0.001,
+            "minimum_temperature_c": 20.0,
+            "maximum_temperature_c": 80.0,
+            "required_static_safety": 2.0,
+            "data_status": "synthetic",
+            "source_reference": "Original GearForge synthetic verification inputs; no manufacturer product",
+            "rating_conditions": "Invented constant limits for testing only; not material or supplier evidence",
+            "redistribution_basis": "GearForge-authored fixture, Apache-2.0"
+          }
+        ],
+        "cases": [
+          {
+            "case_name": "Case 1",
+            "position": "a",
+            "motion": "continuous_rotation",
+            "operating_temperature_c": 40.0,
+            "installation_misalignment_rad": 0.0,
+            "dynamic_x": null,
+            "dynamic_y": null,
+            "static_x": null,
+            "static_y": null,
+            "factor_basis": ""
+          },
+          {
+            "case_name": "Case 1",
+            "position": "b",
+            "motion": "continuous_rotation",
+            "operating_temperature_c": 40.0,
+            "installation_misalignment_rad": 0.0,
+            "dynamic_x": null,
+            "dynamic_y": null,
+            "static_x": null,
+            "static_y": null,
+            "factor_basis": ""
+          }
+        ],
+        "required_hours": 10000.0,
+        "notes": "Enter exact bearing rating conditions and every load case. Basic L10 is a per-bearing population estimate, not gearbox service life.",
+        "schema_version": 1
+      },
+      "expected": [
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "radial_load_n",
+          "value": 100.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "axial_load_n",
+          "value": 0.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "equivalent_dynamic_n",
+          "value": 100.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "equivalent_static_n",
+          "value": 100.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "revolutions",
+          "value": 60000.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "cycle_damage",
+          "value": 6e-05
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "basic_l10_revolutions",
+          "value": 1000000000.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "static_safety",
+          "value": 10.0
+        },
+        {
+          "bearing": 0,
+          "case": null,
+          "field": "cycle_damage",
+          "value": 6e-05
+        },
+        {
+          "bearing": 0,
+          "case": null,
+          "field": "target_damage",
+          "value": 0.6
+        },
+        {
+          "bearing": 0,
+          "case": null,
+          "field": "basic_l10_repeated_duty_hours",
+          "value": 16666.666666666668
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "radial_load_n",
+          "value": 100.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "axial_load_n",
+          "value": 0.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "equivalent_dynamic_n",
+          "value": 100.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "equivalent_static_n",
+          "value": 100.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "revolutions",
+          "value": 60000.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "cycle_damage",
+          "value": 6e-05
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "basic_l10_revolutions",
+          "value": 1000000000.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "static_safety",
+          "value": 10.0
+        },
+        {
+          "bearing": 1,
+          "case": null,
+          "field": "cycle_damage",
+          "value": 6e-05
+        },
+        {
+          "bearing": 1,
+          "case": null,
+          "field": "target_damage",
+          "value": 0.6
+        },
+        {
+          "bearing": 1,
+          "case": null,
+          "field": "basic_l10_repeated_duty_hours",
+          "value": 16666.666666666668
+        }
+      ]
+    },
+    {
+      "name": "ball-reverse-stop",
+      "study": {
+        "name": "ball-reverse-stop",
+        "shaft": {
+          "name": "Shaft and bearing load study",
+          "length_mm": 120.0,
+          "bearing_a_mm": 0.0,
+          "bearing_b_mm": 120.0,
+          "axial_locator": "a",
+          "sections": [
+            {
+              "start_mm": 0.0,
+              "end_mm": 120.0,
+              "outer_diameter_mm": 12.0,
+              "inner_diameter_mm": 0.0,
+              "youngs_modulus_mpa": 200000.0,
+              "shear_modulus_mpa": 76923.07692307692,
+              "material_basis": "Illustrative steel elastic moduli; confirm actual material and temperature"
+            }
+          ],
+          "cases": [
+            {
+              "name": "Case 1",
+              "rpm": 1000.0,
+              "duration_hours": 1.0,
+              "ambient_c": 25.0,
+              "loads": [
+                {
+                  "name": "External load",
+                  "position_mm": 60.0,
+                  "axial_n": 0.0,
+                  "force_y_n": -200.0,
+                  "force_z_n": 0.0,
+                  "torque_nm": 0.0,
+                  "moment_y_nm": 0.0,
+                  "moment_z_nm": 0.0
+                }
+              ]
+            },
+            {
+              "name": "Case 2",
+              "rpm": -500.0,
+              "duration_hours": 2.0,
+              "ambient_c": 25.0,
+              "loads": [
+                {
+                  "name": "External load",
+                  "position_mm": 60.0,
+                  "axial_n": 0.0,
+                  "force_y_n": -400.0,
+                  "force_z_n": 0.0,
+                  "torque_nm": 0.0,
+                  "moment_y_nm": 0.0,
+                  "moment_z_nm": 0.0
+                }
+              ]
+            },
+            {
+              "name": "Case 3",
+              "rpm": 0.0,
+              "duration_hours": 1.0,
+              "ambient_c": 25.0,
+              "loads": [
+                {
+                  "name": "External load",
+                  "position_mm": 60.0,
+                  "axial_n": 0.0,
+                  "force_y_n": -1400.0,
+                  "force_z_n": 0.0,
+                  "torque_nm": 0.0,
+                  "moment_y_nm": 0.0,
+                  "moment_z_nm": 0.0
+                }
+              ]
+            }
+          ],
+          "source_study": null,
+          "source_description": "Manual load definition",
+          "notes": "Ideal rigid supports and elastic shaft. Specify actual section dimensions, support positions and material properties.",
+          "schema_version": 1
+        },
+        "bearings": [
+          {
+            "position": "a",
+            "kind": "deep_groove_ball",
+            "manufacturer": "",
+            "designation": "GearForge synthetic radial ball fixture",
+            "bore_mm": 12.0,
+            "dynamic_capacity_n": 1000.0,
+            "static_capacity_n": 1000.0,
+            "speed_limit_rpm": 5000.0,
+            "minimum_dynamic_load_n": 5.0,
+            "axial_limit_n": 50.0,
+            "misalignment_limit_rad": 0.001,
+            "minimum_temperature_c": 20.0,
+            "maximum_temperature_c": 80.0,
+            "required_static_safety": 2.0,
+            "data_status": "synthetic",
+            "source_reference": "Original GearForge synthetic verification inputs; no manufacturer product",
+            "rating_conditions": "Invented constant limits for testing only; not material or supplier evidence",
+            "redistribution_basis": "GearForge-authored fixture, Apache-2.0"
+          },
+          {
+            "position": "b",
+            "kind": "deep_groove_ball",
+            "manufacturer": "",
+            "designation": "GearForge synthetic radial ball fixture",
+            "bore_mm": 12.0,
+            "dynamic_capacity_n": 1000.0,
+            "static_capacity_n": 1000.0,
+            "speed_limit_rpm": 5000.0,
+            "minimum_dynamic_load_n": 5.0,
+            "axial_limit_n": 50.0,
+            "misalignment_limit_rad": 0.001,
+            "minimum_temperature_c": 20.0,
+            "maximum_temperature_c": 80.0,
+            "required_static_safety": 2.0,
+            "data_status": "synthetic",
+            "source_reference": "Original GearForge synthetic verification inputs; no manufacturer product",
+            "rating_conditions": "Invented constant limits for testing only; not material or supplier evidence",
+            "redistribution_basis": "GearForge-authored fixture, Apache-2.0"
+          }
+        ],
+        "cases": [
+          {
+            "case_name": "Case 1",
+            "position": "a",
+            "motion": "continuous_rotation",
+            "operating_temperature_c": 40.0,
+            "installation_misalignment_rad": 0.0,
+            "dynamic_x": null,
+            "dynamic_y": null,
+            "static_x": null,
+            "static_y": null,
+            "factor_basis": ""
+          },
+          {
+            "case_name": "Case 1",
+            "position": "b",
+            "motion": "continuous_rotation",
+            "operating_temperature_c": 40.0,
+            "installation_misalignment_rad": 0.0,
+            "dynamic_x": null,
+            "dynamic_y": null,
+            "static_x": null,
+            "static_y": null,
+            "factor_basis": ""
+          },
+          {
+            "case_name": "Case 2",
+            "position": "a",
+            "motion": "continuous_rotation",
+            "operating_temperature_c": 40.0,
+            "installation_misalignment_rad": 0.0,
+            "dynamic_x": null,
+            "dynamic_y": null,
+            "static_x": null,
+            "static_y": null,
+            "factor_basis": ""
+          },
+          {
+            "case_name": "Case 2",
+            "position": "b",
+            "motion": "continuous_rotation",
+            "operating_temperature_c": 40.0,
+            "installation_misalignment_rad": 0.0,
+            "dynamic_x": null,
+            "dynamic_y": null,
+            "static_x": null,
+            "static_y": null,
+            "factor_basis": ""
+          },
+          {
+            "case_name": "Case 3",
+            "position": "a",
+            "motion": "stationary",
+            "operating_temperature_c": 40.0,
+            "installation_misalignment_rad": 0.0,
+            "dynamic_x": null,
+            "dynamic_y": null,
+            "static_x": null,
+            "static_y": null,
+            "factor_basis": ""
+          },
+          {
+            "case_name": "Case 3",
+            "position": "b",
+            "motion": "stationary",
+            "operating_temperature_c": 40.0,
+            "installation_misalignment_rad": 0.0,
+            "dynamic_x": null,
+            "dynamic_y": null,
+            "static_x": null,
+            "static_y": null,
+            "factor_basis": ""
+          }
+        ],
+        "required_hours": 10000.0,
+        "notes": "Enter exact bearing rating conditions and every load case. Basic L10 is a per-bearing population estimate, not gearbox service life.",
+        "schema_version": 1
+      },
+      "expected": [
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "radial_load_n",
+          "value": 100.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "axial_load_n",
+          "value": 0.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "equivalent_dynamic_n",
+          "value": 100.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "equivalent_static_n",
+          "value": 100.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "revolutions",
+          "value": 60000.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "cycle_damage",
+          "value": 6e-05
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "basic_l10_revolutions",
+          "value": 1000000000.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "static_safety",
+          "value": 10.0
+        },
+        {
+          "bearing": 0,
+          "case": 1,
+          "field": "radial_load_n",
+          "value": 200.0
+        },
+        {
+          "bearing": 0,
+          "case": 1,
+          "field": "axial_load_n",
+          "value": 0.0
+        },
+        {
+          "bearing": 0,
+          "case": 1,
+          "field": "equivalent_dynamic_n",
+          "value": 200.0
+        },
+        {
+          "bearing": 0,
+          "case": 1,
+          "field": "equivalent_static_n",
+          "value": 200.0
+        },
+        {
+          "bearing": 0,
+          "case": 1,
+          "field": "revolutions",
+          "value": 60000.0
+        },
+        {
+          "bearing": 0,
+          "case": 1,
+          "field": "cycle_damage",
+          "value": 0.00048
+        },
+        {
+          "bearing": 0,
+          "case": 1,
+          "field": "basic_l10_revolutions",
+          "value": 125000000.0
+        },
+        {
+          "bearing": 0,
+          "case": 1,
+          "field": "static_safety",
+          "value": 5.0
+        },
+        {
+          "bearing": 0,
+          "case": 2,
+          "field": "radial_load_n",
+          "value": 700.0
+        },
+        {
+          "bearing": 0,
+          "case": 2,
+          "field": "axial_load_n",
+          "value": 0.0
+        },
+        {
+          "bearing": 0,
+          "case": 2,
+          "field": "equivalent_dynamic_n",
+          "value": 700.0
+        },
+        {
+          "bearing": 0,
+          "case": 2,
+          "field": "equivalent_static_n",
+          "value": 700.0
+        },
+        {
+          "bearing": 0,
+          "case": 2,
+          "field": "revolutions",
+          "value": 0.0
+        },
+        {
+          "bearing": 0,
+          "case": 2,
+          "field": "cycle_damage",
+          "value": 0.0
+        },
+        {
+          "bearing": 0,
+          "case": 2,
+          "field": "basic_l10_revolutions",
+          "value": 2915451.8950437317
+        },
+        {
+          "bearing": 0,
+          "case": 2,
+          "field": "static_safety",
+          "value": 1.4285714285714286
+        },
+        {
+          "bearing": 0,
+          "case": null,
+          "field": "cycle_damage",
+          "value": 0.00054
+        },
+        {
+          "bearing": 0,
+          "case": null,
+          "field": "target_damage",
+          "value": 1.35
+        },
+        {
+          "bearing": 0,
+          "case": null,
+          "field": "basic_l10_repeated_duty_hours",
+          "value": 7407.407407407408
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "radial_load_n",
+          "value": 100.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "axial_load_n",
+          "value": 0.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "equivalent_dynamic_n",
+          "value": 100.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "equivalent_static_n",
+          "value": 100.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "revolutions",
+          "value": 60000.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "cycle_damage",
+          "value": 6e-05
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "basic_l10_revolutions",
+          "value": 1000000000.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "static_safety",
+          "value": 10.0
+        },
+        {
+          "bearing": 1,
+          "case": 1,
+          "field": "radial_load_n",
+          "value": 200.0
+        },
+        {
+          "bearing": 1,
+          "case": 1,
+          "field": "axial_load_n",
+          "value": 0.0
+        },
+        {
+          "bearing": 1,
+          "case": 1,
+          "field": "equivalent_dynamic_n",
+          "value": 200.0
+        },
+        {
+          "bearing": 1,
+          "case": 1,
+          "field": "equivalent_static_n",
+          "value": 200.0
+        },
+        {
+          "bearing": 1,
+          "case": 1,
+          "field": "revolutions",
+          "value": 60000.0
+        },
+        {
+          "bearing": 1,
+          "case": 1,
+          "field": "cycle_damage",
+          "value": 0.00048
+        },
+        {
+          "bearing": 1,
+          "case": 1,
+          "field": "basic_l10_revolutions",
+          "value": 125000000.0
+        },
+        {
+          "bearing": 1,
+          "case": 1,
+          "field": "static_safety",
+          "value": 5.0
+        },
+        {
+          "bearing": 1,
+          "case": 2,
+          "field": "radial_load_n",
+          "value": 700.0
+        },
+        {
+          "bearing": 1,
+          "case": 2,
+          "field": "axial_load_n",
+          "value": 0.0
+        },
+        {
+          "bearing": 1,
+          "case": 2,
+          "field": "equivalent_dynamic_n",
+          "value": 700.0
+        },
+        {
+          "bearing": 1,
+          "case": 2,
+          "field": "equivalent_static_n",
+          "value": 700.0
+        },
+        {
+          "bearing": 1,
+          "case": 2,
+          "field": "revolutions",
+          "value": 0.0
+        },
+        {
+          "bearing": 1,
+          "case": 2,
+          "field": "cycle_damage",
+          "value": 0.0
+        },
+        {
+          "bearing": 1,
+          "case": 2,
+          "field": "basic_l10_revolutions",
+          "value": 2915451.8950437317
+        },
+        {
+          "bearing": 1,
+          "case": 2,
+          "field": "static_safety",
+          "value": 1.4285714285714286
+        },
+        {
+          "bearing": 1,
+          "case": null,
+          "field": "cycle_damage",
+          "value": 0.00054
+        },
+        {
+          "bearing": 1,
+          "case": null,
+          "field": "target_damage",
+          "value": 1.35
+        },
+        {
+          "bearing": 1,
+          "case": null,
+          "field": "basic_l10_repeated_duty_hours",
+          "value": 7407.407407407408
+        }
+      ]
+    },
+    {
+      "name": "roller-spectrum",
+      "study": {
+        "name": "roller-spectrum",
+        "shaft": {
+          "name": "Shaft and bearing load study",
+          "length_mm": 120.0,
+          "bearing_a_mm": 0.0,
+          "bearing_b_mm": 120.0,
+          "axial_locator": "a",
+          "sections": [
+            {
+              "start_mm": 0.0,
+              "end_mm": 120.0,
+              "outer_diameter_mm": 12.0,
+              "inner_diameter_mm": 0.0,
+              "youngs_modulus_mpa": 200000.0,
+              "shear_modulus_mpa": 76923.07692307692,
+              "material_basis": "Illustrative steel elastic moduli; confirm actual material and temperature"
+            }
+          ],
+          "cases": [
+            {
+              "name": "Case 1",
+              "rpm": 1500.0,
+              "duration_hours": 3.0,
+              "ambient_c": 25.0,
+              "loads": [
+                {
+                  "name": "External load",
+                  "position_mm": 30.0,
+                  "axial_n": 0.0,
+                  "force_y_n": -246.0,
+                  "force_z_n": 0.0,
+                  "torque_nm": 0.0,
+                  "moment_y_nm": 0.0,
+                  "moment_z_nm": 0.0
+                }
+              ]
+            },
+            {
+              "name": "Case 2",
+              "rpm": -700.0,
+              "duration_hours": 2.0,
+              "ambient_c": 25.0,
+              "loads": [
+                {
+                  "name": "External load",
+                  "position_mm": 90.0,
+                  "axial_n": 0.0,
+                  "force_y_n": -582.0,
+                  "force_z_n": 0.0,
+                  "torque_nm": 0.0,
+                  "moment_y_nm": 0.0,
+                  "moment_z_nm": 0.0
+                }
+              ]
+            }
+          ],
+          "source_study": null,
+          "source_description": "Manual load definition",
+          "notes": "Ideal rigid supports and elastic shaft. Specify actual section dimensions, support positions and material properties.",
+          "schema_version": 1
+        },
+        "bearings": [
+          {
+            "position": "a",
+            "kind": "cylindrical_roller_radial",
+            "manufacturer": "",
+            "designation": "GearForge synthetic radial ball fixture",
+            "bore_mm": 12.0,
+            "dynamic_capacity_n": 1000.0,
+            "static_capacity_n": 1000.0,
+            "speed_limit_rpm": 5000.0,
+            "minimum_dynamic_load_n": 5.0,
+            "axial_limit_n": 50.0,
+            "misalignment_limit_rad": 0.001,
+            "minimum_temperature_c": 20.0,
+            "maximum_temperature_c": 80.0,
+            "required_static_safety": 2.0,
+            "data_status": "synthetic",
+            "source_reference": "Original GearForge synthetic verification inputs; no manufacturer product",
+            "rating_conditions": "Invented constant limits for testing only; not material or supplier evidence",
+            "redistribution_basis": "GearForge-authored fixture, Apache-2.0"
+          },
+          {
+            "position": "b",
+            "kind": "cylindrical_roller_radial",
+            "manufacturer": "",
+            "designation": "GearForge synthetic radial ball fixture",
+            "bore_mm": 12.0,
+            "dynamic_capacity_n": 1000.0,
+            "static_capacity_n": 1000.0,
+            "speed_limit_rpm": 5000.0,
+            "minimum_dynamic_load_n": 5.0,
+            "axial_limit_n": 50.0,
+            "misalignment_limit_rad": 0.001,
+            "minimum_temperature_c": 20.0,
+            "maximum_temperature_c": 80.0,
+            "required_static_safety": 2.0,
+            "data_status": "synthetic",
+            "source_reference": "Original GearForge synthetic verification inputs; no manufacturer product",
+            "rating_conditions": "Invented constant limits for testing only; not material or supplier evidence",
+            "redistribution_basis": "GearForge-authored fixture, Apache-2.0"
+          }
+        ],
+        "cases": [
+          {
+            "case_name": "Case 1",
+            "position": "a",
+            "motion": "continuous_rotation",
+            "operating_temperature_c": 40.0,
+            "installation_misalignment_rad": 0.0,
+            "dynamic_x": null,
+            "dynamic_y": null,
+            "static_x": null,
+            "static_y": null,
+            "factor_basis": ""
+          },
+          {
+            "case_name": "Case 1",
+            "position": "b",
+            "motion": "continuous_rotation",
+            "operating_temperature_c": 40.0,
+            "installation_misalignment_rad": 0.0,
+            "dynamic_x": null,
+            "dynamic_y": null,
+            "static_x": null,
+            "static_y": null,
+            "factor_basis": ""
+          },
+          {
+            "case_name": "Case 2",
+            "position": "a",
+            "motion": "continuous_rotation",
+            "operating_temperature_c": 40.0,
+            "installation_misalignment_rad": 0.0,
+            "dynamic_x": null,
+            "dynamic_y": null,
+            "static_x": null,
+            "static_y": null,
+            "factor_basis": ""
+          },
+          {
+            "case_name": "Case 2",
+            "position": "b",
+            "motion": "continuous_rotation",
+            "operating_temperature_c": 40.0,
+            "installation_misalignment_rad": 0.0,
+            "dynamic_x": null,
+            "dynamic_y": null,
+            "static_x": null,
+            "static_y": null,
+            "factor_basis": ""
+          }
+        ],
+        "required_hours": 10000.0,
+        "notes": "Enter exact bearing rating conditions and every load case. Basic L10 is a per-bearing population estimate, not gearbox service life.",
+        "schema_version": 1
+      },
+      "expected": [
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "radial_load_n",
+          "value": 184.5
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "axial_load_n",
+          "value": 0.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "equivalent_dynamic_n",
+          "value": 184.5
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "equivalent_static_n",
+          "value": 184.5
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "revolutions",
+          "value": 270000.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "cycle_damage",
+          "value": 0.0009653504406117462
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "basic_l10_revolutions",
+          "value": 279691176.0136557
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "static_safety",
+          "value": 5.420054200542006
+        },
+        {
+          "bearing": 0,
+          "case": 1,
+          "field": "radial_load_n",
+          "value": 145.5
+        },
+        {
+          "bearing": 0,
+          "case": 1,
+          "field": "axial_load_n",
+          "value": 0.0
+        },
+        {
+          "bearing": 0,
+          "case": 1,
+          "field": "equivalent_dynamic_n",
+          "value": 145.5
+        },
+        {
+          "bearing": 0,
+          "case": 1,
+          "field": "equivalent_static_n",
+          "value": 145.5
+        },
+        {
+          "bearing": 0,
+          "case": 1,
+          "field": "revolutions",
+          "value": 84000.0
+        },
+        {
+          "bearing": 0,
+          "case": 1,
+          "field": "cycle_damage",
+          "value": 0.00013608886660427573
+        },
+        {
+          "bearing": 0,
+          "case": 1,
+          "field": "basic_l10_revolutions",
+          "value": 617243732.6872472
+        },
+        {
+          "bearing": 0,
+          "case": 1,
+          "field": "static_safety",
+          "value": 6.8728522336769755
+        },
+        {
+          "bearing": 0,
+          "case": null,
+          "field": "cycle_damage",
+          "value": 0.001101439307216022
+        },
+        {
+          "bearing": 0,
+          "case": null,
+          "field": "target_damage",
+          "value": 2.202878614432044
+        },
+        {
+          "bearing": 0,
+          "case": null,
+          "field": "basic_l10_repeated_duty_hours",
+          "value": 4539.514766944272
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "radial_load_n",
+          "value": 61.5
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "axial_load_n",
+          "value": 0.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "equivalent_dynamic_n",
+          "value": 61.5
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "equivalent_static_n",
+          "value": 61.5
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "revolutions",
+          "value": 270000.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "cycle_damage",
+          "value": 2.4790244877685446e-05
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "basic_l10_revolutions",
+          "value": 10891380917.460653
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "static_safety",
+          "value": 16.260162601626018
+        },
+        {
+          "bearing": 1,
+          "case": 1,
+          "field": "radial_load_n",
+          "value": 436.5
+        },
+        {
+          "bearing": 1,
+          "case": 1,
+          "field": "axial_load_n",
+          "value": 0.0
+        },
+        {
+          "bearing": 1,
+          "case": 1,
+          "field": "equivalent_dynamic_n",
+          "value": 436.5
+        },
+        {
+          "bearing": 1,
+          "case": 1,
+          "field": "equivalent_static_n",
+          "value": 436.5
+        },
+        {
+          "bearing": 1,
+          "case": 1,
+          "field": "revolutions",
+          "value": 84000.0
+        },
+        {
+          "bearing": 1,
+          "case": 1,
+          "field": "cycle_damage",
+          "value": 0.005299400953358249
+        },
+        {
+          "bearing": 1,
+          "case": 1,
+          "field": "basic_l10_revolutions",
+          "value": 15850848.188184157
+        },
+        {
+          "bearing": 1,
+          "case": 1,
+          "field": "static_safety",
+          "value": 2.290950744558992
+        },
+        {
+          "bearing": 1,
+          "case": null,
+          "field": "cycle_damage",
+          "value": 0.005324191198235935
+        },
+        {
+          "bearing": 1,
+          "case": null,
+          "field": "target_damage",
+          "value": 10.64838239647187
+        },
+        {
+          "bearing": 1,
+          "case": null,
+          "field": "basic_l10_repeated_duty_hours",
+          "value": 939.1097753320074
+        }
+      ]
+    },
+    {
+      "name": "ball-combined",
+      "study": {
+        "name": "ball-combined",
+        "shaft": {
+          "name": "Shaft and bearing load study",
+          "length_mm": 120.0,
+          "bearing_a_mm": 0.0,
+          "bearing_b_mm": 120.0,
+          "axial_locator": "a",
+          "sections": [
+            {
+              "start_mm": 0.0,
+              "end_mm": 120.0,
+              "outer_diameter_mm": 12.0,
+              "inner_diameter_mm": 0.0,
+              "youngs_modulus_mpa": 200000.0,
+              "shear_modulus_mpa": 76923.07692307692,
+              "material_basis": "Illustrative steel elastic moduli; confirm actual material and temperature"
+            }
+          ],
+          "cases": [
+            {
+              "name": "Case 1",
+              "rpm": 1300.0,
+              "duration_hours": 7.0,
+              "ambient_c": 25.0,
+              "loads": [
+                {
+                  "name": "External load",
+                  "position_mm": 60.0,
+                  "axial_n": 120.0,
+                  "force_y_n": -200.0,
+                  "force_z_n": 0.0,
+                  "torque_nm": 0.0,
+                  "moment_y_nm": 0.0,
+                  "moment_z_nm": 0.0
+                }
+              ]
+            },
+            {
+              "name": "Case 2",
+              "rpm": -650.0,
+              "duration_hours": 3.0,
+              "ambient_c": 25.0,
+              "loads": [
+                {
+                  "name": "External load",
+                  "position_mm": 30.0,
+                  "axial_n": -200.0,
+                  "force_y_n": -360.0,
+                  "force_z_n": 0.0,
+                  "torque_nm": 0.0,
+                  "moment_y_nm": 0.0,
+                  "moment_z_nm": 0.0
+                }
+              ]
+            }
+          ],
+          "source_study": null,
+          "source_description": "Manual load definition",
+          "notes": "Ideal rigid supports and elastic shaft. Specify actual section dimensions, support positions and material properties.",
+          "schema_version": 1
+        },
+        "bearings": [
+          {
+            "position": "a",
+            "kind": "deep_groove_ball",
+            "manufacturer": "",
+            "designation": "GearForge synthetic radial ball fixture",
+            "bore_mm": 12.0,
+            "dynamic_capacity_n": 1000.0,
+            "static_capacity_n": 1000.0,
+            "speed_limit_rpm": 5000.0,
+            "minimum_dynamic_load_n": 5.0,
+            "axial_limit_n": 50.0,
+            "misalignment_limit_rad": 0.001,
+            "minimum_temperature_c": 20.0,
+            "maximum_temperature_c": 80.0,
+            "required_static_safety": 2.0,
+            "data_status": "synthetic",
+            "source_reference": "Original GearForge synthetic verification inputs; no manufacturer product",
+            "rating_conditions": "Invented constant limits for testing only; not material or supplier evidence",
+            "redistribution_basis": "GearForge-authored fixture, Apache-2.0"
+          },
+          {
+            "position": "b",
+            "kind": "deep_groove_ball",
+            "manufacturer": "",
+            "designation": "GearForge synthetic radial ball fixture",
+            "bore_mm": 12.0,
+            "dynamic_capacity_n": 1000.0,
+            "static_capacity_n": 1000.0,
+            "speed_limit_rpm": 5000.0,
+            "minimum_dynamic_load_n": 5.0,
+            "axial_limit_n": 50.0,
+            "misalignment_limit_rad": 0.001,
+            "minimum_temperature_c": 20.0,
+            "maximum_temperature_c": 80.0,
+            "required_static_safety": 2.0,
+            "data_status": "synthetic",
+            "source_reference": "Original GearForge synthetic verification inputs; no manufacturer product",
+            "rating_conditions": "Invented constant limits for testing only; not material or supplier evidence",
+            "redistribution_basis": "GearForge-authored fixture, Apache-2.0"
+          }
+        ],
+        "cases": [
+          {
+            "case_name": "Case 1",
+            "position": "a",
+            "motion": "continuous_rotation",
+            "operating_temperature_c": 40.0,
+            "installation_misalignment_rad": 0.0,
+            "dynamic_x": 0.56,
+            "dynamic_y": 1.6,
+            "static_x": 0.6,
+            "static_y": 0.5,
+            "factor_basis": "Original synthetic case-specific factors; not a supplier table"
+          },
+          {
+            "case_name": "Case 1",
+            "position": "b",
+            "motion": "continuous_rotation",
+            "operating_temperature_c": 40.0,
+            "installation_misalignment_rad": 0.0,
+            "dynamic_x": 0.56,
+            "dynamic_y": 1.6,
+            "static_x": 0.6,
+            "static_y": 0.5,
+            "factor_basis": "Original synthetic case-specific factors; not a supplier table"
+          },
+          {
+            "case_name": "Case 2",
+            "position": "a",
+            "motion": "continuous_rotation",
+            "operating_temperature_c": 40.0,
+            "installation_misalignment_rad": 0.0,
+            "dynamic_x": 0.56,
+            "dynamic_y": 1.6,
+            "static_x": 0.6,
+            "static_y": 0.5,
+            "factor_basis": "Original synthetic case-specific factors; not a supplier table"
+          },
+          {
+            "case_name": "Case 2",
+            "position": "b",
+            "motion": "continuous_rotation",
+            "operating_temperature_c": 40.0,
+            "installation_misalignment_rad": 0.0,
+            "dynamic_x": 0.56,
+            "dynamic_y": 1.6,
+            "static_x": 0.6,
+            "static_y": 0.5,
+            "factor_basis": "Original synthetic case-specific factors; not a supplier table"
+          }
+        ],
+        "required_hours": 10000.0,
+        "notes": "Enter exact bearing rating conditions and every load case. Basic L10 is a per-bearing population estimate, not gearbox service life.",
+        "schema_version": 1
+      },
+      "expected": [
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "radial_load_n",
+          "value": 100.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "axial_load_n",
+          "value": 120.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "equivalent_dynamic_n",
+          "value": 248.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "equivalent_static_n",
+          "value": 120.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "revolutions",
+          "value": 546000.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "cycle_damage",
+          "value": 0.008328133632
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "basic_l10_revolutions",
+          "value": 65560907.65667483
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "static_safety",
+          "value": 8.333333333333334
+        },
+        {
+          "bearing": 0,
+          "case": 1,
+          "field": "radial_load_n",
+          "value": 270.0
+        },
+        {
+          "bearing": 0,
+          "case": 1,
+          "field": "axial_load_n",
+          "value": 200.0
+        },
+        {
+          "bearing": 0,
+          "case": 1,
+          "field": "equivalent_dynamic_n",
+          "value": 471.2
+        },
+        {
+          "bearing": 0,
+          "case": 1,
+          "field": "equivalent_static_n",
+          "value": 270.0
+        },
+        {
+          "bearing": 0,
+          "case": 1,
+          "field": "revolutions",
+          "value": 117000.0
+        },
+        {
+          "bearing": 0,
+          "case": 1,
+          "field": "cycle_damage",
+          "value": 0.012240571838976
+        },
+        {
+          "bearing": 0,
+          "case": 1,
+          "field": "basic_l10_revolutions",
+          "value": 9558376.972834937
+        },
+        {
+          "bearing": 0,
+          "case": 1,
+          "field": "static_safety",
+          "value": 3.7037037037037037
+        },
+        {
+          "bearing": 0,
+          "case": null,
+          "field": "cycle_damage",
+          "value": 0.020568705470976
+        },
+        {
+          "bearing": 0,
+          "case": null,
+          "field": "target_damage",
+          "value": 20.568705470976
+        },
+        {
+          "bearing": 0,
+          "case": null,
+          "field": "basic_l10_repeated_duty_hours",
+          "value": 486.1754675864632
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "radial_load_n",
+          "value": 100.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "axial_load_n",
+          "value": 0.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "equivalent_dynamic_n",
+          "value": 100.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "equivalent_static_n",
+          "value": 100.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "revolutions",
+          "value": 546000.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "cycle_damage",
+          "value": 0.000546
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "basic_l10_revolutions",
+          "value": 1000000000.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "static_safety",
+          "value": 10.0
+        },
+        {
+          "bearing": 1,
+          "case": 1,
+          "field": "radial_load_n",
+          "value": 90.0
+        },
+        {
+          "bearing": 1,
+          "case": 1,
+          "field": "axial_load_n",
+          "value": 0.0
+        },
+        {
+          "bearing": 1,
+          "case": 1,
+          "field": "equivalent_dynamic_n",
+          "value": 90.0
+        },
+        {
+          "bearing": 1,
+          "case": 1,
+          "field": "equivalent_static_n",
+          "value": 90.0
+        },
+        {
+          "bearing": 1,
+          "case": 1,
+          "field": "revolutions",
+          "value": 117000.0
+        },
+        {
+          "bearing": 1,
+          "case": 1,
+          "field": "cycle_damage",
+          "value": 8.5293e-05
+        },
+        {
+          "bearing": 1,
+          "case": 1,
+          "field": "basic_l10_revolutions",
+          "value": 1371742112.4828532
+        },
+        {
+          "bearing": 1,
+          "case": 1,
+          "field": "static_safety",
+          "value": 11.11111111111111
+        },
+        {
+          "bearing": 1,
+          "case": null,
+          "field": "cycle_damage",
+          "value": 0.000631293
+        },
+        {
+          "bearing": 1,
+          "case": null,
+          "field": "target_damage",
+          "value": 0.631293
+        },
+        {
+          "bearing": 1,
+          "case": null,
+          "field": "basic_l10_repeated_duty_hours",
+          "value": 15840.50512202733
+        }
+      ]
+    },
+    {
+      "name": "ball-radial-envelope",
+      "study": {
+        "name": "ball-radial-envelope",
+        "shaft": {
+          "name": "Shaft and bearing load study",
+          "length_mm": 120.0,
+          "bearing_a_mm": 0.0,
+          "bearing_b_mm": 120.0,
+          "axial_locator": "a",
+          "sections": [
+            {
+              "start_mm": 0.0,
+              "end_mm": 120.0,
+              "outer_diameter_mm": 12.0,
+              "inner_diameter_mm": 0.0,
+              "youngs_modulus_mpa": 200000.0,
+              "shear_modulus_mpa": 76923.07692307692,
+              "material_basis": "Illustrative steel elastic moduli; confirm actual material and temperature"
+            }
+          ],
+          "cases": [
+            {
+              "name": "Case 1",
+              "rpm": 1000.0,
+              "duration_hours": 2.0,
+              "ambient_c": 25.0,
+              "loads": [
+                {
+                  "name": "External load",
+                  "position_mm": 60.0,
+                  "axial_n": 5.0,
+                  "force_y_n": -200.0,
+                  "force_z_n": 0.0,
+                  "torque_nm": 0.0,
+                  "moment_y_nm": 0.0,
+                  "moment_z_nm": 0.0
+                }
+              ]
+            }
+          ],
+          "source_study": null,
+          "source_description": "Manual load definition",
+          "notes": "Ideal rigid supports and elastic shaft. Specify actual section dimensions, support positions and material properties.",
+          "schema_version": 1
+        },
+        "bearings": [
+          {
+            "position": "a",
+            "kind": "deep_groove_ball",
+            "manufacturer": "",
+            "designation": "GearForge synthetic radial ball fixture",
+            "bore_mm": 12.0,
+            "dynamic_capacity_n": 1000.0,
+            "static_capacity_n": 1000.0,
+            "speed_limit_rpm": 5000.0,
+            "minimum_dynamic_load_n": 5.0,
+            "axial_limit_n": 50.0,
+            "misalignment_limit_rad": 0.001,
+            "minimum_temperature_c": 20.0,
+            "maximum_temperature_c": 80.0,
+            "required_static_safety": 2.0,
+            "data_status": "synthetic",
+            "source_reference": "Original GearForge synthetic verification inputs; no manufacturer product",
+            "rating_conditions": "Invented constant limits for testing only; not material or supplier evidence",
+            "redistribution_basis": "GearForge-authored fixture, Apache-2.0"
+          },
+          {
+            "position": "b",
+            "kind": "deep_groove_ball",
+            "manufacturer": "",
+            "designation": "GearForge synthetic radial ball fixture",
+            "bore_mm": 12.0,
+            "dynamic_capacity_n": 1000.0,
+            "static_capacity_n": 1000.0,
+            "speed_limit_rpm": 5000.0,
+            "minimum_dynamic_load_n": 5.0,
+            "axial_limit_n": 50.0,
+            "misalignment_limit_rad": 0.001,
+            "minimum_temperature_c": 20.0,
+            "maximum_temperature_c": 80.0,
+            "required_static_safety": 2.0,
+            "data_status": "synthetic",
+            "source_reference": "Original GearForge synthetic verification inputs; no manufacturer product",
+            "rating_conditions": "Invented constant limits for testing only; not material or supplier evidence",
+            "redistribution_basis": "GearForge-authored fixture, Apache-2.0"
+          }
+        ],
+        "cases": [
+          {
+            "case_name": "Case 1",
+            "position": "a",
+            "motion": "continuous_rotation",
+            "operating_temperature_c": 40.0,
+            "installation_misalignment_rad": 0.0,
+            "dynamic_x": 1.0,
+            "dynamic_y": 0.0,
+            "static_x": 0.6,
+            "static_y": 0.5,
+            "factor_basis": "Original synthetic case-specific factors; not a supplier table"
+          },
+          {
+            "case_name": "Case 1",
+            "position": "b",
+            "motion": "continuous_rotation",
+            "operating_temperature_c": 40.0,
+            "installation_misalignment_rad": 0.0,
+            "dynamic_x": 1.0,
+            "dynamic_y": 0.0,
+            "static_x": 0.6,
+            "static_y": 0.5,
+            "factor_basis": "Original synthetic case-specific factors; not a supplier table"
+          }
+        ],
+        "required_hours": 10000.0,
+        "notes": "Enter exact bearing rating conditions and every load case. Basic L10 is a per-bearing population estimate, not gearbox service life.",
+        "schema_version": 1
+      },
+      "expected": [
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "radial_load_n",
+          "value": 100.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "axial_load_n",
+          "value": 5.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "equivalent_dynamic_n",
+          "value": 100.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "equivalent_static_n",
+          "value": 100.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "revolutions",
+          "value": 120000.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "cycle_damage",
+          "value": 0.00012
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "basic_l10_revolutions",
+          "value": 1000000000.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "static_safety",
+          "value": 10.0
+        },
+        {
+          "bearing": 0,
+          "case": null,
+          "field": "cycle_damage",
+          "value": 0.00012
+        },
+        {
+          "bearing": 0,
+          "case": null,
+          "field": "target_damage",
+          "value": 0.6
+        },
+        {
+          "bearing": 0,
+          "case": null,
+          "field": "basic_l10_repeated_duty_hours",
+          "value": 16666.666666666668
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "radial_load_n",
+          "value": 100.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "axial_load_n",
+          "value": 0.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "equivalent_dynamic_n",
+          "value": 100.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "equivalent_static_n",
+          "value": 100.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "revolutions",
+          "value": 120000.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "cycle_damage",
+          "value": 0.00012
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "basic_l10_revolutions",
+          "value": 1000000000.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "static_safety",
+          "value": 10.0
+        },
+        {
+          "bearing": 1,
+          "case": null,
+          "field": "cycle_damage",
+          "value": 0.00012
+        },
+        {
+          "bearing": 1,
+          "case": null,
+          "field": "target_damage",
+          "value": 0.6
+        },
+        {
+          "bearing": 1,
+          "case": null,
+          "field": "basic_l10_repeated_duty_hours",
+          "value": 16666.666666666668
+        }
+      ]
+    },
+    {
+      "name": "ball-stationary",
+      "study": {
+        "name": "ball-stationary",
+        "shaft": {
+          "name": "Shaft and bearing load study",
+          "length_mm": 120.0,
+          "bearing_a_mm": 0.0,
+          "bearing_b_mm": 120.0,
+          "axial_locator": "a",
+          "sections": [
+            {
+              "start_mm": 0.0,
+              "end_mm": 120.0,
+              "outer_diameter_mm": 12.0,
+              "inner_diameter_mm": 0.0,
+              "youngs_modulus_mpa": 200000.0,
+              "shear_modulus_mpa": 76923.07692307692,
+              "material_basis": "Illustrative steel elastic moduli; confirm actual material and temperature"
+            }
+          ],
+          "cases": [
+            {
+              "name": "Case 1",
+              "rpm": 0.0,
+              "duration_hours": 1.0,
+              "ambient_c": 25.0,
+              "loads": [
+                {
+                  "name": "External load",
+                  "position_mm": 60.0,
+                  "axial_n": 0.0,
+                  "force_y_n": -400.0,
+                  "force_z_n": 0.0,
+                  "torque_nm": 0.0,
+                  "moment_y_nm": 0.0,
+                  "moment_z_nm": 0.0
+                }
+              ]
+            }
+          ],
+          "source_study": null,
+          "source_description": "Manual load definition",
+          "notes": "Ideal rigid supports and elastic shaft. Specify actual section dimensions, support positions and material properties.",
+          "schema_version": 1
+        },
+        "bearings": [
+          {
+            "position": "a",
+            "kind": "deep_groove_ball",
+            "manufacturer": "",
+            "designation": "GearForge synthetic radial ball fixture",
+            "bore_mm": 12.0,
+            "dynamic_capacity_n": 1000.0,
+            "static_capacity_n": 1000.0,
+            "speed_limit_rpm": 5000.0,
+            "minimum_dynamic_load_n": 5.0,
+            "axial_limit_n": 50.0,
+            "misalignment_limit_rad": 0.001,
+            "minimum_temperature_c": 20.0,
+            "maximum_temperature_c": 80.0,
+            "required_static_safety": 2.0,
+            "data_status": "synthetic",
+            "source_reference": "Original GearForge synthetic verification inputs; no manufacturer product",
+            "rating_conditions": "Invented constant limits for testing only; not material or supplier evidence",
+            "redistribution_basis": "GearForge-authored fixture, Apache-2.0"
+          },
+          {
+            "position": "b",
+            "kind": "deep_groove_ball",
+            "manufacturer": "",
+            "designation": "GearForge synthetic radial ball fixture",
+            "bore_mm": 12.0,
+            "dynamic_capacity_n": 1000.0,
+            "static_capacity_n": 1000.0,
+            "speed_limit_rpm": 5000.0,
+            "minimum_dynamic_load_n": 5.0,
+            "axial_limit_n": 50.0,
+            "misalignment_limit_rad": 0.001,
+            "minimum_temperature_c": 20.0,
+            "maximum_temperature_c": 80.0,
+            "required_static_safety": 2.0,
+            "data_status": "synthetic",
+            "source_reference": "Original GearForge synthetic verification inputs; no manufacturer product",
+            "rating_conditions": "Invented constant limits for testing only; not material or supplier evidence",
+            "redistribution_basis": "GearForge-authored fixture, Apache-2.0"
+          }
+        ],
+        "cases": [
+          {
+            "case_name": "Case 1",
+            "position": "a",
+            "motion": "stationary",
+            "operating_temperature_c": 40.0,
+            "installation_misalignment_rad": 0.0,
+            "dynamic_x": null,
+            "dynamic_y": null,
+            "static_x": null,
+            "static_y": null,
+            "factor_basis": ""
+          },
+          {
+            "case_name": "Case 1",
+            "position": "b",
+            "motion": "stationary",
+            "operating_temperature_c": 40.0,
+            "installation_misalignment_rad": 0.0,
+            "dynamic_x": null,
+            "dynamic_y": null,
+            "static_x": null,
+            "static_y": null,
+            "factor_basis": ""
+          }
+        ],
+        "required_hours": 10000.0,
+        "notes": "Enter exact bearing rating conditions and every load case. Basic L10 is a per-bearing population estimate, not gearbox service life.",
+        "schema_version": 1
+      },
+      "expected": [
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "radial_load_n",
+          "value": 200.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "axial_load_n",
+          "value": 0.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "equivalent_dynamic_n",
+          "value": 200.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "equivalent_static_n",
+          "value": 200.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "revolutions",
+          "value": 0.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "cycle_damage",
+          "value": 0.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "basic_l10_revolutions",
+          "value": 125000000.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "static_safety",
+          "value": 5.0
+        },
+        {
+          "bearing": 0,
+          "case": null,
+          "field": "cycle_damage",
+          "value": 0.0
+        },
+        {
+          "bearing": 0,
+          "case": null,
+          "field": "target_damage",
+          "value": 0.0
+        },
+        {
+          "bearing": 0,
+          "case": null,
+          "field": "basic_l10_repeated_duty_hours",
+          "value": null
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "radial_load_n",
+          "value": 200.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "axial_load_n",
+          "value": 0.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "equivalent_dynamic_n",
+          "value": 200.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "equivalent_static_n",
+          "value": 200.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "revolutions",
+          "value": 0.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "cycle_damage",
+          "value": 0.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "basic_l10_revolutions",
+          "value": 125000000.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "static_safety",
+          "value": 5.0
+        },
+        {
+          "bearing": 1,
+          "case": null,
+          "field": "cycle_damage",
+          "value": 0.0
+        },
+        {
+          "bearing": 1,
+          "case": null,
+          "field": "target_damage",
+          "value": 0.0
+        },
+        {
+          "bearing": 1,
+          "case": null,
+          "field": "basic_l10_repeated_duty_hours",
+          "value": null
+        }
+      ]
+    },
+    {
+      "name": "ball-unloaded",
+      "study": {
+        "name": "ball-unloaded",
+        "shaft": {
+          "name": "Shaft and bearing load study",
+          "length_mm": 120.0,
+          "bearing_a_mm": 0.0,
+          "bearing_b_mm": 120.0,
+          "axial_locator": "a",
+          "sections": [
+            {
+              "start_mm": 0.0,
+              "end_mm": 120.0,
+              "outer_diameter_mm": 12.0,
+              "inner_diameter_mm": 0.0,
+              "youngs_modulus_mpa": 200000.0,
+              "shear_modulus_mpa": 76923.07692307692,
+              "material_basis": "Illustrative steel elastic moduli; confirm actual material and temperature"
+            }
+          ],
+          "cases": [
+            {
+              "name": "Case 1",
+              "rpm": 1000.0,
+              "duration_hours": 1.0,
+              "ambient_c": 25.0,
+              "loads": [
+                {
+                  "name": "External load",
+                  "position_mm": 60.0,
+                  "axial_n": 0.0,
+                  "force_y_n": 0.0,
+                  "force_z_n": 0.0,
+                  "torque_nm": 0.0,
+                  "moment_y_nm": 0.0,
+                  "moment_z_nm": 0.0
+                }
+              ]
+            }
+          ],
+          "source_study": null,
+          "source_description": "Manual load definition",
+          "notes": "Ideal rigid supports and elastic shaft. Specify actual section dimensions, support positions and material properties.",
+          "schema_version": 1
+        },
+        "bearings": [
+          {
+            "position": "a",
+            "kind": "deep_groove_ball",
+            "manufacturer": "",
+            "designation": "GearForge synthetic radial ball fixture",
+            "bore_mm": 12.0,
+            "dynamic_capacity_n": 1000.0,
+            "static_capacity_n": 1000.0,
+            "speed_limit_rpm": 5000.0,
+            "minimum_dynamic_load_n": 5.0,
+            "axial_limit_n": 50.0,
+            "misalignment_limit_rad": 0.001,
+            "minimum_temperature_c": 20.0,
+            "maximum_temperature_c": 80.0,
+            "required_static_safety": 2.0,
+            "data_status": "synthetic",
+            "source_reference": "Original GearForge synthetic verification inputs; no manufacturer product",
+            "rating_conditions": "Invented constant limits for testing only; not material or supplier evidence",
+            "redistribution_basis": "GearForge-authored fixture, Apache-2.0"
+          },
+          {
+            "position": "b",
+            "kind": "deep_groove_ball",
+            "manufacturer": "",
+            "designation": "GearForge synthetic radial ball fixture",
+            "bore_mm": 12.0,
+            "dynamic_capacity_n": 1000.0,
+            "static_capacity_n": 1000.0,
+            "speed_limit_rpm": 5000.0,
+            "minimum_dynamic_load_n": 5.0,
+            "axial_limit_n": 50.0,
+            "misalignment_limit_rad": 0.001,
+            "minimum_temperature_c": 20.0,
+            "maximum_temperature_c": 80.0,
+            "required_static_safety": 2.0,
+            "data_status": "synthetic",
+            "source_reference": "Original GearForge synthetic verification inputs; no manufacturer product",
+            "rating_conditions": "Invented constant limits for testing only; not material or supplier evidence",
+            "redistribution_basis": "GearForge-authored fixture, Apache-2.0"
+          }
+        ],
+        "cases": [
+          {
+            "case_name": "Case 1",
+            "position": "a",
+            "motion": "continuous_rotation",
+            "operating_temperature_c": 40.0,
+            "installation_misalignment_rad": 0.0,
+            "dynamic_x": null,
+            "dynamic_y": null,
+            "static_x": null,
+            "static_y": null,
+            "factor_basis": ""
+          },
+          {
+            "case_name": "Case 1",
+            "position": "b",
+            "motion": "continuous_rotation",
+            "operating_temperature_c": 40.0,
+            "installation_misalignment_rad": 0.0,
+            "dynamic_x": null,
+            "dynamic_y": null,
+            "static_x": null,
+            "static_y": null,
+            "factor_basis": ""
+          }
+        ],
+        "required_hours": 10000.0,
+        "notes": "Enter exact bearing rating conditions and every load case. Basic L10 is a per-bearing population estimate, not gearbox service life.",
+        "schema_version": 1
+      },
+      "expected": [
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "radial_load_n",
+          "value": 0.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "axial_load_n",
+          "value": 0.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "equivalent_dynamic_n",
+          "value": 0.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "equivalent_static_n",
+          "value": 0.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "revolutions",
+          "value": 60000.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "cycle_damage",
+          "value": 0.0
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "basic_l10_revolutions",
+          "value": null
+        },
+        {
+          "bearing": 0,
+          "case": 0,
+          "field": "static_safety",
+          "value": null
+        },
+        {
+          "bearing": 0,
+          "case": null,
+          "field": "cycle_damage",
+          "value": 0.0
+        },
+        {
+          "bearing": 0,
+          "case": null,
+          "field": "target_damage",
+          "value": 0.0
+        },
+        {
+          "bearing": 0,
+          "case": null,
+          "field": "basic_l10_repeated_duty_hours",
+          "value": null
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "radial_load_n",
+          "value": 0.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "axial_load_n",
+          "value": 0.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "equivalent_dynamic_n",
+          "value": 0.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "equivalent_static_n",
+          "value": 0.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "revolutions",
+          "value": 60000.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "cycle_damage",
+          "value": 0.0
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "basic_l10_revolutions",
+          "value": null
+        },
+        {
+          "bearing": 1,
+          "case": 0,
+          "field": "static_safety",
+          "value": null
+        },
+        {
+          "bearing": 1,
+          "case": null,
+          "field": "cycle_damage",
+          "value": 0.0
+        },
+        {
+          "bearing": 1,
+          "case": null,
+          "field": "target_damage",
+          "value": 0.0
+        },
+        {
+          "bearing": 1,
+          "case": null,
+          "field": "basic_l10_repeated_duty_hours",
+          "value": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,50 +1,37 @@
-# GearForge Studio 1.0.0rc5
+# GearForge Studio 1.0.0rc6
 
-This release candidate extends the open engineering workflow from gear mesh
-loads into explicit shaft geometry and individual bearing reactions. It supports
-the agreed 250 W, 1,500 rpm, 5:1 steel spur development target.
+This release candidate connects the explicit shaft load path to bearing duty and
+capacity assessment. Enter exact bearing ratings, applicable limits and case
+factors, then review per-bearing basic fatigue exposure and operating checks.
 
-- Define two support positions, solid/hollow stepped sections, duty cases and
-  three-axis forces/couples. Calculate bearing loads, bending, elastic motion,
-  axial extension, twist and nominal surface stress.
-- Transfer every pinion or wheel duty case from a gear study, including the
-  off-axis helical thrust couple and balanced coupling torque.
-- Inspect interactive load-path diagrams, save/reopen shaft studies and export
-  full inputs, numerical results, readable reports and integrity manifests.
-- Compare 1,452 shaft reaction/motion values against pinned PyNiteFEA in a separate
-  compatible verification environment. The reference solver is not bundled.
-- Exercise all six shaft tabs, numerical equilibrium, save/reload and verified
-  exports in each native package smoke test.
+- Carry every shaft duty case into a saved bearing study and recalculate the
+  source load path for each assessment. Input edits invalidate old results.
+- Sum rolling-contact fatigue exposure using absolute speed; preserve stationary
+  and short-duration peak loads in static checks. Keep missing ratings/factors
+  unassessed and unsupported oscillation/axial arrangements explicit.
+- Check declared speed, minimum load, axial load, temperature, nominal bore and
+  misalignment limits. Bearing operating temperature is not ambient temperature.
+- Use five desktop tabs or batch commands; export complete inputs, source
+  declarations, numerical results, HTML and an integrity manifest.
+- Compare 218 values against separate 60-digit Decimal arithmetic for seven
+  original synthetic cases. This verifies arithmetic, not physical bearing life.
+- Include bearing tabs, save/reload, numerical results and verified exports in
+  each native package's desktop checks.
 
-The prior open gear-study and software-hardening capabilities remain:
+The prior open gear/shaft studies, 72 FreeCAD Gears geometry comparisons, 1,452
+PyNiteFEA shaft comparisons, project hardening and deployment controls remain.
+See [bearing methods](BEARING_ANALYSIS.md), [shaft analysis](SHAFT_ANALYSIS.md),
+[open geometry](OPEN_ENGINEERING.md) and the [deployment guide](INTERNAL_DEPLOYMENT.md).
 
-- Edit external spur/helical geometry, normal profile shifts and an operating-duty
-  spectrum; calculate tooth dimensions, contact ratios, quasi-static mesh forces,
-  power balance and revolution exposure.
-- Open a new target study or transfer a selected design stage with its actual
-  required load. Save/reopen studies and export complete inputs, JSON results,
-  readable reports and an integrity manifest.
-- Compare 72 geometry quantities against a pinned FreeCAD Gears checkout. Retain
-  openly reproducible numerical fixtures and run comparisons in CI without
-  bundling the GPL reference implementation into the Apache-2.0 application.
-- Correct transverse pressure-angle usage in existing helical contact-ratio and
-  shaft-force screens. Reject incomplete saved study inputs instead of silently
-  supplying defaults, and invalidate calculation results after edits.
-- Extend native package smoke checks to the four study tabs, save/reload,
-  calculation export and integrity verification.
+All added source, examples and fixtures are intended for public GitHub
+distribution. No paid standard, private package or restricted supplier table is
+required. Numerical bearing examples are explicitly synthetic.
 
-All added code, examples and bundled comparison results are intended for public
-GitHub distribution. No paid standard, proprietary calculation package or private
-data is required. See [open engineering](OPEN_ENGINEERING.md) for formulas,
-provenance, reproducibility and verification limits.
+**Production gearbox design and service-load ratings remain unqualified.**
+Basic L10 is a per-bearing population fatigue estimate, not adjusted service
+life, assembly reliability or a warranty. Actual supplier selection, material
+fatigue/contact, thermal/lubrication, manufacturing and physical qualification
+remain. Production-required exports still reject unqualified designs.
 
-**Final production gearbox design and service-load ratings remain unqualified.**
-Geometry comparisons and force balances do not establish fatigue strength,
-material allowables, assembly durability or thermal capacity. Production-required
-exports continue to reject unqualified designs. See
-[remaining engineering work](PRODUCTION_QUALIFICATION.md).
-
-Python 3.12 is the build/test runtime; the supported package range is 3.12–3.13.
-Native archives remain unsigned. Root `VALIDATION.json` links version-specific
-evidence; rc4 and earlier evidence remain historical. The
-[deployment guide](INTERNAL_DEPLOYMENT.md) covers workstation acceptance and rollback.
+Python 3.12 is the build/test runtime. Native archives remain unsigned. Root
+`VALIDATION.json` links current evidence; prior version records are historical.
