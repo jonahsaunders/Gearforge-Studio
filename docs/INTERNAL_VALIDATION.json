@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "app_version": "1.0.0rc3",
+  "date": "2026-10-06",
+  "requested_use": "internal company use for final production gearbox design and load ratings",
+  "production_qualified": false,
+  "source_tests": {"status": "passed_before_final_qt_upgrade", "tests": 84, "python": "3.12.14", "platform": "Windows 11 x86_64", "qt": "6.8.3"},
+  "final_runtime_validation": {"qt": "6.11.2", "status": "in_progress"},
+  "runtime_dependency_audit": {"distributions": 48, "reported_vulnerabilities": 0, "missing_license_texts": 0, "native_advisory_review": "See SECURITY.md; package scan is not exhaustive native coverage"},
+  "native_windows": {"status": "in_progress", "signed": false},
+  "remaining_engineering_requirements": "See PRODUCTION_QUALIFICATION.md; first production scope, authorized methods/reference cases, supplier/material/test evidence and engineering release are required."
+}

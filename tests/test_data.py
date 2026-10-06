@@ -59,3 +59,40 @@ def test_csv_formula_injection():
     assert safe_cell("=HYPERLINK('bad')").startswith("'")
     assert safe_cell("  +cmd").startswith("'")
     assert safe_cell(-1)==-1
+
+
+@pytest.mark.parametrize("patch",[
+    {"schema_version": True}, {"requirements": None}, {"profile": []},
+    {"requirements": {"unknown": 4}}, {"selected_id": []}, {"design_snapshot": []},
+    {"name": "x" * 201}, {"notes": "x" * 20001},
+])
+def test_project_rejects_malformed_structure(tmp_path,patch):
+    data=asdict(Project());data.update(patch)
+    path=tmp_path/"bad.gearforge";path.write_text(json.dumps(data),encoding="utf-8")
+    with pytest.raises(ValueError):Project.load(path)
+
+
+@pytest.mark.parametrize("text",[
+    '{"schema_version":1}',
+    '{"schema_version":1,"schema_version":1,"requirements":{},"profile":{}}',
+    '{"schema_version":1,"requirements":{},"profile":{},"design_snapshot":{"value":1e999}}',
+    '['*2000+'0'+']'*2000,
+])
+def test_project_rejects_ambiguous_or_incomplete_json(tmp_path,text):
+    path=tmp_path/"bad.gearforge";path.write_text(text,encoding="utf-8")
+    with pytest.raises(ValueError):Project.load(path)
+
+
+def test_invalid_save_preserves_existing_project(tmp_path):
+    path=tmp_path/"project.gearforge";Project(name="Original").save(path)
+    with pytest.raises(ValueError):Project(name="x"*201).save(path)
+    assert Project.load(path).name=="Original"
+
+
+@pytest.mark.parametrize("url",["https://", "https://user:secret@example.com", "https://example.com/\npath", "file:///etc/passwd"])
+def test_catalog_rejects_invalid_source_links(catalog,url):
+    rows=list(csv.DictReader(io.StringIO(catalog.export_csv())))
+    rows[0]["source_url"]=url
+    stream=io.StringIO();writer=csv.DictWriter(stream,fieldnames=CSV_COLUMNS)
+    writer.writeheader();writer.writerows(rows)
+    with pytest.raises(ValueError):catalog.import_csv(stream.getvalue())

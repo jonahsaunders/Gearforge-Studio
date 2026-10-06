@@ -21,8 +21,29 @@ def main():
     if args.smoke:
         destination=ROOT/"build"/"frozen-smoke"
         if destination.exists():
+            if destination.resolve().parent != (ROOT/"build").resolve():raise ValueError("Unsafe smoke output path")
             import shutil;shutil.rmtree(destination)
-        subprocess.run([str(executable),"smoke","--out",str(destination),"--cad"],check=True,timeout=180)
+        diagnostic_executable=folder/"GearForgeCLI.exe" if system=="windows" else executable
+        process=subprocess.run([str(diagnostic_executable),"smoke","--out",str(destination),"--cad"],capture_output=True,text=True,timeout=180)
+        (ROOT/"build"/"frozen-smoke.log").write_text(process.stdout+process.stderr,encoding="utf-8")
+        if process.returncode:
+            raise RuntimeError("Native smoke failed: "+process.stderr[-4000:])
+        # Exercise the windowed desktop entry point's file-based worker as well.
+        if system=="windows":
+            import json
+            from dataclasses import asdict
+            from gearforge.models import Project
+            from gearforge.catalog import Catalog
+            project=Project();catalog=Catalog()
+            request=ROOT/"build"/"desktop-worker-request.json"
+            result=ROOT/"build"/"desktop-worker-result.json"
+            result.unlink(missing_ok=True)
+            request.write_text(json.dumps(dict(task="search",result_path=str(result),
+                requirements=asdict(project.requirements),profile=asdict(project.profile),
+                catalog_text=catalog.export_csv(),limit=1)),encoding="utf-8")
+            catalog.close()
+            subprocess.run([str(executable),"--worker-file",str(request)],check=True,timeout=60)
+            if not json.loads(result.read_text(encoding="utf-8"))["ok"]:raise RuntimeError("Windowed worker failed")
         import json
         evidence=json.loads((destination/"desktop-smoke.json").read_text())
         if not evidence["ok"] or evidence["simulation_points"]!=25:raise RuntimeError(evidence)

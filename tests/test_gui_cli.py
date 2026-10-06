@@ -63,3 +63,43 @@ def test_all_desktop_pages_render(tmp_path):
         assert not w.grab().isNull()
     assert len(w.catalog_rows)>=6
     w.dirty=False;w.close();app.processEvents()
+
+
+@pytest.mark.gui
+def test_cancelled_recovery_and_failed_save_as_keep_current_document(tmp_path,monkeypatch):
+    from PySide6.QtWidgets import QApplication,QFileDialog
+    from gearforge.app import MainWindow
+    app=QApplication.instance() or QApplication([])
+    w=MainWindow(tmp_path/"data");errors=[];w.error=lambda e:errors.append(str(e))
+    original=tmp_path/"original.gearforge";Project(name="Original").save(original)
+    assert w.open_project(original)
+    Project(name="Recovery").save(w.data_dir/"recovery.gearforge")
+    w.dirty=True;w.may_discard=lambda:False
+    w.restore_recovery()
+    assert w.path==original and w.project.name=="Original" and w.dirty
+    monkeypatch.setattr(QFileDialog,"getSaveFileName",lambda *a:(str(tmp_path/"new.gearforge"),""))
+    def fail_save(*a):raise OSError("Disk full")
+    monkeypatch.setattr(Project,"save",fail_save)
+    assert not w.save_project(True)
+    assert w.path==original and w.dirty and errors==["Disk full"]
+    w.may_discard=lambda:True;w.close();app.processEvents()
+
+
+@pytest.mark.gui
+def test_catalog_change_during_search_rejects_result(tmp_path):
+    from PySide6.QtWidgets import QApplication
+    from gearforge.app import MainWindow
+    app=QApplication.instance() or QApplication([])
+    w=MainWindow(tmp_path);w.search_snapshot=w.capture()
+    w.search_catalog_text=w.catalog.export_csv()
+    w.catalog.import_csv(w.search_catalog_text.replace("SS1-20","COMPANY-PART"))
+    w.apply_result({})
+    assert not w.candidates and w.result_snapshot is None
+    assert "Catalog changed" in w.notice.text()
+    w.dirty=False;w.close();app.processEvents()
+
+
+def test_cli_malformed_project_returns_error_without_traceback(tmp_path,capsys):
+    path=tmp_path/"bad.gearforge";path.write_text('{"schema_version":1}')
+    assert main(["search",str(path),"--out",str(tmp_path/"out.json")])==1
+    assert "must be an object" in capsys.readouterr().err

@@ -23,6 +23,21 @@ The native build tooling collects installed dependency license files into
 a complete legal audit. Check the exact dependency lock and binary composition for
 the target release. No commercial Qt license is supplied by this project.
 
+For rc3, collection follows the full installed runtime dependency graph, including
+SciPy, Numba, llvmlite and the Trame dependency chain. `DEPENDENCIES.json` records
+package versions, license metadata, upstream URLs and copied texts;
+`requirements-runtime.txt` records the resolved versions. The release workflow
+adds a vulnerability report and CycloneDX SBOM. This inventory conservatively
+includes declared dependencies even when their modules are excluded from the
+frozen application. Standard Apache-2.0 text supplements the proxy wheel whose
+metadata declares that license but omits its text.
+
+PySide6/Qt is used under its applicable open-source license terms. Recipients
+retain the rights granted by those terms. Keep notices and applicable library
+source/replacement information with the deployment. See
+https://www.qt.io/development/open-source-lgpl-obligations for upstream guidance;
+the company must review the exact deployment and any additional distribution.
+
 Primary technical/source references:
 
 - https://cadquery.readthedocs.io/en/stable/

@@ -12,8 +12,12 @@ ROOT=Path(__file__).resolve().parents[1]
 
 def main():
     version=tomllib.loads((ROOT/"pyproject.toml").read_text())["project"]["version"]
+    wheels=list((ROOT/"dist").glob(f"gearforge_studio-{version}-*.whl"))
+    if len(wheels)!=1:raise RuntimeError("Build exactly one matching application wheel before creating the release kit")
     stage=ROOT/"release"/f"GearForge-Studio-{version}"
-    if stage.exists():shutil.rmtree(stage)
+    if stage.exists():
+        if stage.resolve().parent != (ROOT/"release").resolve():raise ValueError("Unsafe release staging path")
+        shutil.rmtree(stage)
     stage.mkdir(parents=True)
     for name in ("README.md","LICENSE","THIRD_PARTY_NOTICES.md","CHANGELOG.md","pyproject.toml","MANIFEST.in","VALIDATION.json","CONTRIBUTING.md","SECURITY.md",".gitignore","constraints-release.txt"):
         source=ROOT/name
@@ -22,7 +26,7 @@ def main():
         source=ROOT/directory
         if source.exists():shutil.copytree(source,stage/directory,ignore=shutil.ignore_patterns("__pycache__","*.pyc","*.egg-info","exported-*"))
     (stage/"dist").mkdir()
-    for source in (ROOT/"dist").glob(f"gearforge_studio-{version}-*.whl"):shutil.copy2(source,stage/"dist"/source.name)
+    for source in wheels:shutil.copy2(source,stage/"dist"/source.name)
     (stage/"VERSION.txt").write_text(version+"\n")
     for source in (ROOT/"packaging").glob("Install-and-launch.*"):
         shutil.copy2(source,stage/source.name)

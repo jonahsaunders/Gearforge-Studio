@@ -9,14 +9,20 @@ with 3D printed parts, catalog gears, or combinations of both. It combines a
 native Qt workspace, discrete design search, engineering screening, a component
 catalog, dimensional print calibration, rigid-body CAD animation and design exports.
 
-**Current version: 1.0.0rc2 · Python 3.12 recommended · Apache-2.0 application code**
+**Current version: 1.0.0rc3 · Python 3.12 recommended · Apache-2.0 application code**
 
 > **Release status:** This is a tested software release candidate for prototype
 > engineering. Its calculations are preliminary screens, not certified ISO/AGMA
 > gearbox ratings. Spur, helical and planetary tooth CAD is available; bevel,
 > worm and cycloidal designs remain concepts. Physical load/life validation,
-> native Windows/macOS checks and signed distribution are still outstanding.
+> production engineering qualification and signed distribution are still outstanding.
 > See [release status](docs/RELEASE_STATUS.md) for the complete boundary.
+
+For company deployment, start with the [IT deployment guide](docs/INTERNAL_DEPLOYMENT.md)
+and [production qualification gap](docs/PRODUCTION_QUALIFICATION.md). **Final
+production gearbox design and verified service-load ratings are not available.**
+The `qualify` command and each export record this explicitly; production-required
+exports fail until a verified rating implementation exists.
 
 ![GearForge design workspace with a two-stage gearbox](screenshots/desktop.png)
 
@@ -117,20 +123,21 @@ records can cover wider dimensional ranges than this search currently uses.
 
 ## Requirements and platform status
 
-Use **64-bit Python 3.11–3.13**. Python **3.12** is the locally tested build runtime.
+Use **64-bit Python 3.12–3.13**. Python **3.12** is the locally tested build runtime.
 A graphical desktop is required for normal GUI use. Installation downloads
 Python dependencies; synthesis, preview, simulation and exports run locally.
 
 Core packages are PySide6 Essentials, CadQuery/Open CASCADE and ReportLab.
-`constraints-release.txt` pins the tested core/build package versions; it is a
-constraints file, not a complete dependency lock for every platform.
+`constraints-release.txt` pins the runtime dependency set and principal build
+tools. Per-platform builds retain an exact runtime inventory, vulnerability
+report and SBOM. This is not a hash-locked wheel archive for every platform.
 
 | Target | Current evidence |
 | --- | --- |
 | Linux x86_64 | Source and frozen executable checked with Qt offscreen; search, CAD preview and simulation workspace passed |
 | Linux portable bundle | Built on glibc 2.39; targets Ubuntu 24.04-class systems with glibc 2.39 or newer |
 | Interactive Linux desktop | Requires X11/Wayland display libraries; no interactive display was available for the recorded checks |
-| Windows | Native build/test workflow configured; no native Windows result is claimed |
+| Windows x86_64 | rc3 regression tests run locally; see [current evidence](docs/INTERNAL_VALIDATION.json) for native package validation |
 | macOS | macOS 14 build target, `.app` metadata and document integration configured; native/Finder/VoiceOver validation pending |
 
 The native assets are unsigned. The macOS runner builds its own architecture,
@@ -331,8 +338,10 @@ one. Use report-only export when reviewing a concept or a geometry issue.
 | `cad-interference.json` | Static solid-intersection results when CAD is exported |
 | `simulation-sweep.json` / `.csv` | Quasi-static operating sweep and power/load data |
 | `design.gearforge` | Requirements, profile and selected design snapshot |
+| `catalog.csv` / `provenance.json` | Catalog snapshot, project metadata, calculation inputs and runtime versions |
+| `qualification.json` | Explicit unqualified status, unavailable service rating and engineering blockers |
 | `ASSEMBLY.txt` | Prototype assembly and inspection notes |
-| `manifest.json` | File SHA-256 hashes, app version and candidate identity |
+| `manifest.json` | File SHA-256 hashes, UTC timestamp, app version, candidate identity and production-rating status |
 
 The Simulation workspace can also export sweep data with a completed sampled
 mesh check. Unexpected static interference blocks CAD export. SVG references
@@ -351,6 +360,9 @@ gearforge search example.gearforge --out candidates.json --limit 60
 gearforge export example.gearforge --out design-export
 gearforge export example.gearforge --out report-export --report-only
 gearforge smoke --out desktop-diagnostics --cad
+gearforge verify design-export
+gearforge qualify example.gearforge --out qualification.json
+gearforge export example.gearforge --out production-export --require-production-rating
 ```
 
 `search` and `export` accept `--catalog custom.csv`. Export recalculates the
@@ -401,7 +413,8 @@ gearbox tests. See [release status](docs/RELEASE_STATUS.md) and
 Install the development dependencies using the tested constraints:
 
 ```bash
-python -m pip install -c constraints-release.txt '.[dev]'
+python -m pip install -c constraints-release.txt --upgrade pip
+python -m pip install -c constraints-release.txt '.[dev]' pip-audit
 python scripts/check_version.py
 python -m pytest -q
 ```
@@ -421,13 +434,13 @@ Remove-Item Env:QT_QPA_PLATFORM
 ```
 
 The original rc2 baseline passed **48 tests**, with an additional final GUI pass.
-The current suite passed **49 tests** on Linux offscreen after making the GUI
-test cover both Reduce Motion settings explicitly.
+The earlier suite passed **49 tests** on Linux offscreen. Current rc3 evidence
+is recorded in [INTERNAL_VALIDATION.json](docs/INTERNAL_VALIDATION.json).
 Coverage includes numerical constraints, catalogs/projects, CLI/worker flows,
 real CAD solids/interference/STEP round-trips, export manifests, timed motion,
 planetary relations, power balance, stale results and reduced-motion behavior.
 A deliberately misaligned gear phase is a negative control for collision detection.
-See [VALIDATION.json](VALIDATION.json) for exact evidence and untested targets.
+See [VALIDATION.json](VALIDATION.json) for historical rc2 evidence.
 
 The [regression workflow](https://github.com/jonahsaunders/Gearforge-Studio/actions/workflows/ci.yml)
 checks all three target operating systems and uploads test results. Headless
@@ -441,6 +454,8 @@ Build on the target operating system with development dependencies installed:
 ```bash
 python -m build
 python scripts/collect_licenses.py
+python -m pip_audit --no-deps --disable-pip -r release-licenses/requirements-runtime.txt --format json --output release-licenses/vulnerability-audit.json
+python -m pip_audit --no-deps --disable-pip -r release-licenses/requirements-runtime.txt --format cyclonedx-json --output release-licenses/sbom.cdx.json
 python -m PyInstaller packaging/gearforge.spec --noconfirm
 python scripts/native_archive.py --smoke
 python scripts/build_release.py
@@ -457,15 +472,15 @@ windowed executable and a file-based worker protocol.
 
 | Workflow | Trigger | Result |
 | --- | --- | --- |
-| `.github/workflows/ci.yml` | Pull requests, pushes to `main`, manual run | Python 3.12 tests on Linux, Windows and macOS |
+| `.github/workflows/ci.yml` | Pull requests, pushes to `main`, weekly and manual runs | Dependency audit and Python 3.12 tests on Linux, Windows and macOS |
 | `.github/workflows/release.yml` | `v*` tags or manual run | Tests, native builds, frozen smoke checks, archives and checksums |
 | Release draft job | Matching tag after all native builds succeed | Creates a draft prerelease with assets and release notes |
 
 For the current release:
 
 ```bash
-git tag -a v1.0.0rc2 -m "GearForge Studio 1.0.0rc2"
-git push origin v1.0.0rc2
+git tag -a v1.0.0rc3 -m "GearForge Studio 1.0.0rc3"
+git push origin v1.0.0rc3
 ```
 
 The tag must match package/runtime versions. Manual builds on `main` upload
@@ -516,7 +531,7 @@ and the [release guide](docs/GITHUB_RELEASE.md).
 | GUI is invisible after tests | Remove `QT_QPA_PLATFORM=offscreen` from the normal launch environment |
 | No feasible candidates | Review rejection explanations; check ratio, envelope, torque, module, backlash, mode and catalog constraints |
 | CAD/export requests regeneration | Requirements, profile or catalog changed; generate a new shortlist |
-| Detailed CAD unavailable | Bevel, worm and cycloidal entries are concept-only in rc2 |
+| Detailed CAD unavailable | Bevel, worm and cycloidal entries are concept-only in rc3 |
 | CAD export reports interference | Export report-only, inspect geometry/fit assumptions and sample tooth poses; a static pass alone is insufficient |
 | CSV import rejected | Start with the exported template, preserve exact column order and inspect the reported row |
 | Job cannot start | Check the installed environment and writable app-data directory; inspect the local log or run CLI diagnostics |

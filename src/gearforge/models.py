@@ -11,6 +11,40 @@ from typing import Any
 FAMILIES = ("spur", "helical", "planetary", "bevel", "worm", "cycloidal")
 MODES = ("printed", "commercial", "hybrid")
 MODULES = (0.8, 1.0, 1.25, 1.5, 2.0, 2.5, 3.0)
+PROJECT_MAX_BYTES = 2_000_000
+
+
+def read_text_limited(path: Path, limit: int, label: str, encoding="utf-8") -> str:
+    """Bound the actual read, including files which grow after a stat call."""
+    with Path(path).open("rb") as stream:
+        raw = stream.read(limit + 1)
+    if len(raw) > limit:
+        raise ValueError(f"{label} exceeds the {limit:,} byte size limit")
+    try:
+        return raw.decode(encoding)
+    except UnicodeError as exc:
+        raise ValueError(f"{label} must be valid {encoding} text") from exc
+
+
+def strict_json(text: str):
+    def pairs(items):
+        result = {}
+        for key, value in items:
+            if key in result:
+                raise ValueError(f"Duplicate JSON field: {key}")
+            result[key] = value
+        return result
+
+    def constant(value):
+        raise ValueError("Non-finite JSON")
+
+    try:
+        result = json.loads(text, object_pairs_hook=pairs, parse_constant=constant)
+        # Also reject overflowed exponents (1e999), which parse_constant misses.
+        json.dumps(result, allow_nan=False)
+        return result
+    except (RecursionError, UnicodeError) as exc:
+        raise ValueError("Invalid or excessively nested JSON") from exc
 
 
 def finite(value: Any, name: str, minimum: float, maximum: float) -> float:
@@ -18,7 +52,7 @@ def finite(value: Any, name: str, minimum: float, maximum: float) -> float:
         raise ValueError(f"{name} must be a number")
     try:
         result = float(value)
-    except (TypeError, ValueError) as exc:
+    except (TypeError, ValueError, OverflowError) as exc:
         raise ValueError(f"{name} must be a number") from exc
     if not math.isfinite(result) or not minimum <= result <= maximum:
         raise ValueError(f"{name} must be between {minimum:g} and {maximum:g}")
@@ -126,7 +160,7 @@ class Requirements:
             raise ValueError("Unknown manufacturing mode or design priority")
         if not self.families or not isinstance(self.families, list) or any(f not in FAMILIES for f in self.families):
             raise ValueError("Select at least one supported gearbox family")
-        if isinstance(self.max_stages, bool) or self.max_stages not in (1, 2):
+        if type(self.max_stages) is not int or self.max_stages not in (1, 2):
             raise ValueError("Stage count must be 1 or 2")
         if self.mounting not in ("foot", "flange"):
             raise ValueError("Mounting must be foot or flange")
@@ -249,34 +283,49 @@ class Project:
     profile: PrintProfile = field(default_factory=PrintProfile)
     notes: str = ""
     selected_id: str = ""
-    # Design snapshots are compared against fresh calculations on load.
+    # Informational only; loading requires a fresh search before CAD/export.
     design_snapshot: dict | None = None
     schema_version: int = 1
 
     def save(self, path: Path):
+        self.validate()
+        content = json.dumps(asdict(self), indent=2, allow_nan=False)
+        if len(content.encode("utf-8")) > PROJECT_MAX_BYTES:
+            raise ValueError("Project exceeds the 2 MB size limit")
+        atomic_text(path, content)
+
+    def validate(self):
+        if type(self.schema_version) is not int or self.schema_version != 1:
+            raise ValueError("Unsupported project schema")
         self.requirements.validate()
         self.profile.validate()
-        atomic_text(path, json.dumps(asdict(self), indent=2, allow_nan=False))
+        for key, limit in (("name", 200), ("notes", 20000), ("selected_id", 200)):
+            value = getattr(self, key)
+            if not isinstance(value, str) or len(value) > limit or "\x00" in value:
+                raise ValueError(f"Invalid project {key}")
+        if self.design_snapshot is not None and not isinstance(self.design_snapshot, dict):
+            raise ValueError("Invalid design snapshot")
 
     @classmethod
     def load(cls, path: Path):
-        if path.stat().st_size > 2_000_000:
-            raise ValueError("Project exceeds the 2 MB size limit")
-        data = json.loads(path.read_text(encoding="utf-8"), parse_constant=lambda s: (_ for _ in ()).throw(ValueError("Non-finite JSON")))
-        if not isinstance(data, dict) or data.get("schema_version") != 1:
+        return cls.from_dict(strict_json(read_text_limited(path, PROJECT_MAX_BYTES, "Project")))
+
+    @classmethod
+    def from_dict(cls, data):
+        if not isinstance(data, dict) or type(data.get("schema_version")) is not int or data.get("schema_version") != 1:
             raise ValueError("Unsupported project schema")
+        data = dict(data)
         allowed = {f.name for f in fields(cls)}
         if set(data) - allowed:
             raise ValueError("Project contains unknown fields")
-        req = Requirements(**data.pop("requirements"))
-        profile = PrintProfile(**data.pop("profile"))
-        req.validate()
-        profile.validate()
+        for key, model in (("requirements", Requirements), ("profile", PrintProfile)):
+            if not isinstance(data.get(key), dict):
+                raise ValueError(f"Project {key} must be an object")
+            if set(data[key]) - {f.name for f in fields(model)}:
+                raise ValueError(f"Project {key} contains unknown fields")
+        req, profile = Requirements(**data.pop("requirements")), PrintProfile(**data.pop("profile"))
         result = cls(requirements=req, profile=profile, **data)
-        if not isinstance(result.name, str) or len(result.name) > 200:
-            raise ValueError("Invalid project name")
-        if not isinstance(result.notes, str) or len(result.notes) > 20000:
-            raise ValueError("Invalid project notes")
+        result.validate()
         return result
 
 
@@ -285,7 +334,7 @@ def atomic_text(path: Path, content: str):
     path.parent.mkdir(parents=True, exist_ok=True)
     fd, temporary = tempfile.mkstemp(prefix=".gearforge-", dir=path.parent)
     try:
-        with os.fdopen(fd, "w", encoding="utf-8") as file:
+        with os.fdopen(fd, "w", encoding="utf-8", newline="") as file:
             file.write(content)
             file.flush()
             os.fsync(file.fileno())

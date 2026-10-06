@@ -1,0 +1,6 @@
+cadquery-ocp-proxy 7.9.3.1.1
+The published wheel declares Apache-2.0 in its package metadata but omits the
+license text. Apache-2.0.txt is the unmodified standard text retrieved from
+https://www.apache.org/licenses/LICENSE-2.0.txt on 2026-10-06.
+Package metadata: https://pypi.org/project/cadquery-ocp-proxy/7.9.3.1.1/
+No additional copyright ownership is asserted by GearForge.

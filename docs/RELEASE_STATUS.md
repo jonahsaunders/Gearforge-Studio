@@ -1,8 +1,17 @@
-# Release status — 1.0.0rc2
+# Release status — 1.0.0rc3
 
 This is an implemented and tested desktop **release candidate**. It is not a finished
 commercially validated gearbox design product. The remaining work below is concrete
 and material; no installer, model or calculation should imply it is already complete.
+
+## Company-use hardening
+
+The rc3 changes add strict project input validation, reliable recovery/save behavior,
+per-user data locking, verified backup/restore, traceable exports, production-rating
+status and dependency security/release evidence. See [deployment](INTERNAL_DEPLOYMENT.md),
+[current software evidence](INTERNAL_VALIDATION.json) and the
+[production qualification work](PRODUCTION_QUALIFICATION.md). The requested final
+production gearbox design and load-rating scope is still unqualified.
 
 ## Implemented
 
@@ -42,8 +51,8 @@ and material; no installer, model or calculation should imply it is already comp
    integrations. The six seed gears and generic bearing table are intentionally limited.
 6. Produce production drawings with fits, surface finish, pin/keyway/retention details
    and GD&T. SVG outputs are reference layouts and schedules only.
-7. Execute Windows and macOS native tests/builds on those hosts. The supplied workflow
-   is configured; it is not a substitute for running it. Sign Windows packages and
+7. Review current platform results in `INTERNAL_VALIDATION.json` and CI. Complete
+   interactive acceptance on the actual company workstation image. Sign Windows packages and
    notarize macOS packages using the product owner's credentials. Native Linux smoke
    tests are recorded in the validation artifact when that bundle was built.
 8. Review dependency-license notices for the exact distributed binary, release ownership,

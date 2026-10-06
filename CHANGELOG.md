@@ -1,5 +1,24 @@
 # Unreleased
 
+# 1.0.0rc3 — 2026-10-06
+
+- Upgrade PySide6/Qt to 6.11.2 for upstream security fixes.
+- Upgrade CadQuery/OCP/VTK to remove reported VTK advisories; pin the complete
+  runtime dependency set and require Python 3.12–3.13.
+- Reject malformed, duplicate-field, oversized and non-finite project inputs;
+  validate saves and preserve the current document after failed Save As or
+  cancelled recovery. Preserve CSV newlines and worker Unicode on Windows.
+- Lock each application data directory; add verified offline backup/restore.
+- Invalidate catalog search results on import and preserve project metadata,
+  catalog snapshots, runtime provenance and hashes in design exports.
+- Make unavailable production ratings explicit in machine-readable assessments
+  and provide a production-required export guard. Final production engineering
+  qualification remains outstanding; no load-rating method is newly claimed.
+- Inventory all runtime dependency licenses and generate vulnerability/SBOM
+  evidence; pin build actions and add deployment and qualification handoffs.
+
+# Earlier unreleased improvements
+
 - Install Qt's Linux runtime libraries in regression and release workflows,
   including the EGL library required by headless desktop tests.
 - Exercise animation with Reduce Motion both enabled and disabled, independent
