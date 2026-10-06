@@ -1,0 +1,49 @@
+"""Archive the target-native build and emit SHA256; never upload anything."""
+from pathlib import Path
+import argparse
+import hashlib
+import platform
+import subprocess
+import tarfile
+import tomllib
+import zipfile
+
+ROOT=Path(__file__).resolve().parents[1]
+
+
+def main():
+    parser=argparse.ArgumentParser();parser.add_argument("--smoke",action="store_true");args=parser.parse_args()
+    version=tomllib.loads((ROOT/"pyproject.toml").read_text())["project"]["version"]
+    system=platform.system().lower();arch=platform.machine().lower().replace("amd64","x86_64").replace("aarch64","arm64")
+    folder=ROOT/"dist"/("GearForgeStudio.app" if system=="darwin" else "GearForgeStudio")
+    executable=folder/"Contents/MacOS/GearForgeStudio" if system=="darwin" else folder/("GearForgeStudio.exe" if system=="windows" else "GearForgeStudio")
+    if not executable.is_file():raise FileNotFoundError(executable)
+    if args.smoke:
+        destination=ROOT/"build"/"frozen-smoke"
+        if destination.exists():
+            import shutil;shutil.rmtree(destination)
+        subprocess.run([str(executable),"smoke","--out",str(destination),"--cad"],check=True,timeout=180)
+        import json
+        evidence=json.loads((destination/"desktop-smoke.json").read_text())
+        if not evidence["ok"] or evidence["simulation_points"]!=25:raise RuntimeError(evidence)
+    output=ROOT/"release-assets";output.mkdir(exist_ok=True)
+    if system!="darwin":
+        (folder/"START_HERE.txt").write_text("GearForge Studio "+version+" — unsigned release candidate\n\nLaunch GearForgeStudio"+(".exe" if system=="windows" else "")+" in this folder. Keep _internal alongside it.\nLinux target: x86_64, Ubuntu 24.04 class / glibc 2.39+.\nUse Help > About and Help > Open third-party license notices.\nSimulations are kinematic and quasi-static; no certified load rating.\n")
+    stem=f"GearForge-Studio-{version}-{system}-{arch}-unsigned"
+    if system=="linux":
+        path=output/(stem+".tar.gz")
+        with tarfile.open(path,"w:gz") as archive:archive.add(folder,arcname=folder.name)
+    elif system=="darwin":
+        path=output/(stem+".zip")
+        subprocess.run(["ditto","-c","-k","--sequesterRsrc","--keepParent",str(folder),str(path)],check=True)
+    else:
+        path=output/(stem+".zip")
+        with zipfile.ZipFile(path,"w",zipfile.ZIP_DEFLATED) as archive:
+            for file in sorted(folder.rglob("*")):
+                if file.is_file():archive.write(file,file.relative_to(folder.parent))
+    digest=hashlib.file_digest(path.open("rb"),"sha256").hexdigest()
+    path.with_name(path.name+".sha256").write_text(f"{digest}  {path.name}\n")
+    print(path)
+
+
+if __name__=="__main__":main()

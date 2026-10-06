@@ -1,0 +1,36 @@
+# Third-party notices
+
+GearForge application code is Apache-2.0. Third-party packages retain their licenses.
+No supplier logo or manufacturer CAD file is redistributed. Seed dimensional/rating
+facts identify KHK as their source; trademarks remain with their owners. Supplier
+website price/stock values are not embedded or fabricated.
+
+Core dependencies:
+
+| Dependency | Upstream license family | Distribution note |
+| --- | --- | --- |
+| CadQuery | Apache-2.0 | Retain license/notices |
+| cadquery-ocp / Open CASCADE | LGPL-2.1 with exception (upstream) | Retain exact wheel license and comply with applicable terms |
+| PySide6-Essentials / Shiboken6 / Qt | LGPL-3.0 / GPL / commercial options | Retain exact distribution notices and applicable LGPL obligations |
+| NumPy | BSD-3-Clause | Retain license |
+| VTK | BSD-style | Retain license |
+| ReportLab | BSD-style | Retain license |
+| ezdxf | MIT | Retain license |
+| CasADi / NLopt and native transitive libraries | Various, including LGPL | Inspect exact package licenses for distributed build |
+
+The native build tooling collects installed dependency license files into
+`licenses/` in the bundle. This table is a guide, not a replacement for those files or
+a complete legal audit. Check the exact dependency lock and binary composition for
+the target release. No commercial Qt license is supplied by this project.
+
+Primary technical/source references:
+
+- https://cadquery.readthedocs.io/en/stable/
+- https://doc.qt.io/qtforpython-6/
+- https://catalog.khkgears.us/item/spur-gears/spur-gears-ss/ss1-20
+- https://catalog.khkgears.us/item/spur-gears/spur-gears-ss/ss1-30
+- https://catalog.khkgears.us/item/spur-gears/spur-gears-ss/ss1-40
+- https://catalog.khkgears.us/item/spur-gears/spur-gears-ss/ss1-60
+- https://www.khkgears.us/catalog/product/SSG1-40
+- https://www.khkgears.us/catalog/product/MSGA1-40
+- https://khkgears.net/pdf/spur-tech.pdf

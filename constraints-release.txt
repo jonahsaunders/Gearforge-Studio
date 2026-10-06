@@ -1,0 +1,24 @@
+# Versions used in the locally verified rc2 build.
+# Constraints pin core packages; this is not a complete platform dependency lock.
+PySide6-Essentials==6.8.3
+shiboken6==6.8.3
+cadquery==2.7.0
+cadquery-ocp==7.8.1.1.post1
+numpy==2.3.5
+vtk==9.3.1
+reportlab==4.4.9
+ezdxf==1.4.4
+casadi==3.7.2
+nlopt==2.11.0
+multimethod==1.12
+pillow==12.3.0
+pyparsing==3.3.2
+fonttools==4.61.1
+typing_extensions==4.16.0
+PyInstaller==6.22.3
+pyinstaller-hooks-contrib==2026.8
+pytest==9.1.1
+build==1.6.1
+setuptools==84.0.0
+wheel==0.48.0
+packaging==26.3

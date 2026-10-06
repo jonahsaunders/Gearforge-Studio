@@ -1,0 +1,695 @@
+[
+  {
+    "candidate_id": "9b7d5f53ca3b",
+    "samples": 12,
+    "interval": "0 \u2264 input angle < 360 degrees",
+    "method": "Exact B-rep intersection at discrete poses. One input revolution only; not continuous contact or a complete assembly repeat cycle.",
+    "tolerance_mm3": 0.05,
+    "maximum_overlap_mm3": 0.0,
+    "status": "No interference at sampled poses",
+    "frames": [
+      {
+        "input_degrees": 0.0,
+        "pairs": [
+          {
+            "a": "stage_1_driver",
+            "b": "stage_1_driven",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 30.0,
+        "pairs": [
+          {
+            "a": "stage_1_driver",
+            "b": "stage_1_driven",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 60.0,
+        "pairs": [
+          {
+            "a": "stage_1_driver",
+            "b": "stage_1_driven",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 90.0,
+        "pairs": [
+          {
+            "a": "stage_1_driver",
+            "b": "stage_1_driven",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 120.0,
+        "pairs": [
+          {
+            "a": "stage_1_driver",
+            "b": "stage_1_driven",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 150.0,
+        "pairs": [
+          {
+            "a": "stage_1_driver",
+            "b": "stage_1_driven",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 180.0,
+        "pairs": [
+          {
+            "a": "stage_1_driver",
+            "b": "stage_1_driven",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 210.0,
+        "pairs": [
+          {
+            "a": "stage_1_driver",
+            "b": "stage_1_driven",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 240.0,
+        "pairs": [
+          {
+            "a": "stage_1_driver",
+            "b": "stage_1_driven",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 270.0,
+        "pairs": [
+          {
+            "a": "stage_1_driver",
+            "b": "stage_1_driven",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 300.0,
+        "pairs": [
+          {
+            "a": "stage_1_driver",
+            "b": "stage_1_driven",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 330.0,
+        "pairs": [
+          {
+            "a": "stage_1_driver",
+            "b": "stage_1_driven",
+            "overlap_mm3": 0.0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "candidate_id": "6f60093953e0",
+    "samples": 12,
+    "interval": "0 \u2264 input angle < 360 degrees",
+    "method": "Exact B-rep intersection at discrete poses. One input revolution only; not continuous contact or a complete assembly repeat cycle.",
+    "tolerance_mm3": 0.05,
+    "maximum_overlap_mm3": 0.0,
+    "status": "No interference at sampled poses",
+    "frames": [
+      {
+        "input_degrees": 0.0,
+        "pairs": [
+          {
+            "a": "stage_1_driver",
+            "b": "stage_1_driven",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 30.0,
+        "pairs": [
+          {
+            "a": "stage_1_driver",
+            "b": "stage_1_driven",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 60.0,
+        "pairs": [
+          {
+            "a": "stage_1_driver",
+            "b": "stage_1_driven",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 90.0,
+        "pairs": [
+          {
+            "a": "stage_1_driver",
+            "b": "stage_1_driven",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 120.0,
+        "pairs": [
+          {
+            "a": "stage_1_driver",
+            "b": "stage_1_driven",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 150.0,
+        "pairs": [
+          {
+            "a": "stage_1_driver",
+            "b": "stage_1_driven",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 180.0,
+        "pairs": [
+          {
+            "a": "stage_1_driver",
+            "b": "stage_1_driven",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 210.0,
+        "pairs": [
+          {
+            "a": "stage_1_driver",
+            "b": "stage_1_driven",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 240.0,
+        "pairs": [
+          {
+            "a": "stage_1_driver",
+            "b": "stage_1_driven",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 270.0,
+        "pairs": [
+          {
+            "a": "stage_1_driver",
+            "b": "stage_1_driven",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 300.0,
+        "pairs": [
+          {
+            "a": "stage_1_driver",
+            "b": "stage_1_driven",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 330.0,
+        "pairs": [
+          {
+            "a": "stage_1_driver",
+            "b": "stage_1_driven",
+            "overlap_mm3": 0.0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "candidate_id": "5150a86ed091",
+    "samples": 12,
+    "interval": "0 \u2264 input angle < 360 degrees",
+    "method": "Exact B-rep intersection at discrete poses. One input revolution only; not continuous contact or a complete assembly repeat cycle.",
+    "tolerance_mm3": 0.05,
+    "maximum_overlap_mm3": 0.0,
+    "status": "No interference at sampled poses",
+    "frames": [
+      {
+        "input_degrees": 0.0,
+        "pairs": [
+          {
+            "a": "sun",
+            "b": "planet_1",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "sun",
+            "b": "planet_2",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "sun",
+            "b": "planet_3",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_1",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_2",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_3",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 30.0,
+        "pairs": [
+          {
+            "a": "sun",
+            "b": "planet_1",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "sun",
+            "b": "planet_2",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "sun",
+            "b": "planet_3",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_1",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_2",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_3",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 60.0,
+        "pairs": [
+          {
+            "a": "sun",
+            "b": "planet_1",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "sun",
+            "b": "planet_2",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "sun",
+            "b": "planet_3",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_1",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_2",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_3",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 90.0,
+        "pairs": [
+          {
+            "a": "sun",
+            "b": "planet_1",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "sun",
+            "b": "planet_2",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "sun",
+            "b": "planet_3",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_1",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_2",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_3",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 120.0,
+        "pairs": [
+          {
+            "a": "sun",
+            "b": "planet_1",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "sun",
+            "b": "planet_2",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "sun",
+            "b": "planet_3",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_1",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_2",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_3",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 150.0,
+        "pairs": [
+          {
+            "a": "sun",
+            "b": "planet_1",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "sun",
+            "b": "planet_2",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "sun",
+            "b": "planet_3",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_1",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_2",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_3",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 180.0,
+        "pairs": [
+          {
+            "a": "sun",
+            "b": "planet_1",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "sun",
+            "b": "planet_2",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "sun",
+            "b": "planet_3",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_1",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_2",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_3",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 210.0,
+        "pairs": [
+          {
+            "a": "sun",
+            "b": "planet_1",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "sun",
+            "b": "planet_2",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "sun",
+            "b": "planet_3",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_1",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_2",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_3",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 240.0,
+        "pairs": [
+          {
+            "a": "sun",
+            "b": "planet_1",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "sun",
+            "b": "planet_2",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "sun",
+            "b": "planet_3",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_1",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_2",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_3",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 270.0,
+        "pairs": [
+          {
+            "a": "sun",
+            "b": "planet_1",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "sun",
+            "b": "planet_2",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "sun",
+            "b": "planet_3",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_1",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_2",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_3",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 300.0,
+        "pairs": [
+          {
+            "a": "sun",
+            "b": "planet_1",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "sun",
+            "b": "planet_2",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "sun",
+            "b": "planet_3",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_1",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_2",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_3",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          }
+        ]
+      },
+      {
+        "input_degrees": 330.0,
+        "pairs": [
+          {
+            "a": "sun",
+            "b": "planet_1",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "sun",
+            "b": "planet_2",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "sun",
+            "b": "planet_3",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_1",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_2",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          },
+          {
+            "a": "planet_3",
+            "b": "ring",
+            "overlap_mm3": 0.0
+          }
+        ]
+      }
+    ]
+  }
+]
