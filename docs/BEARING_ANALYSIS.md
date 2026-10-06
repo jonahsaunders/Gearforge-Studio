@@ -111,7 +111,7 @@ not authorship, suitability of supplier data or engineering approval.
 `scripts/verify_bearing_reference.py` creates separate closed-form reactions and
 60-digit Decimal calculations for seven GearForge-authored synthetic cases. Its
 218 comparisons cover radial/combined loading, the radial envelope, both
-exponents, asymmetric supports/load positions, reversals, variable duty,
+exponents, off-center load positions, reversals, variable duty,
 stationary peaks and zero load. Relative tolerance is 1e-10 and absolute tolerance
 1e-12. The initial largest relative discrepancy was below 3.7e-15.
 
