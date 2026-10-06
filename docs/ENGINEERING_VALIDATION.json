@@ -32,7 +32,9 @@
       "relative": 2e-07,
       "absolute": 1e-07
     },
-    "passed": true
+    "passed": true,
+    "independent_ci_status": "passed",
+    "ci_run_url": "https://github.com/jonahsaunders/Gearforge-Studio/actions/runs/37511977682"
   },
   "local_source_desktop_smoke": {
     "ok": true,
@@ -53,10 +55,114 @@
     "selected": "416647d929c4"
   },
   "native_packages": {
-    "status": "Final rc4 Windows build in progress; rc3 native results are historical"
+    "status": "passed",
+    "commit": "b17fea6176fc73c5442603f3a5df7f2695f05f0b",
+    "run_url": "https://github.com/jonahsaunders/Gearforge-Studio/actions/runs/37511971987",
+    "platforms": {
+      "Linux-X64": {
+        "tests": {
+          "tests": 115,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "smoke": {
+          "ok": true,
+          "errors": [],
+          "candidates": 60,
+          "cad_meshes": 15,
+          "elapsed_s": 21.088,
+          "simulation_points": 25,
+          "native_platform": "offscreen",
+          "engineering_study": {
+            "app_version": "1.0.0rc4",
+            "tabs_rendered": 4,
+            "verified_files": 3,
+            "input_power_w": 250.0,
+            "study_sha256": "6351727be05d242e0a8445d16b21249f8be1a491e9996a71ab658bbb123b8838",
+            "production_approved": false
+          },
+          "selected": "416647d929c4"
+        }
+      },
+      "Windows-X64": {
+        "tests": {
+          "tests": 115,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "smoke": {
+          "ok": true,
+          "errors": [],
+          "candidates": 60,
+          "cad_meshes": 15,
+          "elapsed_s": 25.86,
+          "simulation_points": 25,
+          "native_platform": "offscreen",
+          "engineering_study": {
+            "app_version": "1.0.0rc4",
+            "tabs_rendered": 4,
+            "verified_files": 3,
+            "input_power_w": 250.0,
+            "study_sha256": "6351727be05d242e0a8445d16b21249f8be1a491e9996a71ab658bbb123b8838",
+            "production_approved": false
+          },
+          "selected": "416647d929c4"
+        }
+      },
+      "macOS-ARM64": {
+        "tests": {
+          "tests": 115,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "smoke": {
+          "ok": true,
+          "errors": [],
+          "candidates": 60,
+          "cad_meshes": 15,
+          "elapsed_s": 65.086,
+          "simulation_points": 25,
+          "native_platform": "offscreen",
+          "engineering_study": {
+            "app_version": "1.0.0rc4",
+            "tabs_rendered": 4,
+            "verified_files": 3,
+            "input_power_w": 250.0,
+            "study_sha256": "6351727be05d242e0a8445d16b21249f8be1a491e9996a71ab658bbb123b8838",
+            "production_approved": false
+          },
+          "selected": "416647d929c4"
+        }
+      }
+    }
   },
   "regression_ci": {
-    "status": "Pending rc4 implementation push"
+    "status": "passed",
+    "commit": "b17fea6176fc73c5442603f3a5df7f2695f05f0b",
+    "run_url": "https://github.com/jonahsaunders/Gearforge-Studio/actions/runs/37511977682",
+    "platforms": {
+      "Linux-X64": {
+        "tests": 115,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "Windows-X64": {
+        "tests": 115,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "macOS-ARM64": {
+        "tests": 115,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
   },
   "scope_limits": [
     "72 independent scalar comparisons cover specified geometry quantities only.",
@@ -72,5 +178,55 @@
   "historical_evidence": [
     "docs/INTERNAL_VALIDATION.json",
     "docs/VALIDATION_RC2.json"
-  ]
+  ],
+  "tested_implementation_commit": "b17fea6176fc73c5442603f3a5df7f2695f05f0b",
+  "dependency_audit": {
+    "Linux-X64": {
+      "runtime_packages": 48,
+      "known_package_advisories": 0,
+      "missing_license_texts": []
+    },
+    "Windows-X64": {
+      "runtime_packages": 48,
+      "known_package_advisories": 0,
+      "missing_license_texts": []
+    },
+    "macOS-ARM64": {
+      "runtime_packages": 48,
+      "known_package_advisories": 0,
+      "missing_license_texts": []
+    },
+    "scope": "Known Python-package advisories and collected runtime notices; not exhaustive native-library vulnerability coverage or a legal opinion. See SECURITY.md and THIRD_PARTY_NOTICES.md."
+  },
+  "local_windows_native_smoke": {
+    "ok": true,
+    "errors": [],
+    "candidates": 60,
+    "cad_meshes": 15,
+    "elapsed_s": 24.0,
+    "simulation_points": 25,
+    "native_platform": "offscreen",
+    "engineering_study": {
+      "app_version": "1.0.0rc4",
+      "tabs_rendered": 4,
+      "verified_files": 3,
+      "input_power_w": 250.0,
+      "study_sha256": "6351727be05d242e0a8445d16b21249f8be1a491e9996a71ab658bbb123b8838",
+      "production_approved": false
+    },
+    "selected": "416647d929c4"
+  },
+  "local_windows_native_archive": {
+    "name": "GearForge-Studio-1.0.0rc4-windows-x86_64-unsigned.zip",
+    "sha256": "0bec3c2e437741b999b04fb191d34029d8ce37095acc0ebe7467cc58314143eb",
+    "bytes": 298156253,
+    "unsigned": true
+  },
+  "local_windows_console_study": {
+    "create": "passed",
+    "calculate": "passed",
+    "verify": "passed",
+    "verified_files": 3,
+    "study_sha256": "6351727be05d242e0a8445d16b21249f8be1a491e9996a71ab658bbb123b8838"
+  }
 }
