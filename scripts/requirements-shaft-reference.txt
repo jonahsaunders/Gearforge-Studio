@@ -3,7 +3,7 @@ PyNiteFEA==3.2.0
 numpy==2.4.6
 scipy==1.18.1
 matplotlib==3.11.2
-prettytable==3.16.0
+prettytable==3.18.0
 wcwidth==0.2.13
 contourpy==1.4.0
 cycler==0.12.1
