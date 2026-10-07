@@ -4,7 +4,7 @@ numpy==2.4.6
 scipy==1.18.1
 matplotlib==3.11.2
 prettytable==3.16.0
-wcwidth==0.2.13
+wcwidth==0.9.1
 contourpy==1.4.0
 cycler==0.12.1
 fonttools==4.66.1
