@@ -9,14 +9,74 @@ with 3D printed parts, catalog gears, or combinations of both. It combines a
 native Qt workspace, discrete design search, engineering screening, a component
 catalog, dimensional print calibration, rigid-body CAD animation and design exports.
 
-**Current version: 1.0.0rc2 · Python 3.12 recommended · Apache-2.0 application code**
+**Current version: 1.0.0rc12 · Python 3.12 recommended · Apache-2.0 application code**
 
 > **Release status:** This is a tested software release candidate for prototype
 > engineering. Its calculations are preliminary screens, not certified ISO/AGMA
 > gearbox ratings. Spur, helical and planetary tooth CAD is available; bevel,
 > worm and cycloidal designs remain concepts. Physical load/life validation,
-> native Windows/macOS checks and signed distribution are still outstanding.
+> production engineering qualification and signed distribution are still outstanding.
 > See [release status](docs/RELEASE_STATUS.md) for the complete boundary.
+
+For company deployment, start with the [IT deployment guide](docs/INTERNAL_DEPLOYMENT.md)
+and [production qualification gap](docs/PRODUCTION_QUALIFICATION.md). **Final
+production gearbox design and verified service-load ratings are not available.**
+The `qualify` command and each export record this explicitly; production-required
+exports fail until a verified rating implementation exists.
+
+The new **Design → Engineering study** workspace adds editable spur/helical
+geometry, profile shifts, operating duty, mesh forces and traceable calculation
+reports. Its first development target is 250 W at 1,500 rpm, 5:1 reduction and
+10,000 hours. All application code, examples and comparison fixtures are intended
+for public GitHub distribution; no paid standard or private calculation package
+is required. See the [open engineering guide](docs/OPEN_ENGINEERING.md) for the
+method, reproducible FreeCAD Gears comparisons and exact verification scope.
+
+**Cyclic stress histories** adds signed local stress samples, exact finite rainflow
+counts across repeated blocks, bounded uniaxial fatigue damage, duration/start
+coverage, import fingerprints and three plots. Its original synthetic data and
+25,788 independent numerical checks are publishable on GitHub. This does not
+establish production gearbox fatigue life. See [methods and scope](docs/STRESS_HISTORY.md).
+
+**Tooth-root elastic stress** adds a cancellable 2D finite-element study on
+the generated spur profile, with explicit material/support/load inputs, three
+mesh levels, a wider-sector check, stress maps and traceable CSV/VTK exports.
+Its 4,582 comparisons use an independent BSD-licensed scikit-fem reference.
+See [methods, evidence and limits](docs/ROOT_STRESS.md).
+
+**Rack-generated tooth roots** adds explicit spur cutter geometry, a generated
+root joined to the involute, analytic undercut/fold rejection and a check against
+the nominal active contact path. Inspect the tooth or whole gear and export
+sampled DXF/SVG/CSV alongside complete calculation evidence. See the
+[tooth-profile guide](docs/TOOTH_PROFILES.md).
+
+**Thermal network and cooling duty** adds editable bodies, heat-transfer paths,
+ordered heating/cooling phases, continuous temperature extrema and energy balances.
+It calculates entered and settled repeated duty plus conservative warm-up bounds,
+with explicit loss/cooling evidence. See the [thermal guide](docs/THERMAL_ANALYSIS.md).
+
+**Tooth contact and surface fatigue** adds spur contact-pressure diagrams,
+explicit load-sharing assumptions and bounded pressure-life curves for each gear.
+It tracks opposite flanks and each member's actual tooth cycles. The original
+implementation is checked against openly licensed SlipPY; the bundled example
+uses invented data, not material allowables. See the [contact guide](docs/CONTACT_ANALYSIS.md).
+
+**Shaft fatigue and material evidence** adds explicit material curves, critical
+section cuts, application factors and rotating-bending/steady-torque fatigue
+blocks. It includes a public NASA worked example and bounded finite-life
+calculations. It does not supply material allowables or production approval.
+See the [shaft fatigue guide](docs/SHAFT_FATIGUE.md).
+
+**Shaft and bearing loads** adds explicit support positions, stepped solid/hollow
+sections, external forces and couples, individual bearing reactions, deflection,
+twist and nominal stress. Transfer a gear study's duty into either shaft and
+inspect its load-path diagrams. See the [shaft analysis guide](docs/SHAFT_ANALYSIS.md)
+and its independently reproduced PyNiteFEA comparisons.
+
+**Bearing duty and capacity** recalculates shaft reactions against explicit
+bearing ratings and limits. It tracks per-case fatigue exposure, stationary
+peak loads, static safety, speed, temperature and misalignment. Missing inputs
+remain unassessed; original examples are synthetic. See the [bearing guide](docs/BEARING_ANALYSIS.md).
 
 ![GearForge design workspace with a two-stage gearbox](screenshots/desktop.png)
 
@@ -49,6 +109,9 @@ catalog, dimensional print calibration, rigid-body CAD animation and design expo
 - **Engineering screens:** Review ratio error, available torque, backlash,
   printable tooth dimensions, contact ratio, tooth bending, shaft stress/deflection
   and generic bearing capacity/life estimates with their assumptions.
+- **Engineering studies:** Save a separate design basis, profile-shifted external
+  pair and operating-duty spectrum; calculate forces, energy and revolution
+  exposure; export inputs, readable results and an integrity manifest.
 - **Catalog components:** Use source-traceable seed records or import a validated
   CSV catalog. Unknown prices stay unknown; supplier conditions remain visible.
 - **Native desktop workspace:** Platform controls and system fonts, appearance
@@ -117,20 +180,21 @@ records can cover wider dimensional ranges than this search currently uses.
 
 ## Requirements and platform status
 
-Use **64-bit Python 3.11–3.13**. Python **3.12** is the locally tested build runtime.
+Use **64-bit Python 3.12–3.13**. Python **3.12** is the locally tested build runtime.
 A graphical desktop is required for normal GUI use. Installation downloads
 Python dependencies; synthesis, preview, simulation and exports run locally.
 
 Core packages are PySide6 Essentials, CadQuery/Open CASCADE and ReportLab.
-`constraints-release.txt` pins the tested core/build package versions; it is a
-constraints file, not a complete dependency lock for every platform.
+`constraints-release.txt` pins the runtime dependency set and principal build
+tools. Per-platform builds retain an exact runtime inventory, vulnerability
+report and SBOM. This is not a hash-locked wheel archive for every platform.
 
 | Target | Current evidence |
 | --- | --- |
 | Linux x86_64 | Source and frozen executable checked with Qt offscreen; search, CAD preview and simulation workspace passed |
 | Linux portable bundle | Built on glibc 2.39; targets Ubuntu 24.04-class systems with glibc 2.39 or newer |
 | Interactive Linux desktop | Requires X11/Wayland display libraries; no interactive display was available for the recorded checks |
-| Windows | Native build/test workflow configured; no native Windows result is claimed |
+| Windows x86_64 | See [current evidence](VALIDATION.json) for exact version-specific regression and native package checks |
 | macOS | macOS 14 build target, `.app` metadata and document integration configured; native/Finder/VoiceOver validation pending |
 
 The native assets are unsigned. The macOS runner builds its own architecture,
@@ -331,8 +395,10 @@ one. Use report-only export when reviewing a concept or a geometry issue.
 | `cad-interference.json` | Static solid-intersection results when CAD is exported |
 | `simulation-sweep.json` / `.csv` | Quasi-static operating sweep and power/load data |
 | `design.gearforge` | Requirements, profile and selected design snapshot |
+| `catalog.csv` / `provenance.json` | Catalog snapshot, project metadata, calculation inputs and runtime versions |
+| `qualification.json` | Explicit unqualified status, unavailable service rating and engineering blockers |
 | `ASSEMBLY.txt` | Prototype assembly and inspection notes |
-| `manifest.json` | File SHA-256 hashes, app version and candidate identity |
+| `manifest.json` | File SHA-256 hashes, UTC timestamp, app version, candidate identity and production-rating status |
 
 The Simulation workspace can also export sweep data with a completed sampled
 mesh check. Unexpected static interference blocks CAD export. SVG references
@@ -351,6 +417,9 @@ gearforge search example.gearforge --out candidates.json --limit 60
 gearforge export example.gearforge --out design-export
 gearforge export example.gearforge --out report-export --report-only
 gearforge smoke --out desktop-diagnostics --cad
+gearforge verify design-export
+gearforge qualify example.gearforge --out qualification.json
+gearforge export example.gearforge --out production-export --require-production-rating
 ```
 
 `search` and `export` accept `--catalog custom.csv`. Export recalculates the
@@ -401,7 +470,8 @@ gearbox tests. See [release status](docs/RELEASE_STATUS.md) and
 Install the development dependencies using the tested constraints:
 
 ```bash
-python -m pip install -c constraints-release.txt '.[dev]'
+python -m pip install -c constraints-release.txt --upgrade pip
+python -m pip install -c constraints-release.txt '.[dev]' pip-audit
 python scripts/check_version.py
 python -m pytest -q
 ```
@@ -420,14 +490,15 @@ python -m pytest -q --junitxml=build/test-results.xml
 Remove-Item Env:QT_QPA_PLATFORM
 ```
 
-The original rc2 baseline passed **48 tests**, with an additional final GUI pass.
-The current suite passed **49 tests** on Linux offscreen after making the GUI
-test cover both Reduce Motion settings explicitly.
+Version-specific regression and native package evidence is indexed in
+[VALIDATION.json](VALIDATION.json). The rc4 additions include independent open
+geometry comparisons and desktop study workflows; rc3 and rc2 results remain
+historical records and do not validate a newer build.
 Coverage includes numerical constraints, catalogs/projects, CLI/worker flows,
 real CAD solids/interference/STEP round-trips, export manifests, timed motion,
 planetary relations, power balance, stale results and reduced-motion behavior.
 A deliberately misaligned gear phase is a negative control for collision detection.
-See [VALIDATION.json](VALIDATION.json) for exact evidence and untested targets.
+See [open engineering](docs/OPEN_ENGINEERING.md) for the numerical reference scope.
 
 The [regression workflow](https://github.com/jonahsaunders/Gearforge-Studio/actions/workflows/ci.yml)
 checks all three target operating systems and uploads test results. Headless
@@ -441,7 +512,9 @@ Build on the target operating system with development dependencies installed:
 ```bash
 python -m build
 python scripts/collect_licenses.py
-python -m PyInstaller packaging/gearforge.spec --noconfirm
+python -m pip_audit --no-deps --disable-pip -r release-licenses/requirements-runtime.txt --format json --output release-licenses/vulnerability-audit.json
+python -m pip_audit --no-deps --disable-pip -r release-licenses/requirements-runtime.txt --format cyclonedx-json --output release-licenses/sbom.cdx.json
+python scripts/build_native.py
 python scripts/native_archive.py --smoke
 python scripts/build_release.py
 ```
@@ -453,19 +526,20 @@ with `README.md` at its root and includes a per-file SHA-256 list.
 The result includes wheel/source distributions, target-native archives,
 checksums and a source release kit. Keep dependency notices with native bundles.
 The macOS spec generates an `.app` with project document metadata; Windows uses a
-windowed executable and a file-based worker protocol.
+windowed executable and a file-based worker protocol. Windows also includes
+`GearForgeCLI.exe` for console commands, backup/restore and visible diagnostics.
 
 | Workflow | Trigger | Result |
 | --- | --- | --- |
-| `.github/workflows/ci.yml` | Pull requests, pushes to `main`, manual run | Python 3.12 tests on Linux, Windows and macOS |
+| `.github/workflows/ci.yml` | Pull requests, pushes to `main`, weekly and manual runs | Dependency audit and Python 3.12 tests on Linux, Windows and macOS |
 | `.github/workflows/release.yml` | `v*` tags or manual run | Tests, native builds, frozen smoke checks, archives and checksums |
 | Release draft job | Matching tag after all native builds succeed | Creates a draft prerelease with assets and release notes |
 
 For the current release:
 
 ```bash
-git tag -a v1.0.0rc2 -m "GearForge Studio 1.0.0rc2"
-git push origin v1.0.0rc2
+git tag -a v1.0.0rc12 -m "GearForge Studio 1.0.0rc12"
+git push origin v1.0.0rc12
 ```
 
 The tag must match package/runtime versions. Manual builds on `main` upload
@@ -492,7 +566,7 @@ includes them automatically and preserves file permissions:
 ```bash
 git init -b main
 git add .
-git commit -m "Add GearForge Studio 1.0.0rc2"
+git commit -m "Add GearForge Studio 1.0.0rc12"
 git remote add origin https://github.com/jonahsaunders/Gearforge-Studio.git
 git push -u origin main
 ```
@@ -516,7 +590,7 @@ and the [release guide](docs/GITHUB_RELEASE.md).
 | GUI is invisible after tests | Remove `QT_QPA_PLATFORM=offscreen` from the normal launch environment |
 | No feasible candidates | Review rejection explanations; check ratio, envelope, torque, module, backlash, mode and catalog constraints |
 | CAD/export requests regeneration | Requirements, profile or catalog changed; generate a new shortlist |
-| Detailed CAD unavailable | Bevel, worm and cycloidal entries are concept-only in rc2 |
+| Detailed CAD unavailable | Bevel, worm and cycloidal entries are concept-only in rc3 |
 | CAD export reports interference | Export report-only, inspect geometry/fit assumptions and sample tooth poses; a static pass alone is insufficient |
 | CSV import rejected | Start with the exported template, preserve exact column order and inspect the reported row |
 | Job cannot start | Check the installed environment and writable app-data directory; inspect the local log or run CLI diagnostics |
@@ -535,7 +609,7 @@ and the [release guide](docs/GITHUB_RELEASE.md).
 | `packaging/` | Native build spec, launcher templates and supplemental license texts |
 | `scripts/` | Version checks, license collection, package/archive creation and reproducible app captures |
 | `.github/` | Test/release workflows and contribution templates |
-| `VALIDATION.json` | Recorded test/platform evidence and outstanding validation |
+| `VALIDATION.json` | Index of current software evidence and historical validation |
 
 ## Contributing and licensing
 

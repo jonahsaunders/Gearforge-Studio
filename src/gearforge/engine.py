@@ -16,10 +16,11 @@ from dataclasses import asdict
 
 from .catalog import BEARINGS, Catalog
 from .models import Candidate, Check, GearSpec, MODULES, PrintProfile, Requirements, SearchResult, Stage
+from .engineering import transverse_pressure_angle
 
 
 def external_contact_ratio(a: GearSpec, b: GearSpec) -> float:
-    alpha = math.radians(a.pressure_deg)
+    alpha = transverse_pressure_angle(a.pressure_deg, a.helix_deg)
     ra, rb = a.pitch_mm / 2, b.pitch_mm / 2
     basea, baseb = ra * math.cos(alpha), rb * math.cos(alpha)
     path = math.sqrt((ra + a.module_mm) ** 2 - basea ** 2) + math.sqrt((rb + b.module_mm) ** 2 - baseb ** 2)
@@ -312,7 +313,7 @@ def _make_candidate(req, profile, family, source_stages, level):
                     force = max(force, 2000 * s.input_torque_nm * req.peak_factor / s.driver.pitch_mm)
                 elif shaft["index"] in (i, i+1):
                     ft = 2000 * s.input_torque_nm * req.peak_factor / s.driver.pitch_mm
-                    force += ft / math.cos(math.radians(s.driver.pressure_deg))
+                    force += ft / math.cos(transverse_pressure_angle(s.driver.pressure_deg, s.driver.helix_deg))
                     axial += ft * abs(math.tan(math.radians(s.driver.helix_deg)))
             bending_moment = force * span / 4
             normal = 32 * bending_moment / (math.pi * d**3)

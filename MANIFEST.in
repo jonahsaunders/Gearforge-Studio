@@ -1,11 +1,22 @@
 include README.md CHANGELOG.md LICENSE THIRD_PARTY_NOTICES.md
-include CONTRIBUTING.md SECURITY.md constraints-release.txt
+include CONTRIBUTING.md SECURITY.md constraints-release.txt VALIDATION.json
 recursive-include .github *.yml *.md
-recursive-include docs *.md
+recursive-include docs *.md *.json
 recursive-include packaging *.py *.spec *.sh *.bat *.command
 recursive-include packaging/licenses *.txt
 recursive-include scripts *.py
+recursive-include scripts requirements-*.txt
 recursive-include tests *.py
+recursive-include tests/data *.json
 recursive-include examples *.gearforge
+recursive-include examples *.gearforge-study
+recursive-include examples *.gearforge-shaft
+recursive-include examples *.gearforge-bearing
+recursive-include examples *.gearforge-fatigue
+recursive-include examples *.gearforge-contact
+recursive-include examples *.gearforge-thermal
+recursive-include examples *.gearforge-tooth
+recursive-include examples *.gearforge-root
+recursive-include examples *.gearforge-history
 prune examples/exported-*
 recursive-include src/gearforge/data *.csv *.json *.svg *.png

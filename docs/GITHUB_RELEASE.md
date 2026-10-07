@@ -1,25 +1,26 @@
 # Prepare and publish on GitHub
 
-The source kit is ready for a new repository. The tested core dependency versions
-are pinned in constraints-release.txt; it is not a complete platform lockfile. No remote repository or published
-release was created by this preparation. Generated CAD, runtime databases,
+The repository has regression and release workflows. Runtime dependency versions
+are pinned in constraints-release.txt; per-platform inventory and audit evidence
+are retained with release artifacts. No production engineering approval is implied. Generated CAD, runtime databases,
 build output, credentials and native dependencies are excluded by `.gitignore`.
 
 From the extracted source kit, install development dependencies and verify:
 
 ```sh
-python -m pip install -c constraints-release.txt '.[dev]'
+python -m pip install -c constraints-release.txt --upgrade pip
+python -m pip install -c constraints-release.txt '.[dev]' pip-audit
 python scripts/check_version.py
 python -m pytest -q
 python -m build
 ```
 
-Create an empty GitHub repository and use your configured Git author identity:
+Only for a new repository created from an extracted source kit, use your configured Git author identity:
 
 ```sh
 git init -b main
 git add .
-git commit -m "Prepare GearForge Studio 1.0.0rc2"
+git commit -m "Prepare GearForge Studio 1.0.0rc3"
 git remote add origin https://github.com/jonahsaunders/Gearforge-Studio.git
 git push -u origin main
 ```
@@ -30,8 +31,8 @@ Actions enabled and permission to create releases. Create the matching tag when
 ready to build native assets:
 
 ```sh
-git tag -a v1.0.0rc2 -m "GearForge Studio 1.0.0rc2"
-git push origin v1.0.0rc2
+git tag -a v1.0.0rc3 -m "GearForge Studio 1.0.0rc3"
+git push origin v1.0.0rc3
 ```
 
 Tag/version mismatch stops the build. The separate numeric macOS build is `tool.gearforge.release.macos-build` in
@@ -54,10 +55,18 @@ For a local native build:
 
 ```sh
 python scripts/collect_licenses.py
-python -m PyInstaller packaging/gearforge.spec --noconfirm
+python -m pip_audit --no-deps --disable-pip -r release-licenses/requirements-runtime.txt --format json --output release-licenses/vulnerability-audit.json
+python -m pip_audit --no-deps --disable-pip -r release-licenses/requirements-runtime.txt --format cyclonedx-json --output release-licenses/sbom.cdx.json
+python scripts/build_native.py
 python scripts/native_archive.py --smoke
 python scripts/build_release.py
 ```
 
 See [GitHub release management](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository)
 and [PyInstaller bundle specification](https://pyinstaller.org/en/stable/spec-files.html).
+
+The native build wrapper limits Windows DLL lookup to the active Python runtime
+and Windows system paths, preventing unrelated applications on PATH from supplying
+incompatible native libraries. The Windows package includes GearForgeCLI.exe for
+visible diagnostics. The smoke gate exercises the GUI/CAD process and the windowed
+worker entry point separately, retaining build/frozen-smoke.log on failure.

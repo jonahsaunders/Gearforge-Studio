@@ -1,7 +1,7 @@
 Copyright (C) 2022 The Qt Company Ltd.
-PySide6 / Shiboken6 6.8.3
+PySide6 / Shiboken6 6.11.2
 Selected distribution license: GNU LGPL version 3.
-Upstream: https://code.qt.io/cgit/pyside/pyside-setup.git/tree/?h=6.8.3
-Qt sources: https://code.qt.io/cgit/qt/qtbase.git/tree/?h=v6.8.3
+Upstream: https://code.qt.io/cgit/pyside/pyside-setup.git/tree/?h=6.11.2
+Qt sources: https://code.qt.io/cgit/qt/qtbase.git/tree/?h=v6.11.2
 Bundled shared libraries are dynamically loaded and can be replaced.
 Refer to GPL-3.txt and LGPL-3.txt and exact upstream notices.

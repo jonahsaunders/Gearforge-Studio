@@ -1,0 +1,1175 @@
+{
+  "reference": "https://github.com/FrictionTribologyEnigma/slippy",
+  "reference_commit": "a4fbb447fc494d0480661ee41ef15fdc82e7423c",
+  "reference_license": "MIT",
+  "scope": "Effective modulus/radius, Hertz contact half-width and peak pressure in original cylinder cases and critical cuts of six spur-study fixtures. Does not independently validate geometry, physical sharing, factors or fatigue life.",
+  "provenance": "Original GearForge inputs and adapter; separate pinned reference process in SI units; no reference source bundled",
+  "comparisons": 208,
+  "maximum_relative_error": 4.007867195766908e-16,
+  "tolerance": {
+    "relative": 1e-10,
+    "absolute": 1e-12
+  },
+  "passed": true,
+  "failures": [],
+  "cylinder_cases": [
+    {
+      "inputs": [
+        5,
+        20,
+        4,
+        210000,
+        210000,
+        0.3,
+        0.3
+      ],
+      "expected": {
+        "effective_radius_mm": 4.0,
+        "effective_modulus_mpa": 115384.61538461538,
+        "half_width_mm": 0.013287433293778345,
+        "peak_pressure_mpa": 191.64567250641844
+      }
+    },
+    {
+      "inputs": [
+        5,
+        20,
+        400,
+        210000,
+        70000,
+        0.3,
+        0.33
+      ],
+      "expected": {
+        "effective_radius_mm": 4.0,
+        "effective_modulus_mpa": 58605.1963274077,
+        "half_width_mm": 0.1864433887913333,
+        "peak_pressure_mpa": 1365.8189255079112
+      }
+    },
+    {
+      "inputs": [
+        1.2,
+        50,
+        0.1,
+        190000,
+        170000,
+        0.27,
+        0.29
+      ],
+      "expected": {
+        "effective_radius_mm": 1.171875,
+        "effective_modulus_mpa": 97398.28964984862,
+        "half_width_mm": 0.0012377132458597805,
+        "peak_pressure_mpa": 51.435158708780875
+      }
+    },
+    {
+      "inputs": [
+        20,
+        20,
+        100,
+        210000,
+        210000,
+        0,
+        0.49
+      ],
+      "expected": {
+        "effective_radius_mm": 10.0,
+        "effective_modulus_mpa": 119324.96164554804,
+        "half_width_mm": 0.10329740407883334,
+        "peak_pressure_mpa": 616.2979389895734
+      }
+    },
+    {
+      "inputs": [
+        12,
+        80,
+        30,
+        2500,
+        70000,
+        0.4,
+        0.33
+      ],
+      "expected": {
+        "effective_radius_mm": 10.434782608695652,
+        "effective_modulus_mpa": 2867.547959739627,
+        "half_width_mm": 0.372822439981447,
+        "peak_pressure_mpa": 51.22704838254333
+      }
+    },
+    {
+      "inputs": [
+        200,
+        400,
+        1000,
+        200000,
+        220000,
+        0.3,
+        0.28
+      ],
+      "expected": {
+        "effective_radius_mm": 133.33333333333334,
+        "effective_modulus_mpa": 114428.378237803,
+        "half_width_mm": 1.2180287971686115,
+        "peak_pressure_mpa": 522.6639746510479
+      }
+    },
+    {
+      "inputs": [
+        0.01,
+        2,
+        1e-05,
+        180000,
+        180000,
+        0.2,
+        0.2
+      ],
+      "expected": {
+        "effective_radius_mm": 0.009950248756218907,
+        "effective_modulus_mpa": 93750.0,
+        "half_width_mm": 1.1624824103096973e-06,
+        "peak_pressure_mpa": 5.476381979818338
+      }
+    },
+    {
+      "inputs": [
+        1000,
+        1000,
+        0.0001,
+        210000,
+        210000,
+        0.3,
+        0.3
+      ],
+      "expected": {
+        "effective_radius_mm": 500.0,
+        "effective_modulus_mpa": 115384.61538461538,
+        "half_width_mm": 0.000742790102284558,
+        "peak_pressure_mpa": 0.08570655026360283
+      }
+    }
+  ],
+  "gear_studies": [
+    {
+      "study": {
+        "name": "Synthetic tooth-contact example \u2014 no material allowables",
+        "source": {
+          "name": "250 W steel spur qualification target",
+          "pair": {
+            "normal_module_mm": 2.0,
+            "pinion_teeth": 20,
+            "wheel_teeth": 100,
+            "normal_pressure_angle_deg": 20.0,
+            "pinion_helix_angle_deg": 0.0,
+            "pinion_profile_shift": 0.0,
+            "wheel_profile_shift": 0.0,
+            "face_width_mm": 20.0
+          },
+          "duty": [
+            {
+              "name": "Continuous rated-input target",
+              "input_rpm": 1500.0,
+              "input_torque_nm": 1.5915494309189535,
+              "duration_hours": 10000.0,
+              "ambient_c": 25.0,
+              "starts": 0
+            }
+          ],
+          "target_life_hours": 10000.0,
+          "ambient_min_c": 20.0,
+          "ambient_max_c": 40.0,
+          "assumed_efficiency": 0.95,
+          "material_process": "Catalog steel gears; supplier grade and heat treatment to be selected",
+          "lubrication": "Enclosed lubricated housing; lubricant and quantity to be specified",
+          "standard_basis": "Open analytical involute geometry and quasi-static statics; method external-involute-1. No standards-compliance claim.",
+          "evidence_references": "",
+          "notes": "Development and qualification target, not an approved operating rating.",
+          "schema_version": 1
+        },
+        "materials": [
+          {
+            "role": "pinion",
+            "designation": "Invented isotropic metal contact fixture",
+            "youngs_modulus_mpa": 210000.0,
+            "poisson_ratio": 0.3,
+            "maximum_elastic_pressure_mpa": 1500.0,
+            "minimum_temperature_c": 20.0,
+            "maximum_temperature_c": 80.0,
+            "life_curve": [
+              {
+                "cycles": 1000.0,
+                "pressure_mpa": 900.0
+              },
+              {
+                "cycles": 10000000000.0,
+                "pressure_mpa": 100.0
+              }
+            ],
+            "data_status": "synthetic",
+            "source_reference": "Original GearForge numerical fixture; no supplier or measured material data",
+            "applicable_conditions": "Invented modulus, elastic-pressure limit and pressure-life points; no physical pitting, surface, lubricant or reliability qualification",
+            "redistribution_basis": "Original GearForge fixture, Apache-2.0"
+          },
+          {
+            "role": "wheel",
+            "designation": "Invented isotropic metal contact fixture",
+            "youngs_modulus_mpa": 210000.0,
+            "poisson_ratio": 0.3,
+            "maximum_elastic_pressure_mpa": 1500.0,
+            "minimum_temperature_c": 20.0,
+            "maximum_temperature_c": 80.0,
+            "life_curve": [
+              {
+                "cycles": 1000.0,
+                "pressure_mpa": 900.0
+              },
+              {
+                "cycles": 10000000000.0,
+                "pressure_mpa": 100.0
+              }
+            ],
+            "data_status": "synthetic",
+            "source_reference": "Original GearForge numerical fixture; no supplier or measured material data",
+            "applicable_conditions": "Invented modulus, elastic-pressure limit and pressure-life points; no physical pitting, surface, lubricant or reliability qualification",
+            "redistribution_basis": "Original GearForge fixture, Apache-2.0"
+          }
+        ],
+        "cases": [
+          {
+            "case_name": "Continuous rated-input target",
+            "normal_load_multiplier": 1.0,
+            "face_line_load_multiplier": 1.0,
+            "effective_face_width_mm": 20.0,
+            "pinion_temperature_c": 40.0,
+            "wheel_temperature_c": 40.0,
+            "factor_basis": "Synthetic uniform-width quasi-static fixture; unity multipliers are not verified dynamic/alignment factors"
+          }
+        ],
+        "load_sharing": "full_load_envelope",
+        "pressure_design_factor": 1.0,
+        "load_sharing_basis": "Full mesh force applied to each examined pair as a local envelope; original arithmetic fixture. No measured stiffness or contact pattern.",
+        "notes": "Ideal spur geometry and frictionless elastic line contact. Establish actual load distribution, material/surface and lubrication evidence before engineering release.",
+        "schema_version": 1
+      },
+      "expected": [
+        {
+          "profile_index": 0,
+          "values": {
+            "effective_radius_mm": 1.3257147840057315,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.007870336796738426,
+            "peak_pressure_mpa": 342.50043644196217
+          }
+        },
+        {
+          "profile_index": 41,
+          "values": {
+            "effective_radius_mm": 4.786452096307487,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.014954611194101755,
+            "peak_pressure_mpa": 180.25167975556025
+          }
+        },
+        {
+          "profile_index": 42,
+          "values": {
+            "effective_radius_mm": 4.786452096307487,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.014954611194101755,
+            "peak_pressure_mpa": 180.25167975556025
+          }
+        },
+        {
+          "profile_index": 73,
+          "values": {
+            "effective_radius_mm": 5.700335722094476,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.01631993726675711,
+            "peak_pressure_mpa": 165.1718228916808
+          }
+        },
+        {
+          "profile_index": 84,
+          "values": {
+            "effective_radius_mm": 5.985989235901186,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.016723848846399682,
+            "peak_pressure_mpa": 161.18262085395816
+          }
+        },
+        {
+          "profile_index": 85,
+          "values": {
+            "effective_radius_mm": 5.985989235901186,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.016723848846399682,
+            "peak_pressure_mpa": 161.18262085395816
+          }
+        },
+        {
+          "profile_index": 126,
+          "values": {
+            "effective_radius_mm": 8.24966393517499,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.019632987788218714,
+            "peak_pressure_mpa": 137.29921379799907
+          }
+        }
+      ]
+    },
+    {
+      "study": {
+        "name": "Synthetic tooth-contact example \u2014 no material allowables",
+        "source": {
+          "name": "250 W steel spur qualification target",
+          "pair": {
+            "normal_module_mm": 2.0,
+            "pinion_teeth": 20,
+            "wheel_teeth": 100,
+            "normal_pressure_angle_deg": 20.0,
+            "pinion_helix_angle_deg": 0.0,
+            "pinion_profile_shift": 0.0,
+            "wheel_profile_shift": 0.0,
+            "face_width_mm": 20.0
+          },
+          "duty": [
+            {
+              "name": "Continuous rated-input target",
+              "input_rpm": 1500.0,
+              "input_torque_nm": 1.5915494309189535,
+              "duration_hours": 10000.0,
+              "ambient_c": 25.0,
+              "starts": 0
+            }
+          ],
+          "target_life_hours": 10000.0,
+          "ambient_min_c": 20.0,
+          "ambient_max_c": 40.0,
+          "assumed_efficiency": 0.95,
+          "material_process": "Catalog steel gears; supplier grade and heat treatment to be selected",
+          "lubrication": "Enclosed lubricated housing; lubricant and quantity to be specified",
+          "standard_basis": "Open analytical involute geometry and quasi-static statics; method external-involute-1. No standards-compliance claim.",
+          "evidence_references": "",
+          "notes": "Development and qualification target, not an approved operating rating.",
+          "schema_version": 1
+        },
+        "materials": [
+          {
+            "role": "pinion",
+            "designation": "Invented isotropic metal contact fixture",
+            "youngs_modulus_mpa": 210000.0,
+            "poisson_ratio": 0.3,
+            "maximum_elastic_pressure_mpa": 1500.0,
+            "minimum_temperature_c": 20.0,
+            "maximum_temperature_c": 80.0,
+            "life_curve": [
+              {
+                "cycles": 1000.0,
+                "pressure_mpa": 900.0
+              },
+              {
+                "cycles": 10000000000.0,
+                "pressure_mpa": 100.0
+              }
+            ],
+            "data_status": "synthetic",
+            "source_reference": "Original GearForge numerical fixture; no supplier or measured material data",
+            "applicable_conditions": "Invented modulus, elastic-pressure limit and pressure-life points; no physical pitting, surface, lubricant or reliability qualification",
+            "redistribution_basis": "Original GearForge fixture, Apache-2.0"
+          },
+          {
+            "role": "wheel",
+            "designation": "Invented isotropic metal contact fixture",
+            "youngs_modulus_mpa": 210000.0,
+            "poisson_ratio": 0.3,
+            "maximum_elastic_pressure_mpa": 1500.0,
+            "minimum_temperature_c": 20.0,
+            "maximum_temperature_c": 80.0,
+            "life_curve": [
+              {
+                "cycles": 1000.0,
+                "pressure_mpa": 900.0
+              },
+              {
+                "cycles": 10000000000.0,
+                "pressure_mpa": 100.0
+              }
+            ],
+            "data_status": "synthetic",
+            "source_reference": "Original GearForge numerical fixture; no supplier or measured material data",
+            "applicable_conditions": "Invented modulus, elastic-pressure limit and pressure-life points; no physical pitting, surface, lubricant or reliability qualification",
+            "redistribution_basis": "Original GearForge fixture, Apache-2.0"
+          }
+        ],
+        "cases": [
+          {
+            "case_name": "Continuous rated-input target",
+            "normal_load_multiplier": 1.0,
+            "face_line_load_multiplier": 1.0,
+            "effective_face_width_mm": 20.0,
+            "pinion_temperature_c": 40.0,
+            "wheel_temperature_c": 40.0,
+            "factor_basis": "Synthetic uniform-width quasi-static fixture; unity multipliers are not verified dynamic/alignment factors"
+          }
+        ],
+        "load_sharing": "equal_pairs",
+        "pressure_design_factor": 1.0,
+        "load_sharing_basis": "Full mesh force applied to each examined pair as a local envelope; original arithmetic fixture. No measured stiffness or contact pattern.",
+        "notes": "Ideal spur geometry and frictionless elastic line contact. Establish actual load distribution, material/surface and lubrication evidence before engineering release.",
+        "schema_version": 1
+      },
+      "expected": [
+        {
+          "profile_index": 0,
+          "values": {
+            "effective_radius_mm": 1.3257147840057315,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.005565168519195752,
+            "peak_pressure_mpa": 242.18438116746358
+          }
+        },
+        {
+          "profile_index": 41,
+          "values": {
+            "effective_radius_mm": 4.786452096307487,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.010574506985357604,
+            "peak_pressure_mpa": 127.45718507542259
+          }
+        },
+        {
+          "profile_index": 42,
+          "values": {
+            "effective_radius_mm": 4.786452096307487,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.014954611194101755,
+            "peak_pressure_mpa": 180.25167975556025
+          }
+        },
+        {
+          "profile_index": 73,
+          "values": {
+            "effective_radius_mm": 5.700335722094476,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.01631993726675711,
+            "peak_pressure_mpa": 165.1718228916808
+          }
+        },
+        {
+          "profile_index": 84,
+          "values": {
+            "effective_radius_mm": 5.985989235901186,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.016723848846399682,
+            "peak_pressure_mpa": 161.18262085395816
+          }
+        },
+        {
+          "profile_index": 85,
+          "values": {
+            "effective_radius_mm": 5.985989235901186,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.011825546926828037,
+            "peak_pressure_mpa": 113.97332421525405
+          }
+        },
+        {
+          "profile_index": 126,
+          "values": {
+            "effective_radius_mm": 8.24966393517499,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.01388261880000213,
+            "peak_pressure_mpa": 97.08520512814674
+          }
+        }
+      ]
+    },
+    {
+      "study": {
+        "name": "Synthetic tooth-contact example \u2014 no material allowables",
+        "source": {
+          "name": "250 W steel spur qualification target",
+          "pair": {
+            "normal_module_mm": 1.5,
+            "pinion_teeth": 24,
+            "wheel_teeth": 72,
+            "normal_pressure_angle_deg": 20.0,
+            "pinion_helix_angle_deg": 0.0,
+            "pinion_profile_shift": 0.3,
+            "wheel_profile_shift": -0.3,
+            "face_width_mm": 20.0
+          },
+          "duty": [
+            {
+              "name": "Continuous rated-input target",
+              "input_rpm": 1500.0,
+              "input_torque_nm": 1.5915494309189535,
+              "duration_hours": 10000.0,
+              "ambient_c": 25.0,
+              "starts": 0
+            }
+          ],
+          "target_life_hours": 10000.0,
+          "ambient_min_c": 20.0,
+          "ambient_max_c": 40.0,
+          "assumed_efficiency": 0.95,
+          "material_process": "Catalog steel gears; supplier grade and heat treatment to be selected",
+          "lubrication": "Enclosed lubricated housing; lubricant and quantity to be specified",
+          "standard_basis": "Open analytical involute geometry and quasi-static statics; method external-involute-1. No standards-compliance claim.",
+          "evidence_references": "",
+          "notes": "Development and qualification target, not an approved operating rating.",
+          "schema_version": 1
+        },
+        "materials": [
+          {
+            "role": "pinion",
+            "designation": "Invented isotropic metal contact fixture",
+            "youngs_modulus_mpa": 210000.0,
+            "poisson_ratio": 0.3,
+            "maximum_elastic_pressure_mpa": 1500.0,
+            "minimum_temperature_c": 20.0,
+            "maximum_temperature_c": 80.0,
+            "life_curve": [
+              {
+                "cycles": 1000.0,
+                "pressure_mpa": 900.0
+              },
+              {
+                "cycles": 10000000000.0,
+                "pressure_mpa": 100.0
+              }
+            ],
+            "data_status": "synthetic",
+            "source_reference": "Original GearForge numerical fixture; no supplier or measured material data",
+            "applicable_conditions": "Invented modulus, elastic-pressure limit and pressure-life points; no physical pitting, surface, lubricant or reliability qualification",
+            "redistribution_basis": "Original GearForge fixture, Apache-2.0"
+          },
+          {
+            "role": "wheel",
+            "designation": "Invented isotropic metal contact fixture",
+            "youngs_modulus_mpa": 210000.0,
+            "poisson_ratio": 0.3,
+            "maximum_elastic_pressure_mpa": 1500.0,
+            "minimum_temperature_c": 20.0,
+            "maximum_temperature_c": 80.0,
+            "life_curve": [
+              {
+                "cycles": 1000.0,
+                "pressure_mpa": 900.0
+              },
+              {
+                "cycles": 10000000000.0,
+                "pressure_mpa": 100.0
+              }
+            ],
+            "data_status": "synthetic",
+            "source_reference": "Original GearForge numerical fixture; no supplier or measured material data",
+            "applicable_conditions": "Invented modulus, elastic-pressure limit and pressure-life points; no physical pitting, surface, lubricant or reliability qualification",
+            "redistribution_basis": "Original GearForge fixture, Apache-2.0"
+          }
+        ],
+        "cases": [
+          {
+            "case_name": "Continuous rated-input target",
+            "normal_load_multiplier": 1.0,
+            "face_line_load_multiplier": 1.0,
+            "effective_face_width_mm": 20.0,
+            "pinion_temperature_c": 40.0,
+            "wheel_temperature_c": 40.0,
+            "factor_basis": "Synthetic uniform-width quasi-static fixture; unity multipliers are not verified dynamic/alignment factors"
+          }
+        ],
+        "load_sharing": "full_load_envelope",
+        "pressure_design_factor": 1.0,
+        "load_sharing_basis": "Full mesh force applied to each examined pair as a local envelope; original arithmetic fixture. No measured stiffness or contact pattern.",
+        "notes": "Ideal spur geometry and frictionless elastic line contact. Establish actual load distribution, material/surface and lubrication evidence before engineering release.",
+        "schema_version": 1
+      },
+      "expected": [
+        {
+          "profile_index": 0,
+          "values": {
+            "effective_radius_mm": 2.843437367104579,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.012149792093145234,
+            "peak_pressure_mpa": 246.51485274284988
+          }
+        },
+        {
+          "profile_index": 41,
+          "values": {
+            "effective_radius_mm": 4.614208357529457,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.015477314725269966,
+            "peak_pressure_mpa": 193.51575269111785
+          }
+        },
+        {
+          "profile_index": 42,
+          "values": {
+            "effective_radius_mm": 4.614208357529457,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.015477314725269966,
+            "peak_pressure_mpa": 193.51575269111785
+          }
+        },
+        {
+          "profile_index": 43,
+          "values": {
+            "effective_radius_mm": 4.617271934896526,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.01548245191020462,
+            "peak_pressure_mpa": 193.45154282209265
+          }
+        },
+        {
+          "profile_index": 84,
+          "values": {
+            "effective_radius_mm": 5.295558935423978,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.016580702080577586,
+            "peak_pressure_mpa": 180.63796057263252
+          }
+        },
+        {
+          "profile_index": 85,
+          "values": {
+            "effective_radius_mm": 5.295558935423978,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.016580702080577586,
+            "peak_pressure_mpa": 180.63796057263252
+          }
+        },
+        {
+          "profile_index": 126,
+          "values": {
+            "effective_radius_mm": 6.034222267272011,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.017699364154907863,
+            "peak_pressure_mpa": 169.2210060476905
+          }
+        }
+      ]
+    },
+    {
+      "study": {
+        "name": "Synthetic tooth-contact example \u2014 no material allowables",
+        "source": {
+          "name": "250 W steel spur qualification target",
+          "pair": {
+            "normal_module_mm": 1.5,
+            "pinion_teeth": 24,
+            "wheel_teeth": 72,
+            "normal_pressure_angle_deg": 20.0,
+            "pinion_helix_angle_deg": 0.0,
+            "pinion_profile_shift": 0.3,
+            "wheel_profile_shift": -0.3,
+            "face_width_mm": 20.0
+          },
+          "duty": [
+            {
+              "name": "Continuous rated-input target",
+              "input_rpm": 1500.0,
+              "input_torque_nm": 1.5915494309189535,
+              "duration_hours": 10000.0,
+              "ambient_c": 25.0,
+              "starts": 0
+            }
+          ],
+          "target_life_hours": 10000.0,
+          "ambient_min_c": 20.0,
+          "ambient_max_c": 40.0,
+          "assumed_efficiency": 0.95,
+          "material_process": "Catalog steel gears; supplier grade and heat treatment to be selected",
+          "lubrication": "Enclosed lubricated housing; lubricant and quantity to be specified",
+          "standard_basis": "Open analytical involute geometry and quasi-static statics; method external-involute-1. No standards-compliance claim.",
+          "evidence_references": "",
+          "notes": "Development and qualification target, not an approved operating rating.",
+          "schema_version": 1
+        },
+        "materials": [
+          {
+            "role": "pinion",
+            "designation": "Invented isotropic metal contact fixture",
+            "youngs_modulus_mpa": 210000.0,
+            "poisson_ratio": 0.3,
+            "maximum_elastic_pressure_mpa": 1500.0,
+            "minimum_temperature_c": 20.0,
+            "maximum_temperature_c": 80.0,
+            "life_curve": [
+              {
+                "cycles": 1000.0,
+                "pressure_mpa": 900.0
+              },
+              {
+                "cycles": 10000000000.0,
+                "pressure_mpa": 100.0
+              }
+            ],
+            "data_status": "synthetic",
+            "source_reference": "Original GearForge numerical fixture; no supplier or measured material data",
+            "applicable_conditions": "Invented modulus, elastic-pressure limit and pressure-life points; no physical pitting, surface, lubricant or reliability qualification",
+            "redistribution_basis": "Original GearForge fixture, Apache-2.0"
+          },
+          {
+            "role": "wheel",
+            "designation": "Invented isotropic metal contact fixture",
+            "youngs_modulus_mpa": 210000.0,
+            "poisson_ratio": 0.3,
+            "maximum_elastic_pressure_mpa": 1500.0,
+            "minimum_temperature_c": 20.0,
+            "maximum_temperature_c": 80.0,
+            "life_curve": [
+              {
+                "cycles": 1000.0,
+                "pressure_mpa": 900.0
+              },
+              {
+                "cycles": 10000000000.0,
+                "pressure_mpa": 100.0
+              }
+            ],
+            "data_status": "synthetic",
+            "source_reference": "Original GearForge numerical fixture; no supplier or measured material data",
+            "applicable_conditions": "Invented modulus, elastic-pressure limit and pressure-life points; no physical pitting, surface, lubricant or reliability qualification",
+            "redistribution_basis": "Original GearForge fixture, Apache-2.0"
+          }
+        ],
+        "cases": [
+          {
+            "case_name": "Continuous rated-input target",
+            "normal_load_multiplier": 1.0,
+            "face_line_load_multiplier": 1.0,
+            "effective_face_width_mm": 20.0,
+            "pinion_temperature_c": 40.0,
+            "wheel_temperature_c": 40.0,
+            "factor_basis": "Synthetic uniform-width quasi-static fixture; unity multipliers are not verified dynamic/alignment factors"
+          }
+        ],
+        "load_sharing": "equal_pairs",
+        "pressure_design_factor": 1.0,
+        "load_sharing_basis": "Full mesh force applied to each examined pair as a local envelope; original arithmetic fixture. No measured stiffness or contact pattern.",
+        "notes": "Ideal spur geometry and frictionless elastic line contact. Establish actual load distribution, material/surface and lubrication evidence before engineering release.",
+        "schema_version": 1
+      },
+      "expected": [
+        {
+          "profile_index": 0,
+          "values": {
+            "effective_radius_mm": 2.843437367104579,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.008591200379069694,
+            "peak_pressure_mpa": 174.31232403767234
+          }
+        },
+        {
+          "profile_index": 41,
+          "values": {
+            "effective_radius_mm": 4.614208357529457,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.0109441141967968,
+            "peak_pressure_mpa": 136.83630099430832
+          }
+        },
+        {
+          "profile_index": 42,
+          "values": {
+            "effective_radius_mm": 4.614208357529457,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.015477314725269966,
+            "peak_pressure_mpa": 193.51575269111785
+          }
+        },
+        {
+          "profile_index": 43,
+          "values": {
+            "effective_radius_mm": 4.617271934896526,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.01548245191020462,
+            "peak_pressure_mpa": 193.45154282209265
+          }
+        },
+        {
+          "profile_index": 84,
+          "values": {
+            "effective_radius_mm": 5.295558935423978,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.016580702080577586,
+            "peak_pressure_mpa": 180.63796057263252
+          }
+        },
+        {
+          "profile_index": 85,
+          "values": {
+            "effective_radius_mm": 5.295558935423978,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.011724326878010309,
+            "peak_pressure_mpa": 127.73032686061666
+          }
+        },
+        {
+          "profile_index": 126,
+          "values": {
+            "effective_radius_mm": 6.034222267272011,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.012515340416625456,
+            "peak_pressure_mpa": 119.65732089553173
+          }
+        }
+      ]
+    },
+    {
+      "study": {
+        "name": "Synthetic tooth-contact example \u2014 no material allowables",
+        "source": {
+          "name": "250 W steel spur qualification target",
+          "pair": {
+            "normal_module_mm": 3.0,
+            "pinion_teeth": 30,
+            "wheel_teeth": 60,
+            "normal_pressure_angle_deg": 20.0,
+            "pinion_helix_angle_deg": 0.0,
+            "pinion_profile_shift": 0.2,
+            "wheel_profile_shift": -0.2,
+            "face_width_mm": 20.0
+          },
+          "duty": [
+            {
+              "name": "Continuous rated-input target",
+              "input_rpm": 1500.0,
+              "input_torque_nm": 1.5915494309189535,
+              "duration_hours": 10000.0,
+              "ambient_c": 25.0,
+              "starts": 0
+            }
+          ],
+          "target_life_hours": 10000.0,
+          "ambient_min_c": 20.0,
+          "ambient_max_c": 40.0,
+          "assumed_efficiency": 0.95,
+          "material_process": "Catalog steel gears; supplier grade and heat treatment to be selected",
+          "lubrication": "Enclosed lubricated housing; lubricant and quantity to be specified",
+          "standard_basis": "Open analytical involute geometry and quasi-static statics; method external-involute-1. No standards-compliance claim.",
+          "evidence_references": "",
+          "notes": "Development and qualification target, not an approved operating rating.",
+          "schema_version": 1
+        },
+        "materials": [
+          {
+            "role": "pinion",
+            "designation": "Invented isotropic metal contact fixture",
+            "youngs_modulus_mpa": 210000.0,
+            "poisson_ratio": 0.3,
+            "maximum_elastic_pressure_mpa": 1500.0,
+            "minimum_temperature_c": 20.0,
+            "maximum_temperature_c": 80.0,
+            "life_curve": [
+              {
+                "cycles": 1000.0,
+                "pressure_mpa": 900.0
+              },
+              {
+                "cycles": 10000000000.0,
+                "pressure_mpa": 100.0
+              }
+            ],
+            "data_status": "synthetic",
+            "source_reference": "Original GearForge numerical fixture; no supplier or measured material data",
+            "applicable_conditions": "Invented modulus, elastic-pressure limit and pressure-life points; no physical pitting, surface, lubricant or reliability qualification",
+            "redistribution_basis": "Original GearForge fixture, Apache-2.0"
+          },
+          {
+            "role": "wheel",
+            "designation": "Invented isotropic metal contact fixture",
+            "youngs_modulus_mpa": 210000.0,
+            "poisson_ratio": 0.3,
+            "maximum_elastic_pressure_mpa": 1500.0,
+            "minimum_temperature_c": 20.0,
+            "maximum_temperature_c": 80.0,
+            "life_curve": [
+              {
+                "cycles": 1000.0,
+                "pressure_mpa": 900.0
+              },
+              {
+                "cycles": 10000000000.0,
+                "pressure_mpa": 100.0
+              }
+            ],
+            "data_status": "synthetic",
+            "source_reference": "Original GearForge numerical fixture; no supplier or measured material data",
+            "applicable_conditions": "Invented modulus, elastic-pressure limit and pressure-life points; no physical pitting, surface, lubricant or reliability qualification",
+            "redistribution_basis": "Original GearForge fixture, Apache-2.0"
+          }
+        ],
+        "cases": [
+          {
+            "case_name": "Continuous rated-input target",
+            "normal_load_multiplier": 1.0,
+            "face_line_load_multiplier": 1.0,
+            "effective_face_width_mm": 20.0,
+            "pinion_temperature_c": 40.0,
+            "wheel_temperature_c": 40.0,
+            "factor_basis": "Synthetic uniform-width quasi-static fixture; unity multipliers are not verified dynamic/alignment factors"
+          }
+        ],
+        "load_sharing": "full_load_envelope",
+        "pressure_design_factor": 1.0,
+        "load_sharing_basis": "Full mesh force applied to each examined pair as a local envelope; original arithmetic fixture. No measured stiffness or contact pattern.",
+        "notes": "Ideal spur geometry and frictionless elastic line contact. Establish actual load distribution, material/surface and lubrication evidence before engineering release.",
+        "schema_version": 1
+      },
+      "expected": [
+        {
+          "profile_index": 0,
+          "values": {
+            "effective_radius_mm": 7.217218210562566,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.012242269251259277,
+            "peak_pressure_mpa": 97.86107942005457
+          }
+        },
+        {
+          "profile_index": 41,
+          "values": {
+            "effective_radius_mm": 10.161305663906305,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.014526191548194425,
+            "peak_pressure_mpa": 82.47458939973087
+          }
+        },
+        {
+          "profile_index": 42,
+          "values": {
+            "effective_radius_mm": 10.161305663906305,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.014526191548194425,
+            "peak_pressure_mpa": 82.47458939973087
+          }
+        },
+        {
+          "profile_index": 47,
+          "values": {
+            "effective_radius_mm": 10.260604299770057,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.014596995646800406,
+            "peak_pressure_mpa": 82.07453865630092
+          }
+        },
+        {
+          "profile_index": 84,
+          "values": {
+            "effective_radius_mm": 10.940173024963913,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.015072632285435131,
+            "peak_pressure_mpa": 79.4845691708978
+          }
+        },
+        {
+          "profile_index": 85,
+          "values": {
+            "effective_radius_mm": 10.940173024963913,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.015072632285435131,
+            "peak_pressure_mpa": 79.4845691708978
+          }
+        },
+        {
+          "profile_index": 121,
+          "values": {
+            "effective_radius_mm": 11.543179837241313,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.015482451910204623,
+            "peak_pressure_mpa": 77.38061712883707
+          }
+        },
+        {
+          "profile_index": 127,
+          "values": {
+            "effective_radius_mm": 11.526839828532081,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.015471489896529127,
+            "peak_pressure_mpa": 77.43544361218532
+          }
+        }
+      ]
+    },
+    {
+      "study": {
+        "name": "Synthetic tooth-contact example \u2014 no material allowables",
+        "source": {
+          "name": "250 W steel spur qualification target",
+          "pair": {
+            "normal_module_mm": 3.0,
+            "pinion_teeth": 30,
+            "wheel_teeth": 60,
+            "normal_pressure_angle_deg": 20.0,
+            "pinion_helix_angle_deg": 0.0,
+            "pinion_profile_shift": 0.2,
+            "wheel_profile_shift": -0.2,
+            "face_width_mm": 20.0
+          },
+          "duty": [
+            {
+              "name": "Continuous rated-input target",
+              "input_rpm": 1500.0,
+              "input_torque_nm": 1.5915494309189535,
+              "duration_hours": 10000.0,
+              "ambient_c": 25.0,
+              "starts": 0
+            }
+          ],
+          "target_life_hours": 10000.0,
+          "ambient_min_c": 20.0,
+          "ambient_max_c": 40.0,
+          "assumed_efficiency": 0.95,
+          "material_process": "Catalog steel gears; supplier grade and heat treatment to be selected",
+          "lubrication": "Enclosed lubricated housing; lubricant and quantity to be specified",
+          "standard_basis": "Open analytical involute geometry and quasi-static statics; method external-involute-1. No standards-compliance claim.",
+          "evidence_references": "",
+          "notes": "Development and qualification target, not an approved operating rating.",
+          "schema_version": 1
+        },
+        "materials": [
+          {
+            "role": "pinion",
+            "designation": "Invented isotropic metal contact fixture",
+            "youngs_modulus_mpa": 210000.0,
+            "poisson_ratio": 0.3,
+            "maximum_elastic_pressure_mpa": 1500.0,
+            "minimum_temperature_c": 20.0,
+            "maximum_temperature_c": 80.0,
+            "life_curve": [
+              {
+                "cycles": 1000.0,
+                "pressure_mpa": 900.0
+              },
+              {
+                "cycles": 10000000000.0,
+                "pressure_mpa": 100.0
+              }
+            ],
+            "data_status": "synthetic",
+            "source_reference": "Original GearForge numerical fixture; no supplier or measured material data",
+            "applicable_conditions": "Invented modulus, elastic-pressure limit and pressure-life points; no physical pitting, surface, lubricant or reliability qualification",
+            "redistribution_basis": "Original GearForge fixture, Apache-2.0"
+          },
+          {
+            "role": "wheel",
+            "designation": "Invented isotropic metal contact fixture",
+            "youngs_modulus_mpa": 210000.0,
+            "poisson_ratio": 0.3,
+            "maximum_elastic_pressure_mpa": 1500.0,
+            "minimum_temperature_c": 20.0,
+            "maximum_temperature_c": 80.0,
+            "life_curve": [
+              {
+                "cycles": 1000.0,
+                "pressure_mpa": 900.0
+              },
+              {
+                "cycles": 10000000000.0,
+                "pressure_mpa": 100.0
+              }
+            ],
+            "data_status": "synthetic",
+            "source_reference": "Original GearForge numerical fixture; no supplier or measured material data",
+            "applicable_conditions": "Invented modulus, elastic-pressure limit and pressure-life points; no physical pitting, surface, lubricant or reliability qualification",
+            "redistribution_basis": "Original GearForge fixture, Apache-2.0"
+          }
+        ],
+        "cases": [
+          {
+            "case_name": "Continuous rated-input target",
+            "normal_load_multiplier": 1.0,
+            "face_line_load_multiplier": 1.0,
+            "effective_face_width_mm": 20.0,
+            "pinion_temperature_c": 40.0,
+            "wheel_temperature_c": 40.0,
+            "factor_basis": "Synthetic uniform-width quasi-static fixture; unity multipliers are not verified dynamic/alignment factors"
+          }
+        ],
+        "load_sharing": "equal_pairs",
+        "pressure_design_factor": 1.0,
+        "load_sharing_basis": "Full mesh force applied to each examined pair as a local envelope; original arithmetic fixture. No measured stiffness or contact pattern.",
+        "notes": "Ideal spur geometry and frictionless elastic line contact. Establish actual load distribution, material/surface and lubrication evidence before engineering release.",
+        "schema_version": 1
+      },
+      "expected": [
+        {
+          "profile_index": 0,
+          "values": {
+            "effective_radius_mm": 7.217218210562566,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.008656591604676994,
+            "peak_pressure_mpa": 69.19823287215587
+          }
+        },
+        {
+          "profile_index": 41,
+          "values": {
+            "effective_radius_mm": 10.161305663906305,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.01027156854854299,
+            "peak_pressure_mpa": 58.318341440125856
+          }
+        },
+        {
+          "profile_index": 42,
+          "values": {
+            "effective_radius_mm": 10.161305663906305,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.014526191548194425,
+            "peak_pressure_mpa": 82.47458939973087
+          }
+        },
+        {
+          "profile_index": 47,
+          "values": {
+            "effective_radius_mm": 10.260604299770057,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.014596995646800406,
+            "peak_pressure_mpa": 82.07453865630092
+          }
+        },
+        {
+          "profile_index": 84,
+          "values": {
+            "effective_radius_mm": 10.940173024963913,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.015072632285435131,
+            "peak_pressure_mpa": 79.4845691708978
+          }
+        },
+        {
+          "profile_index": 85,
+          "values": {
+            "effective_radius_mm": 10.940173024963913,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.01065796049936247,
+            "peak_pressure_mpa": 56.20407786043303
+          }
+        },
+        {
+          "profile_index": 121,
+          "values": {
+            "effective_radius_mm": 11.543179837241313,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.010947746735100305,
+            "peak_pressure_mpa": 54.716359104200606
+          }
+        },
+        {
+          "profile_index": 127,
+          "values": {
+            "effective_radius_mm": 11.526839828532081,
+            "effective_modulus_mpa": 115384.61538461538,
+            "half_width_mm": 0.010939995420894901,
+            "peak_pressure_mpa": 54.75512728236477
+          }
+        }
+      ]
+    }
+  ]
+}

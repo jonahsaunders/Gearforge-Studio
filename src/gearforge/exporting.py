@@ -117,12 +117,27 @@ def write_pdf(path: Path, c: Candidate, req: Requirements, profile: PrintProfile
     doc.build(flow,onFirstPage=page,onLaterPages=page)
 
 
-def export_bundle(candidate: dict, requirements: dict, profile: dict, destination: str, include_cad=True):
+def export_bundle(candidate: dict, requirements: dict, profile: dict, destination: str, include_cad=True,
+                  project: dict | None = None, catalog_text: str | None = None, require_production=False):
     """Publish a complete directory atomically. Never overwrite user files."""
     from .models import Project
     c, req, p = candidate_from_dict(candidate), Requirements(**requirements), PrintProfile(**profile)
     req.validate()
     p.validate()
+    from .qualification import production_assessment, require_production_rating
+    if require_production:
+        require_production_rating(c,req,p)
+    qualification=production_assessment(c,req,p)
+    source_project = Project.from_dict(project) if project is not None else Project(name=c.label,requirements=req,profile=p)
+    if asdict(source_project.requirements) != asdict(req) or asdict(source_project.profile) != asdict(p):
+        raise ValueError("Project does not match the selected calculation inputs")
+    source_project.selected_id=c.id
+    source_project.design_snapshot=asdict(c)
+    if catalog_text is not None:
+        from .catalog import Catalog
+        catalog = Catalog()
+        try:catalog.import_csv(catalog_text)
+        finally:catalog.close()
     dest = Path(destination).resolve()
     if dest.exists():
         raise FileExistsError("Choose a new export folder; existing files will not be overwritten")
@@ -154,7 +169,23 @@ def export_bundle(candidate: dict, requirements: dict, profile: dict, destinatio
                         cq.exporters.export(shape,str(print_dir/(part.name+"."+extension)),tolerance=0.04,angularTolerance=0.12)
             assembled.export(str(temporary/"assembly.step"))
             atomic_text(temporary/"cad-interference.json",json.dumps(collisions,indent=2))
-        Project(name=c.label,requirements=req,profile=p,selected_id=c.id,design_snapshot=asdict(c)).save(temporary/"design.gearforge")
+        source_project.save(temporary/"design.gearforge")
+        atomic_text(temporary/"qualification.json",json.dumps(qualification,indent=2,allow_nan=False))
+        if catalog_text is not None:
+            atomic_text(temporary/"catalog.csv",catalog_text)
+        import importlib.metadata
+        import platform
+        packages={}
+        for package in ("cadquery","cadquery-ocp","PySide6-Essentials","reportlab","numpy","vtk"):
+            try:packages[package]=importlib.metadata.version(package)
+            except importlib.metadata.PackageNotFoundError:packages[package]="unavailable"
+        provenance={"schema_version":1,"purpose":"internal prototype engineering",
+                    "project_name":source_project.name,"project_notes":source_project.notes,
+                    "requirements":asdict(req),"profile":asdict(p),
+                    "python":platform.python_version(),"platform":platform.system(),
+                    "architecture":platform.machine(),"dependencies":packages,
+                    "catalog_snapshot_included":catalog_text is not None}
+        atomic_text(temporary/"provenance.json",json.dumps(provenance,indent=2,allow_nan=False))
         atomic_text(temporary/"bom.csv",bom_csv(c))
         from .simulation import operating_sweep
         sweep=operating_sweep(c,req)
@@ -188,12 +219,11 @@ contact or commercial service suitability. Gear roots use sampled radial relief.
 No validated fatigue, creep, contact wear, housing, retention or thermal rating exists.
 """
         atomic_text(temporary/"ASSEMBLY.txt",assembly_text)
-        manifest = {"app_version":__version__,"candidate_id":c.id,"export_level":c.export_level,
-                    "cad_included":bool(include_cad and c.export_level != "concept"),"files":{}}
-        for file in sorted(temporary.rglob("*")):
-            if file.is_file():
-                manifest["files"][file.relative_to(temporary).as_posix()] = hashlib.sha256(file.read_bytes()).hexdigest()
-        atomic_text(temporary/"manifest.json",json.dumps(manifest,indent=2))
+        from .maintenance import write_manifest
+        manifest = write_manifest(temporary,kind="gearforge-design-export",candidate_id=c.id,
+                                  export_level=c.export_level,
+                                  production_approved=False,rated_output_torque_nm=None,
+                                  cad_included=bool(include_cad and c.export_level != "concept"))
         os.replace(temporary,dest)
         return {"destination":str(dest),"files":len(manifest["files"])+1,"cad_included":manifest["cad_included"]}
     finally:

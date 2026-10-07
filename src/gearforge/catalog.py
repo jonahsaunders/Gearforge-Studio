@@ -5,6 +5,7 @@ import csv
 import io
 import json
 import sqlite3
+from urllib.parse import urlsplit
 from pathlib import Path
 from importlib.resources import files
 
@@ -67,7 +68,7 @@ class Catalog:
             raise ValueError("Catalog headers must match the exported CSV template")
         records, keys = [], set()
         for i, row in enumerate(reader, 2):
-            if i > 10002:
+            if i > 10001:
                 raise ValueError("Catalog exceeds 10,000 rows")
             if None in row or any(v is None for v in row.values()):
                 raise ValueError(f"Malformed CSV row {i}")
@@ -90,8 +91,11 @@ class Catalog:
             row["teeth"] = int(row["teeth"])
             if row["family"] == "spur" and row["helix_deg"]:
                 raise ValueError(f"Spur gears must have zero helix on row {i}")
-            if row["source_url"] and not row["source_url"].startswith("https://"):
-                raise ValueError(f"Source URL must use HTTPS on row {i}")
+            if row["source_url"]:
+                url = urlsplit(row["source_url"])
+                if (url.scheme != "https" or not url.hostname or url.username or url.password
+                        or any(ch.isspace() or ord(ch)<32 for ch in row["source_url"])):
+                    raise ValueError(f"Source URL must be a valid HTTPS URL without credentials on row {i}")
             if row["hub_diameter_mm"] and row["hub_diameter_mm"] <= row["bore_mm"]:
                 raise ValueError(f"Hub must be wider than bore on row {i}")
             if any(len(str(v)) > 8000 for v in row.values()):

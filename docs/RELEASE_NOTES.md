@@ -1,28 +1,27 @@
-# GearForge Studio 1.0.0rc2
+# GearForge Studio 1.0.0rc12
 
-This release candidate improves the desktop interface and simulation workflow.
+This release candidate adds an original local signed stress-history study for
+changing loads. All implementation and synthetic fixtures can be published with
+this repository; no paid standards, restricted material tables or private solver
+are required.
 
-- Native platform controls/system font, appearance and text-size preferences,
-  resizable sidebar, standard shortcuts and macOS application-menu roles.
-- Named accessible inputs, keyboard viewer controls, document state/path support
-  and a Finder file-open handler.
-- Timed rigid-body CAD animation with pause, reverse, seek, slow motion and tooth
-  stepping; CAD survives playback. Reduced-motion controls prevent automatic play.
-- A simulation workspace with motor/load curves, power-loss and overload tables,
-  JSON/CSV export and optional exact tooth intersections at sampled input poses.
-- File-based background workers compatible with windowed executable builds.
-- Cross-platform test/build workflows, version/tag checks, native archives and
-  checksums; successful tag builds create a draft GitHub prerelease.
-- macOS .app target with icon/project document metadata and Windows windowed UI.
+- Count exact finite cycles across ordered/repeated blocks without expanding
+  billions of samples or losing block-transition cycles and endpoint halves.
+- Assess explicit uniaxial elastic material curves with bounded interpolation,
+  a selected mean-stress model and linear damage; retain missing/out-of-range
+  conditions and lower bounds without inventing endurance or remaining life.
+- Check duration/start coverage and retain source/revision/sharing declarations,
+  imported CSV fingerprints, strict editable files and complete JSON/CSV exports.
+- Use seven desktop tabs, three plots and cancellable calculation/export workers.
+- Reproduce 25,788 checks with separately installed MIT rainflow and independent
+  high-precision fatigue arithmetic. The reference is not an app dependency.
 
-Detailed tooth CAD is available for spur, helical and fixed-ring planetary
-prototypes. Bevel, worm and cycloidal searches remain concept-only. Numerical
-screens and simulations are not certified commercial gearbox load ratings.
-Thermal, fatigue, continuous contact, manufactured fits and retention require
-independent validation. See `docs/SIMULATION.md` and `docs/RELEASE_STATUS.md`.
+See [stress history methods and limits](STRESS_HISTORY.md). `VALIDATION.json`
+identifies current build evidence; previous releases do not qualify a new build.
+Native archives are unsigned and require company workstation acceptance.
 
-Linux x86_64 is the locally built/tested native target (Ubuntu 24.04 class,
-glibc 2.39+). Windows/macOS targets are configured in CI but have not run in this
-workspace. Assets are unsigned. macOS VoiceOver/Finder/system appearance and
-signed/notarized distribution need a real platform validation pass. This is a
-prerelease and must not be labeled a fully validated commercial engineering app.
+Production gearbox design and service-load ratings remain unqualified. The
+synthetic history is not a gear solution. Actual full-engagement stress histories,
+material/process evidence, multiaxial effects, manufacturing and physical load/life
+qualification remain. Existing root pressure-patch peaks are not treated as a
+complete cyclic history.

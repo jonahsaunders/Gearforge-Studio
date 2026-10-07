@@ -1,0 +1,346 @@
+{
+  "schema_version": 1,
+  "app_version": "1.0.0rc6",
+  "date": "2026-10-06",
+  "requested_use": "Internal company use for final production gearbox design and service-load ratings",
+  "distribution_constraint": "GitHub-publishable implementation, examples and fixtures; no paid standards, private packages or restricted supplier tables",
+  "production_qualified": false,
+  "runtime": {
+    "python": "3.12.14",
+    "platform": "Windows x86_64"
+  },
+  "bearing_tests": {
+    "tests": 28,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "local_windows_source_tests": {
+    "tests": 170,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "independent_bearing_arithmetic": {
+    "reference": "Original closed-form beam reactions and 60-digit Decimal bearing arithmetic",
+    "provenance": "GearForge-authored synthetic inputs and independent adapter; Apache-2.0; Python standard library Decimal",
+    "scope": "Equivalent loads, per-case basic life/damage/static safety, repeated-duty fatigue sums; no supplier-factor validation or physical life evidence",
+    "comparisons": 218,
+    "tolerance": {
+      "relative": 1e-10,
+      "absolute": 1e-12
+    },
+    "maximum_absolute_error": 2.2649765014648438e-06,
+    "maximum_relative_error": 3.66950101154367e-15,
+    "passed": true,
+    "independent_ci_status": "passed on all three platforms",
+    "ci_run_url": "https://github.com/jonahsaunders/Gearforge-Studio/actions/runs/37526506269"
+  },
+  "local_source_desktop_smoke": {
+    "ok": true,
+    "errors": [],
+    "candidates": 60,
+    "cad_meshes": 15,
+    "elapsed_s": 45.984,
+    "simulation_points": 25,
+    "native_platform": "offscreen",
+    "engineering_study": {
+      "app_version": "1.0.0rc6",
+      "tabs_rendered": 4,
+      "verified_files": 3,
+      "input_power_w": 250.0,
+      "study_sha256": "6351727be05d242e0a8445d16b21249f8be1a491e9996a71ab658bbb123b8838",
+      "production_approved": false
+    },
+    "shaft_study": {
+      "app_version": "1.0.0rc6",
+      "tabs_rendered": 6,
+      "verified_files": 3,
+      "maximum_equilibrium_residual": 0.0,
+      "study_sha256": "5786457039a04580d2d7bec531f69b4e904f7cc0f044d8afa92daad40321ec7e",
+      "production_approved": false
+    },
+    "bearing_study": {
+      "app_version": "1.0.0rc6",
+      "tabs_rendered": 5,
+      "verified_files": 3,
+      "synthetic_basic_l10_hours": 18295.51049310608,
+      "study_sha256": "f73a5b330272ed1758d70f9711f62b1ba50f7e3459f0f64a15b6b639c0995f94",
+      "production_approved": false
+    },
+    "selected": "416647d929c4"
+  },
+  "native_packages": {
+    "status": "passed",
+    "commit": "1014a8c038d426cdd2e99b8e9fdfde4ac3a10ef3",
+    "run_url": "https://github.com/jonahsaunders/Gearforge-Studio/actions/runs/37526501993",
+    "platforms": {
+      "Linux-X64": {
+        "tests": {
+          "tests": 170,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "smoke": {
+          "ok": true,
+          "errors": [],
+          "candidates": 60,
+          "cad_meshes": 15,
+          "elapsed_s": 20.819,
+          "simulation_points": 25,
+          "native_platform": "offscreen",
+          "engineering_study": {
+            "app_version": "1.0.0rc6",
+            "tabs_rendered": 4,
+            "verified_files": 3,
+            "input_power_w": 250.0,
+            "study_sha256": "6351727be05d242e0a8445d16b21249f8be1a491e9996a71ab658bbb123b8838",
+            "production_approved": false
+          },
+          "shaft_study": {
+            "app_version": "1.0.0rc6",
+            "tabs_rendered": 6,
+            "verified_files": 3,
+            "maximum_equilibrium_residual": 0.0,
+            "study_sha256": "5786457039a04580d2d7bec531f69b4e904f7cc0f044d8afa92daad40321ec7e",
+            "production_approved": false
+          },
+          "bearing_study": {
+            "app_version": "1.0.0rc6",
+            "tabs_rendered": 5,
+            "verified_files": 3,
+            "synthetic_basic_l10_hours": 18295.51049310608,
+            "study_sha256": "f73a5b330272ed1758d70f9711f62b1ba50f7e3459f0f64a15b6b639c0995f94",
+            "production_approved": false
+          },
+          "selected": "416647d929c4"
+        }
+      },
+      "Windows-X64": {
+        "tests": {
+          "tests": 170,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "smoke": {
+          "ok": true,
+          "errors": [],
+          "candidates": 60,
+          "cad_meshes": 15,
+          "elapsed_s": 27.61,
+          "simulation_points": 25,
+          "native_platform": "offscreen",
+          "engineering_study": {
+            "app_version": "1.0.0rc6",
+            "tabs_rendered": 4,
+            "verified_files": 3,
+            "input_power_w": 250.0,
+            "study_sha256": "6351727be05d242e0a8445d16b21249f8be1a491e9996a71ab658bbb123b8838",
+            "production_approved": false
+          },
+          "shaft_study": {
+            "app_version": "1.0.0rc6",
+            "tabs_rendered": 6,
+            "verified_files": 3,
+            "maximum_equilibrium_residual": 0.0,
+            "study_sha256": "5786457039a04580d2d7bec531f69b4e904f7cc0f044d8afa92daad40321ec7e",
+            "production_approved": false
+          },
+          "bearing_study": {
+            "app_version": "1.0.0rc6",
+            "tabs_rendered": 5,
+            "verified_files": 3,
+            "synthetic_basic_l10_hours": 18295.51049310608,
+            "study_sha256": "f73a5b330272ed1758d70f9711f62b1ba50f7e3459f0f64a15b6b639c0995f94",
+            "production_approved": false
+          },
+          "selected": "416647d929c4"
+        }
+      },
+      "macOS-ARM64": {
+        "tests": {
+          "tests": 170,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "smoke": {
+          "ok": true,
+          "errors": [],
+          "candidates": 60,
+          "cad_meshes": 15,
+          "elapsed_s": 69.5,
+          "simulation_points": 25,
+          "native_platform": "offscreen",
+          "engineering_study": {
+            "app_version": "1.0.0rc6",
+            "tabs_rendered": 4,
+            "verified_files": 3,
+            "input_power_w": 250.0,
+            "study_sha256": "6351727be05d242e0a8445d16b21249f8be1a491e9996a71ab658bbb123b8838",
+            "production_approved": false
+          },
+          "shaft_study": {
+            "app_version": "1.0.0rc6",
+            "tabs_rendered": 6,
+            "verified_files": 3,
+            "maximum_equilibrium_residual": 0.0,
+            "study_sha256": "4b1c86918a77060dee64f310ad5358f3b9c6fb4b17d64ff5c7dbbd3d9fff393f",
+            "production_approved": false
+          },
+          "bearing_study": {
+            "app_version": "1.0.0rc6",
+            "tabs_rendered": 5,
+            "verified_files": 3,
+            "synthetic_basic_l10_hours": 18295.510493106085,
+            "study_sha256": "b0458a94c67456a0d2a9b6a7feeab7b858b265437b50d85add873de41eee6a29",
+            "production_approved": false
+          },
+          "selected": "416647d929c4"
+        }
+      }
+    }
+  },
+  "regression_ci": {
+    "status": "passed",
+    "commit": "1014a8c038d426cdd2e99b8e9fdfde4ac3a10ef3",
+    "run_url": "https://github.com/jonahsaunders/Gearforge-Studio/actions/runs/37526506269",
+    "platforms": {
+      "Linux-X64": {
+        "tests": 170,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "bearing_arithmetic_comparisons": 218,
+        "maximum_bearing_arithmetic_relative_error": 3.66950101154367e-15
+      },
+      "Windows-X64": {
+        "tests": 170,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "bearing_arithmetic_comparisons": 218,
+        "maximum_bearing_arithmetic_relative_error": 3.66950101154367e-15
+      },
+      "macOS-ARM64": {
+        "tests": 170,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "bearing_arithmetic_comparisons": 218,
+        "maximum_bearing_arithmetic_relative_error": 3.66950101154367e-15
+      }
+    }
+  },
+  "limitations": [
+    "Basic per-bearing rolling-contact fatigue arithmetic is not adjusted bearing service life, assembly reliability or gearbox qualification.",
+    "Independent high-precision arithmetic does not verify supplier factors, bearing fatigue distributions or real operating conditions.",
+    "Deep-groove radial ball and radial-only cylindrical-roller models; induced thrust, preload, angular-contact/tapered arrangements and oscillation life are unsupported.",
+    "Missing ratings, factors, limits or bearing temperatures remain unassessed; source declarations and synthetic examples never approve production.",
+    "Actual supplier selection, lubrication/thermal, shaft/tooth fatigue, contact, manufacturing and physical durability qualification remain outstanding.",
+    "Native packages are unsigned; acceptance on actual company workstation images remains outstanding."
+  ],
+  "methods": "docs/BEARING_ANALYSIS.md",
+  "production_work": "docs/PRODUCTION_QUALIFICATION.md",
+  "historical_evidence": [
+    "docs/SHAFT_VALIDATION.json",
+    "docs/ENGINEERING_VALIDATION.json",
+    "docs/INTERNAL_VALIDATION.json",
+    "docs/VALIDATION_RC2.json"
+  ],
+  "tested_implementation_commit": "1014a8c038d426cdd2e99b8e9fdfde4ac3a10ef3",
+  "dependency_audit": {
+    "Linux-X64": {
+      "runtime_packages": 48,
+      "known_package_advisories": 0,
+      "missing_license_texts": []
+    },
+    "Windows-X64": {
+      "runtime_packages": 48,
+      "known_package_advisories": 0,
+      "missing_license_texts": []
+    },
+    "macOS-ARM64": {
+      "runtime_packages": 48,
+      "known_package_advisories": 0,
+      "missing_license_texts": []
+    },
+    "scope": "Known Python-package advisories and collected runtime notices; not exhaustive native-library vulnerability coverage or a legal opinion. See SECURITY.md and THIRD_PARTY_NOTICES.md."
+  },
+  "local_windows_native_smoke": {
+    "ok": true,
+    "errors": [],
+    "candidates": 60,
+    "cad_meshes": 15,
+    "elapsed_s": 61.843,
+    "simulation_points": 25,
+    "native_platform": "offscreen",
+    "engineering_study": {
+      "app_version": "1.0.0rc6",
+      "tabs_rendered": 4,
+      "verified_files": 3,
+      "input_power_w": 250.0,
+      "study_sha256": "6351727be05d242e0a8445d16b21249f8be1a491e9996a71ab658bbb123b8838",
+      "production_approved": false
+    },
+    "shaft_study": {
+      "app_version": "1.0.0rc6",
+      "tabs_rendered": 6,
+      "verified_files": 3,
+      "maximum_equilibrium_residual": 0.0,
+      "study_sha256": "5786457039a04580d2d7bec531f69b4e904f7cc0f044d8afa92daad40321ec7e",
+      "production_approved": false
+    },
+    "bearing_study": {
+      "app_version": "1.0.0rc6",
+      "tabs_rendered": 5,
+      "verified_files": 3,
+      "synthetic_basic_l10_hours": 18295.51049310608,
+      "study_sha256": "f73a5b330272ed1758d70f9711f62b1ba50f7e3459f0f64a15b6b639c0995f94",
+      "production_approved": false
+    },
+    "selected": "416647d929c4"
+  },
+  "local_windows_native_archive": {
+    "name": "GearForge-Studio-1.0.0rc6-windows-x86_64-unsigned.zip",
+    "sha256": "aa26a3eb6ba21d3f8da57b44a322d79f0c14e83134c07040ca9bd0760e436ab5",
+    "bytes": 298312202,
+    "unsigned": true
+  },
+  "local_windows_console_bearing": {
+    "passed": true,
+    "commands": [
+      "bearing new --synthetic-example",
+      "bearing calculate",
+      "verify"
+    ],
+    "results": [
+      "C:\\Users\\jonah\\Documents\\Codex\\2026-10-06\\g\\work\\Gearforge-Studio\\build\\rc6-console.gearforge-bearing",
+      {
+        "destination": "C:\\Users\\jonah\\Documents\\Codex\\2026-10-06\\g\\work\\Gearforge-Studio\\build\\rc6-console-calculation",
+        "files": 4,
+        "study_sha256": "f73a5b330272ed1758d70f9711f62b1ba50f7e3459f0f64a15b6b639c0995f94",
+        "production_approved": false
+      },
+      {
+        "ok": true,
+        "files": 3,
+        "note": "Hashes verify integrity, not authorship or engineering approval."
+      }
+    ],
+    "study_sha256": "f73a5b330272ed1758d70f9711f62b1ba50f7e3459f0f64a15b6b639c0995f94",
+    "app_version": "1.0.0rc6"
+  },
+  "independent_geometry_reference": {
+    "passed": true,
+    "comparisons": 72,
+    "ci_run_url": "https://github.com/jonahsaunders/Gearforge-Studio/actions/runs/37526506269"
+  },
+  "independent_shaft_reference": {
+    "passed": true,
+    "comparisons": 1452,
+    "ci_run_url": "https://github.com/jonahsaunders/Gearforge-Studio/actions/runs/37526506269"
+  }
+}

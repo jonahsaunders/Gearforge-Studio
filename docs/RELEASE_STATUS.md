@@ -1,8 +1,51 @@
-# Release status — 1.0.0rc2
+# Release status — 1.0.0rc12
 
-This is an implemented and tested desktop **release candidate**. It is not a finished
+This is a desktop **release candidate**; current validation status is recorded
+in `VALIDATION.json` and its linked version-specific evidence. It is not a finished
 commercially validated gearbox design product. The remaining work below is concrete
 and material; no installer, model or calculation should imply it is already complete.
+
+## Company-use hardening
+
+The rc3 changes add strict project input validation, reliable recovery/save behavior,
+per-user data locking, verified backup/restore, traceable exports, production-rating
+status and dependency security/release evidence. See [deployment](INTERNAL_DEPLOYMENT.md),
+[current software evidence](../VALIDATION.json) and the
+[production qualification work](PRODUCTION_QUALIFICATION.md). The requested final
+production gearbox design and load-rating scope is still unqualified.
+
+The rc4 engineering study adds original external spur/helical geometry, profile
+shifts, quasi-static mesh forces, duty spectra, save/load and calculation exports.
+It also corrects the existing search's helical transverse pressure-angle usage.
+Independent geometry comparisons run against a pinned, separately checked-out
+FreeCAD Gears. No proprietary standards or restricted reference data are required.
+See [the method and verification scope](OPEN_ENGINEERING.md).
+
+The rc5 shaft study resolves explicit three-axis forces/couples through two
+bearing supports and stepped solid/hollow sections. It adds bearing reactions,
+elastic motion, nominal stress, diagrams and traceable exports, with 1,452
+independent finite-element comparisons. See [shaft analysis](SHAFT_ANALYSIS.md).
+The rc6 [bearing assessment](BEARING_ANALYSIS.md) adds explicit capacity inputs,
+basic per-bearing fatigue arithmetic and operating-limit checks across duty.
+Actual supplier selection and adjusted service life remain unqualified.
+The rc7 [shaft fatigue study](SHAFT_FATIGUE.md) adds selected-section rotating
+bending/steady-torque arithmetic, explicit material evidence and a public NASA
+worked example. Transient fatigue, actual material allowables and whole-shaft
+qualification remain unresolved.
+The rc8 [tooth-contact study](CONTACT_ANALYSIS.md) adds spur Hertz pressure and
+sliding diagrams, explicit sharing assumptions and bounded declared pressure-life
+curves. Its 208 open-reference comparisons verify contact arithmetic, not actual
+load distribution, material durability or production gearbox life.
+The rc9 [thermal study](THERMAL_ANALYSIS.md) adds declared passive thermal networks,
+continuous extrema, energy balance and settled/repeated-duty warm-up bounds.
+Its 3,539 separate ODE comparisons verify numerical heat balance; measured losses,
+cooling coefficients, lubricant adequacy and physical thermal qualification remain.
+
+The rc12 [stress history study](STRESS_HISTORY.md) adds exact finite cycle counts
+across repeated blocks, bounded uniaxial damage and duty coverage with explicit
+provenance. Its synthetic curve/history is not measured component evidence.
+The rc11 [root elastic study](ROOT_STRESS.md) remains a sampled pressure-patch
+model; it is not automatically converted into a qualified cyclic stress history.
 
 ## Implemented
 
@@ -42,8 +85,8 @@ and material; no installer, model or calculation should imply it is already comp
    integrations. The six seed gears and generic bearing table are intentionally limited.
 6. Produce production drawings with fits, surface finish, pin/keyway/retention details
    and GD&T. SVG outputs are reference layouts and schedules only.
-7. Execute Windows and macOS native tests/builds on those hosts. The supplied workflow
-   is configured; it is not a substitute for running it. Sign Windows packages and
+7. Review version-specific platform results linked from `VALIDATION.json` and CI. Complete
+   interactive acceptance on the actual company workstation image. Sign Windows packages and
    notarize macOS packages using the product owner's credentials. Native Linux smoke
    tests are recorded in the validation artifact when that bundle was built.
 8. Review dependency-license notices for the exact distributed binary, release ownership,
@@ -59,8 +102,23 @@ configuration; inventing endpoints or silently charging/purchasing would be inco
 
 ## Evidence
 
-See `VALIDATION.json` in the release kit for the actual test commands/results, checked
-runtime, exported sample files and checksums. Tests cover all family searches, numerical
+See root `VALIDATION.json` for current test and native-package evidence.
+`docs/INTERNAL_VALIDATION.json` preserves rc3 evidence and `docs/VALIDATION_RC2.json`
+preserves rc2 evidence; `docs/ENGINEERING_VALIDATION.json` records rc4. Those
+historical passes do not validate a newer build. `docs/SHAFT_VALIDATION.json`
+preserves rc5; `docs/BEARING_VALIDATION.json` records rc6.
+Tests cover all family searches, numerical
 constraints, project/catalog round-trips, worker/desktop workflows, real CAD solids,
 interference, real STEP imports, PDF signatures and output manifests. They do not
 establish mechanical fatigue life, wear, real printer accuracy or production readiness.
+
+The rc10 [rack-cutter profiles](TOOTH_PROFILES.md) add explicit generated spur
+roots and sampled geometry exports. `TOOTH_VALIDATION.json` preserves rc10
+verification; earlier thermal/native records apply to rc9 only.
+
+The rc11 [tooth-root elastic study](ROOT_STRESS.md) adds generated-profile Q9
+plane elasticity, explicit material/support/pressure-patch data, three mesh levels,
+a wider-sector comparison, cancellable desktop workers and CSV/VTK field exports.
+Its 4,582 independent scikit-fem comparisons verify the numerical formulation.
+Actual material/process evidence, 3D loading, root fatigue and physical gearbox
+qualification remain. See the current evidence pointer in `VALIDATION.json`.

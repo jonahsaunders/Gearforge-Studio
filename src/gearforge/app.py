@@ -4,6 +4,7 @@ import json
 import logging
 import logging.handlers
 import os
+import sqlite3
 import sys
 import tempfile
 from dataclasses import asdict, fields
@@ -14,7 +15,7 @@ from PySide6.QtGui import QAction, QColor, QDesktopServices, QFont, QIcon, QKeyS
 from PySide6.QtWidgets import (
     QApplication, QCheckBox, QComboBox, QDialog, QDialogButtonBox, QDoubleSpinBox,
     QFileDialog, QFormLayout, QFrame, QGridLayout, QHBoxLayout, QHeaderView, QLabel,
-    QLineEdit, QListWidget, QMainWindow, QMessageBox, QProgressBar, QPushButton,
+    QLineEdit, QListWidget, QMainWindow, QMessageBox, QProgressBar, QPushButton, QInputDialog,
     QScrollArea, QSlider, QSplitter, QStackedWidget, QTableWidget, QTableWidgetItem,
     QSizePolicy, QTabWidget, QTextBrowser, QTextEdit, QVBoxLayout, QWidget,
 )
@@ -23,7 +24,7 @@ from . import __version__
 from .calibration import calibrate_profile
 from .catalog import Catalog
 from .exporting import report_html
-from .models import FAMILIES, MODES, Candidate, PrintProfile, Project, Requirements, atomic_text, candidate_from_dict
+from .models import FAMILIES, MODES, Candidate, PrintProfile, Project, Requirements, atomic_text, candidate_from_dict, read_text_limited
 from .viewer import AssemblyViewer
 
 from .appearance import STYLE, apply_appearance, system_reduced_motion
@@ -77,7 +78,11 @@ class MainWindow(QMainWindow):
         self.setMinimumSize(1100,720)
         self.data_dir=Path(data_dir or os.environ.get("GEARFORGE_DATA_DIR") or QStandardPaths.writableLocation(QStandardPaths.AppDataLocation))
         self.data_dir.mkdir(parents=True,exist_ok=True)
-        self.catalog=Catalog(self.data_dir/"catalog.sqlite")
+        from .maintenance import lock_data_directory
+        self.data_lock=lock_data_directory(self.data_dir)
+        try:self.catalog=Catalog(self.data_dir/"catalog.sqlite")
+        except Exception:
+            self.data_lock.unlock();raise
         self.project=Project()
         self.path=None
         self.dirty=False
@@ -143,7 +148,7 @@ class MainWindow(QMainWindow):
             file.addAction(action)
             self.command_actions[title]=action
         design=self.menuBar().addMenu("Design")
-        for title,callback,shortcut in [("Generate designs",self.generate,"Ctrl+Return"),("Load CAD preview",self.load_preview,"Ctrl+Shift+L"),("Sample tooth meshing…",self.check_mesh,None),("Compare selected rows",self.compare,None)]:
+        for title,callback,shortcut in [("Engineering study…",self.engineering_study,None),("Shaft and bearing loads…",self.shaft_study,None),("Bearing duty and capacity…",self.bearing_study,None),("Shaft fatigue and material evidence…",self.fatigue_study,None),("Tooth contact and surface fatigue…",self.contact_study,None),("Thermal network and cooling duty…",self.thermal_study,None),("Rack-generated tooth roots…",self.tooth_study,None),("Tooth-root elastic stress…",self.root_study,None),("Cyclic stress history and fatigue…",self.history_study,None),("Study selected stage…",self.study_selected_stage,None),("Generate designs",self.generate,"Ctrl+Return"),("Load CAD preview",self.load_preview,"Ctrl+Shift+L"),("Sample tooth meshing…",self.check_mesh,None),("Compare selected rows",self.compare,None)]:
             action=QAction(title,self);action.triggered.connect(callback)
             if shortcut:action.setShortcut(shortcut)
             design.addAction(action)
@@ -161,9 +166,72 @@ class MainWindow(QMainWindow):
         helpmenu=self.menuBar().addMenu("Help")
         action=QAction("About and release status",self)
         action.setMenuRole(QAction.AboutRole)
-        action.triggered.connect(lambda:QMessageBox.information(self,"GearForge Studio",f"GearForge Studio {__version__}\n\nDesktop release candidate. Spur, helical and planetary prototype CAD; bevel, worm and cycloidal concept searches.\n\nEngineering calculations are preliminary screens, not certified load ratings. No network or telemetry.\n\nApplication code: Apache-2.0. Bundled dependencies retain their own licenses."))
+        action.triggered.connect(lambda:QMessageBox.information(self,"GearForge Studio",f"GearForge Studio {__version__}\n\nDesktop release candidate. Spur, helical and planetary prototype CAD; bevel, worm and cycloidal concept searches.\n\nEngineering calculations are preliminary screens, not certified load ratings. No network or telemetry.\n\nApplication code: Apache-2.0. Uses PySide6/Qt under LGPLv3 terms; bundled dependencies retain their own licenses."))
         helpmenu.addAction(action)
         licenses=QAction("Open third-party license notices…",self);licenses.triggered.connect(self.open_licenses);helpmenu.addAction(licenses)
+
+    def engineering_study(self):
+        from .engineering_ui import EngineeringStudyDialog
+        EngineeringStudyDialog(self).exec()
+
+    def shaft_study(self):
+        from .shaft_ui import ShaftStudyDialog
+        from .shafts import shaft_from_gear_study
+        from .engineering import EngineeringStudy
+        ShaftStudyDialog(self,shaft_from_gear_study(EngineeringStudy())).exec()
+
+    def bearing_study(self):
+        from .bearing_ui import BearingStudyDialog
+        from .bearings import bearings_from_shaft
+        from .shafts import shaft_from_gear_study
+        from .engineering import EngineeringStudy
+        BearingStudyDialog(self,bearings_from_shaft(shaft_from_gear_study(EngineeringStudy()))).exec()
+
+    def fatigue_study(self):
+        from .fatigue_ui import FatigueStudyDialog
+        from .fatigue import fatigue_from_shaft
+        from .shafts import shaft_from_gear_study
+        from .engineering import EngineeringStudy
+        FatigueStudyDialog(self,fatigue_from_shaft(shaft_from_gear_study(EngineeringStudy()))).exec()
+
+    def contact_study(self):
+        from .contact_ui import ContactStudyDialog
+        from .contact import contact_from_study
+        from .engineering import EngineeringStudy
+        ContactStudyDialog(self,contact_from_study(EngineeringStudy())).exec()
+
+    def tooth_study(self):
+        from .tooth_ui import ToothProfileDialog
+        ToothProfileDialog(self).exec()
+
+    def history_study(self):
+        from .cyclic_ui import HistoryStudyDialog
+        HistoryStudyDialog(self).exec()
+
+    def root_study(self):
+        from .root_ui import RootStressDialog
+        RootStressDialog(self).exec()
+
+    def thermal_study(self):
+        from .thermal_ui import ThermalStudyDialog
+        from .thermal import thermal_from_study
+        from .engineering import EngineeringStudy
+        ThermalStudyDialog(self,thermal_from_study(EngineeringStudy())).exec()
+
+    def study_selected_stage(self):
+        from .engineering import study_for_stage
+        from .engineering_ui import EngineeringStudyDialog
+        from .models import Requirements
+        try:
+            payload=self.ready_payload();index=0
+            if len(self.selected.stages)>1:
+                choices=[f"Stage {i+1}: {s.driver.teeth} / {s.driven.teeth} teeth" for i,s in enumerate(self.selected.stages)]
+                choice,ok=QInputDialog.getItem(self,"Study selected stage","Gear stage",choices,0,False)
+                if not ok:return
+                index=choices.index(choice)
+            study=study_for_stage(self.selected,Requirements(**payload["requirements"]),index)
+            dialog=EngineeringStudyDialog(self);dialog.set_study(study);dialog.dirty=True;dialog.exec()
+        except (ValueError,TypeError) as exc:self.error(exc)
 
     def open_licenses(self):
         path=Path(sys._MEIPASS)/"licenses" if getattr(sys,"frozen",False) else Path(__file__).resolve().parents[2]/"release-licenses"
@@ -471,11 +539,11 @@ class MainWindow(QMainWindow):
         errors=bytes(self.process.readAllStandardError()).decode(errors="replace")[-4000:]
         callback=self.job_callback
         try:
-            response=json.loads(path.read_text())
+            response=json.loads(path.read_text(encoding="utf-8"))
         except Exception:
             response={"ok":False,"error":errors or "Worker did not return a result"}
         self.cleanup_job()
-        if response.get("ok"):
+        if code == 0 and response.get("ok"):
             try:callback(response["result"])
             except Exception as exc:self.error(exc)
         else:
@@ -503,11 +571,17 @@ class MainWindow(QMainWindow):
         try:
             req,p=self.capture()
             self.search_snapshot=(req,p)
-            self.start_job("search",dict(requirements=req,profile=p,catalog_text=self.catalog.export_csv()),self.apply_result)
+            self.search_catalog_text=self.catalog.export_csv()
+            self.start_job("search",dict(requirements=req,profile=p,catalog_text=self.search_catalog_text),self.apply_result)
         except Exception as exc:self.error(exc)
 
     def apply_result(self,result):
+        if self.search_catalog_text != self.catalog.export_csv():
+            self.reset_results()
+            self.notice.setText("Catalog changed during search. Regenerate designs.")
+            return
         self.result_snapshot=self.search_snapshot
+        self.result_catalog_text=self.search_catalog_text
         self.candidates=[candidate_from_dict(c) for c in result["candidates"]]
         rows=[(c.score,c.family.title()+f" / {len(c.stages)}",f"{c.ratio:.4g}:1",f"{c.efficiency:.0%}",f"{c.backlash_deg:.3f}"," × ".join(f"{v:.0f}" for v in c.size_mm),"Concept" if c.export_level=="concept" else "Prototype"+(" · Pareto" if c.pareto else "")) for c in self.candidates]
         fill_table(self.candidate_table,rows)
@@ -555,6 +629,7 @@ class MainWindow(QMainWindow):
             enabled=idle and valid and (title=="Export selected design…" or self.selected.export_level!="concept")
             self.command_actions[title].setEnabled(enabled)
         self.command_actions["Generate designs"].setEnabled(idle)
+        self.command_actions["Study selected stage…"].setEnabled(idle and valid and self.selected.family in ("spur","helical"))
         self.cad_button.setEnabled(self.command_actions["Load CAD preview"].isEnabled())
         self.export_button.setEnabled(self.command_actions["Export selected design…"].isEnabled())
         self.mesh_check_button.setEnabled(self.command_actions["Sample tooth meshing…"].isEnabled())
@@ -632,7 +707,8 @@ class MainWindow(QMainWindow):
         suffix="";i=1;dest=Path(parent)/("GearForge-"+self.selected.id)
         while dest.exists():
             i+=1;dest=Path(parent)/("GearForge-"+self.selected.id+f"-{i}")
-        payload.update(destination=str(dest),include_cad=include_cad)
+        payload.update(destination=str(dest),include_cad=include_cad,
+                       project=asdict(self.project),catalog_text=self.result_catalog_text)
         self.start_job("export",payload,lambda result:self.statusBar().showMessage(f"Exported {result['files']} files to {result['destination']}"))
 
     def update_report(self):
@@ -650,7 +726,8 @@ class MainWindow(QMainWindow):
         path,_=QFileDialog.getOpenFileName(self,"Import component catalog","","CSV (*.csv)")
         if path:
             try:
-                count=self.catalog.import_csv(Path(path).read_text(encoding="utf-8-sig"));self.refresh_catalog();self.result_snapshot=None
+                count=self.catalog.import_csv(read_text_limited(Path(path),5_000_000,"Catalog","utf-8-sig"))
+                self.cancel_job();self.reset_results();self.refresh_catalog()
                 self.statusBar().showMessage(f"Imported {count} validated catalog records. Regenerate existing designs.")
             except Exception as exc:self.error(exc)
 
@@ -705,23 +782,25 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Untitled gearbox[*] — GearForge Studio");self.setWindowFilePath("")
 
     def open_project(self,path=None):
-        if not self.may_discard():return
+        if not self.may_discard():return False
         if path is None:path,_=QFileDialog.getOpenFileName(self,"Open gearbox project","","GearForge (*.gearforge)")
-        if not path:return
+        if not path:return False
         try:
             project=Project.load(Path(path));self.cancel_job();self.project=project;self.path=Path(path);self.reset_results();self.populate()
             self.setWindowTitle(self.project.name+"[*] — GearForge Studio");self.setWindowFilePath(str(self.path));self.statusBar().showMessage("Project loaded. Generate designs to recalculate against the current catalog.")
-        except Exception as exc:self.error(exc)
+            return True
+        except Exception as exc:self.error(exc);return False
 
     def save_project(self,save_as=False):
         try:self.capture()
         except Exception as exc:self.error(exc);return False
-        if self.path is None or save_as:
+        destination=self.path
+        if destination is None or save_as:
             path,_=QFileDialog.getSaveFileName(self,"Save project",self.project.name+".gearforge","GearForge (*.gearforge)")
             if not path:return False
-            self.path=Path(path)
+            destination=Path(path)
         try:
-            self.project.save(self.path);self.dirty=False;self.setWindowModified(False)
+            self.project.save(destination);self.path=destination;self.dirty=False;self.setWindowModified(False)
             self.setWindowTitle(self.project.name+"[*] — GearForge Studio");self.setWindowFilePath(str(self.path));self.statusBar().showMessage("Project saved: "+str(self.path));return True
         except Exception as exc:self.error(exc);return False
 
@@ -733,14 +812,16 @@ class MainWindow(QMainWindow):
     def restore_recovery(self):
         recovery=self.data_dir/"recovery.gearforge"
         if not recovery.exists():self.error("No autosaved project is available.");return
-        self.open_project(recovery);self.path=None;self.mark_dirty()
+        if self.open_project(recovery):
+            self.path=None;self.setWindowFilePath("");self.mark_dirty()
 
     def error(self,error):
         QMessageBox.warning(self,"GearForge Studio",str(error))
 
     def closeEvent(self,event):
         if not self.may_discard():event.ignore();return
-        self.cancel_job();self.viewer.animate(False);self.settings.setValue("geometry",self.saveGeometry());self.settings.setValue("design_splitter",self.design_splitter.saveState());self.settings.setValue("sidebar_visible",self.sidebar_action.isChecked());self.catalog.close();event.accept()
+        self.autosave.stop()
+        self.cancel_job();self.viewer.animate(False);self.settings.setValue("geometry",self.saveGeometry());self.settings.setValue("design_splitter",self.design_splitter.saveState());self.settings.setValue("sidebar_visible",self.sidebar_action.isChecked());self.settings.sync();self.catalog.close();self.data_lock.unlock();event.accept()
 
 
 class DocumentApplication(QApplication):
@@ -767,7 +848,10 @@ def main():
     data_dir=Path(os.environ.get("GEARFORGE_DATA_DIR") or QStandardPaths.writableLocation(QStandardPaths.AppDataLocation));data_dir.mkdir(parents=True,exist_ok=True)
     handler=logging.handlers.RotatingFileHandler(data_dir/"gearforge.log",maxBytes=1_000_000,backupCount=2)
     logging.basicConfig(level=logging.INFO,handlers=[handler])
-    window=MainWindow(data_dir);window.show()
+    try:window=MainWindow(data_dir)
+    except (OSError,RuntimeError,ValueError,sqlite3.Error) as exc:
+        QMessageBox.critical(None,"GearForge Studio",str(exc));return 1
+    window.show()
     if isinstance(app,DocumentApplication):
         app.window=window
         if app.pending_document:window.open_project(app.pending_document)
