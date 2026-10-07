@@ -20,7 +20,7 @@ Only for a new repository created from an extracted source kit, use your configu
 ```sh
 git init -b main
 git add .
-git commit -m "Prepare GearForge Studio 1.0.0rc3"
+git commit -m "Prepare GearForge Studio 1.0.0rc12"
 git remote add origin https://github.com/jonahsaunders/Gearforge-Studio.git
 git push -u origin main
 ```
@@ -31,8 +31,8 @@ Actions enabled and permission to create releases. Create the matching tag when
 ready to build native assets:
 
 ```sh
-git tag -a v1.0.0rc3 -m "GearForge Studio 1.0.0rc3"
-git push origin v1.0.0rc3
+git tag -a v1.0.0rc12 -m "GearForge Studio 1.0.0rc12"
+git push origin v1.0.0rc12
 ```
 
 Tag/version mismatch stops the build. The separate numeric macOS build is `tool.gearforge.release.macos-build` in

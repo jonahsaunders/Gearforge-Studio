@@ -1,237 +1,95 @@
-# GearForge Studio
+<p align="center">
+  <img src="src/gearforge/data/icon.svg" alt="GearForge Studio gear icon" width="80">
+</p>
 
-[![Desktop regression tests](https://github.com/jonahsaunders/Gearforge-Studio/actions/workflows/ci.yml/badge.svg)](https://github.com/jonahsaunders/Gearforge-Studio/actions/workflows/ci.yml)
+<h1 align="center">GearForge Studio</h1>
 
-**Generate, compare, simulate and export gearbox prototypes from operating requirements.**
+<p align="center"><strong>Explore gearbox designs. Understand the loads. Keep the evidence.</strong></p>
 
-GearForge Studio is an offline desktop application for exploring gearboxes made
-with 3D printed parts, catalog gears, or combinations of both. It combines a
-native Qt workspace, discrete design search, engineering screening, a component
-catalog, dimensional print calibration, rigid-body CAD animation and design exports.
+<p align="center">
+  <a href="https://github.com/jonahsaunders/Gearforge-Studio/actions/workflows/ci.yml"><img src="https://github.com/jonahsaunders/Gearforge-Studio/actions/workflows/ci.yml/badge.svg" alt="Desktop regression tests"></a>
+</p>
 
-**Current version: 1.0.0rc12 · Python 3.12 recommended · Apache-2.0 application code**
+<p align="center">Offline desktop app · Windows / macOS / Linux · Apache-2.0 application code</p>
 
-> **Release status:** This is a tested software release candidate for prototype
-> engineering. Its calculations are preliminary screens, not certified ISO/AGMA
-> gearbox ratings. Spur, helical and planetary tooth CAD is available; bevel,
-> worm and cycloidal designs remain concepts. Physical load/life validation,
-> production engineering qualification and signed distribution are still outstanding.
-> See [release status](docs/RELEASE_STATUS.md) for the complete boundary.
+GearForge Studio brings gearbox search, 3D CAD, motion playback and nine engineering study workspaces into one local desktop application. Compare printed, catalog and hybrid designs; investigate geometry, loads, heat and fatigue; export the inputs and calculations behind each result.
 
-For company deployment, start with the [IT deployment guide](docs/INTERNAL_DEPLOYMENT.md)
-and [production qualification gap](docs/PRODUCTION_QUALIFICATION.md). **Final
-production gearbox design and verified service-load ratings are not available.**
-The `qualify` command and each export record this explicitly; production-required
-exports fail until a verified rating implementation exists.
+**[Get started](#install-and-launch)** · **[Features](#features)** · **[Engineering workspaces](#engineering-workspaces)** · **[Screenshot gallery](docs/GALLERY.md)** · **[Documentation](#documentation)**
 
-The new **Design → Engineering study** workspace adds editable spur/helical
-geometry, profile shifts, operating duty, mesh forces and traceable calculation
-reports. Its first development target is 250 W at 1,500 rpm, 5:1 reduction and
-10,000 hours. All application code, examples and comparison fixtures are intended
-for public GitHub distribution; no paid standard or private calculation package
-is required. See the [open engineering guide](docs/OPEN_ENGINEERING.md) for the
-method, reproducible FreeCAD Gears comparisons and exact verification scope.
+![GearForge Studio rc12: a 12:1 hybrid gearbox, generated 3D assembly, ranked candidates and engineering checks](screenshots/desktop.png)
 
-**Cyclic stress histories** adds signed local stress samples, exact finite rainflow
-counts across repeated blocks, bounded uniaxial fatigue damage, duration/start
-coverage, import fingerprints and three plots. Its original synthetic data and
-25,788 independent numerical checks are publishable on GitHub. This does not
-establish production gearbox fatigue life. See [methods and scope](docs/STRESS_HISTORY.md).
-
-**Tooth-root elastic stress** adds a cancellable 2D finite-element study on
-the generated spur profile, with explicit material/support/load inputs, three
-mesh levels, a wider-sector check, stress maps and traceable CSV/VTK exports.
-Its 4,582 comparisons use an independent BSD-licensed scikit-fem reference.
-See [methods, evidence and limits](docs/ROOT_STRESS.md).
-
-**Rack-generated tooth roots** adds explicit spur cutter geometry, a generated
-root joined to the involute, analytic undercut/fold rejection and a check against
-the nominal active contact path. Inspect the tooth or whole gear and export
-sampled DXF/SVG/CSV alongside complete calculation evidence. See the
-[tooth-profile guide](docs/TOOTH_PROFILES.md).
-
-**Thermal network and cooling duty** adds editable bodies, heat-transfer paths,
-ordered heating/cooling phases, continuous temperature extrema and energy balances.
-It calculates entered and settled repeated duty plus conservative warm-up bounds,
-with explicit loss/cooling evidence. See the [thermal guide](docs/THERMAL_ANALYSIS.md).
-
-**Tooth contact and surface fatigue** adds spur contact-pressure diagrams,
-explicit load-sharing assumptions and bounded pressure-life curves for each gear.
-It tracks opposite flanks and each member's actual tooth cycles. The original
-implementation is checked against openly licensed SlipPY; the bundled example
-uses invented data, not material allowables. See the [contact guide](docs/CONTACT_ANALYSIS.md).
-
-**Shaft fatigue and material evidence** adds explicit material curves, critical
-section cuts, application factors and rotating-bending/steady-torque fatigue
-blocks. It includes a public NASA worked example and bounded finite-life
-calculations. It does not supply material allowables or production approval.
-See the [shaft fatigue guide](docs/SHAFT_FATIGUE.md).
-
-**Shaft and bearing loads** adds explicit support positions, stepped solid/hollow
-sections, external forces and couples, individual bearing reactions, deflection,
-twist and nominal stress. Transfer a gear study's duty into either shaft and
-inspect its load-path diagrams. See the [shaft analysis guide](docs/SHAFT_ANALYSIS.md)
-and its independently reproduced PyNiteFEA comparisons.
-
-**Bearing duty and capacity** recalculates shaft reactions against explicit
-bearing ratings and limits. It tracks per-case fatigue exposure, stationary
-peak loads, static safety, speed, temperature and misalignment. Missing inputs
-remain unassessed; original examples are synthetic. See the [bearing guide](docs/BEARING_ANALYSIS.md).
-
-![GearForge design workspace with a two-stage gearbox](screenshots/desktop.png)
-
-## Contents
-
-- [Features](#features)
-- [App gallery](#app-gallery)
-- [Supported designs and manufacturing modes](#supported-designs-and-manufacturing-modes)
-- [Requirements and platform status](#requirements-and-platform-status)
-- [Install and launch](#install-and-launch)
-- [Design your first gearbox](#design-your-first-gearbox)
-- [Simulation workspace](#simulation-workspace)
-- [Component catalogs](#component-catalogs)
-- [Print calibration](#print-calibration)
-- [Exported files](#exported-files)
-- [Command-line interface](#command-line-interface)
-- [Projects, local data and privacy](#projects-local-data-and-privacy)
-- [Engineering methods and limitations](#engineering-methods-and-limitations)
-- [Development and testing](#development-and-testing)
-- [Build packages and GitHub releases](#build-packages-and-github-releases)
-- [Upload this project to GitHub](#upload-this-project-to-github)
-- [Troubleshooting](#troubleshooting)
-- [Repository guide](#repository-guide)
-- [Contributing and licensing](#contributing-and-licensing)
+> **Current version: 1.0.0rc12 — engineering release candidate.** Supports prototype design and engineering studies. Final production gearbox load/life ratings remain unqualified. Synthetic examples illustrate the methods; they are not material allowables. [Scope and remaining work →](docs/PRODUCTION_QUALIFICATION.md)
 
 ## Features
 
-- **Requirement-driven synthesis:** Enter speeds, torque, size limits, stage
-  count, manufacturing mode and design priorities; compare feasible alternatives.
-- **Engineering screens:** Review ratio error, available torque, backlash,
-  printable tooth dimensions, contact ratio, tooth bending, shaft stress/deflection
-  and generic bearing capacity/life estimates with their assumptions.
-- **Engineering studies:** Save a separate design basis, profile-shifted external
-  pair and operating-duty spectrum; calculate forces, energy and revolution
-  exposure; export inputs, readable results and an integrity manifest.
-- **Catalog components:** Use source-traceable seed records or import a validated
-  CSV catalog. Unknown prices stay unknown; supplier conditions remain visible.
-- **Native desktop workspace:** Platform controls and system fonts, appearance
-  and text-size preferences, resizable sidebar, keyboard shortcuts, accessible
-  field names, autosave, project recovery and cancellable background jobs.
-- **CAD and kinematics:** Orbit, zoom, show the housing, explode the assembly,
-  play/pause, reverse, seek and step one input tooth while preserving the CAD model.
-- **Motor/load exploration:** Inspect output torque versus speed, load margin,
-  assumed power loss and overload, and optionally sample exact tooth intersections.
-- **Manufacturing references:** Export STEP, STL/3MF, reports, a bill of materials,
-  SVG layouts, assembly notes, source project and file checksums.
-- **Offline batch operation:** Run searches, diagnostics and exports from a CLI.
-
-The search is a bounded discrete exploration of the implemented templates. It
-returns a ranked shortlist with Pareto flags; it does not prove global optimality.
-
-## App gallery
-
-These are captures of the running Qt application with real generated CAD and
-example projects. They were captured on Linux using Qt's offscreen platform;
-native controls, fonts and menus vary by operating system.
-
-| Gearbox previews | Supporting workspaces |
+| Workflow | What you can do |
 | --- | --- |
-| **Exploded hybrid assembly** — inspect the separation of gears, shafts and hardware.<br>![Exploded hybrid gearbox with real CAD meshes](screenshots/exploded.png) | **Component catalog** — review source-traceable supplier dimensions and ratings.<br>![Component catalog with six source-traceable KHK records](screenshots/catalog.png) |
-| **Planetary prototype** — fixed ring, sun input and three planets.<br>![Generated planetary gearbox prototype CAD](screenshots/planetary.png) | **Print calibration** — record material assumptions, clearances and coupon measurements.<br>![Print profile and dimensional calibration workspace](screenshots/calibration.png) |
-| **Helical prototype** — generated gears with opposite helix hands.<br>![Generated helical gearbox prototype CAD](screenshots/helical.png) | **Design report** — review the selected design's calculations and assumptions.<br>![Design report with engineering assumptions and selected gearbox data](screenshots/report.png) |
+| **Find a design** | Enter speeds, torque, envelope, manufacturing mode and priorities. Search one- or two-stage templates; compare ranked candidates, Pareto flags and rejection reasons. |
+| **Inspect real CAD** | Load spur, helical and planetary prototype solids. Orbit, zoom, show the housing and explode the assembly. Review geometry, shafts, bearings and hardware. |
+| **Explore motion and operating points** | Play, pause, reverse, seek and step one input tooth. Sweep a motor curve or assumed torque envelope; inspect output torque, load margin and power loss. Run optional sampled tooth-intersection checks. |
+| **Review modeled checks** | Inspect ratio error, available motor torque, backlash, tooth dimensions, contact ratio, preliminary bending, shaft and bearing screens, with assumptions visible. |
+| **Work with catalog components** | Browse six source-traceable seed gears; import/export validated CSV catalogs. Preserve supplier URLs, rating conditions, retrieval dates and unknown prices. |
+| **Calibrate printed parts** | Save material profiles, set backlash and fit clearances, export a dimensional coupon and apply measured shrink compensation. |
+| **Save and recover work** | Use validated project files, autosave/recovery, local profiles, a data-directory lock and verified backup/restore. Background jobs can be cancelled; changed inputs invalidate stale results. |
+| **Review and share** | Export CAD, print files, BOMs, reports, layouts and calculation evidence. New export directories are published atomically with file hashes and explicit qualification status. |
+| **Make the workspace yours** | Use system/light/dark appearance, text sizing, a resizable sidebar, keyboard controls, accessible field labels and reduced-motion playback. |
+| **Run batches offline** | Search, calculate, export, verify and diagnose from the command line. Normal design work stays on the workstation; there are no accounts or telemetry. |
 
-Regenerate all eight README images with an installed development environment:
+<table>
+  <tr>
+    <td width="50%"><strong>Helical prototype</strong><br><img src="screenshots/helical.png" alt="Generated helical gearbox with opposite helix hands"></td>
+    <td width="50%"><strong>Planetary prototype</strong><br><img src="screenshots/planetary.png" alt="Fixed-ring planetary gearbox with sun input and carrier output"></td>
+  </tr>
+</table>
 
-```bash
-python scripts/capture_screenshots.py
-```
+[Explore CAD, simulation, catalog, calibration and report screenshots →](docs/GALLERY.md)
 
-The capture script uses a temporary project-data directory and the included
-examples. It does not change your saved projects or catalog.
+## Engineering workspaces
 
-## Supported designs and manufacturing modes
+Open these workspaces from the **Design** menu. Each has editable inputs, explicit assumptions, saved study files and calculation exports. Transfers retain the source study where supported; missing material, supplier and operating evidence stays visible.
 
-| Family | Implemented search | Detailed CAD | Current scope |
-| --- | --- | --- | --- |
-| Spur | One or two stages; printed, catalog or mixed gears | Sampled involute teeth | Prototype |
-| Helical | One or two stages; opposite helix hands | Twisted sampled involute teeth | Prototype |
-| Planetary | Fixed ring, sun input, three planets, carrier output | External/internal sampled involutes and carrier | Prototype |
-| Bevel | Single-stage ratio and packaging concepts | No manufacturing tooth solids | Concept |
-| Worm | Starts/wheel ratios and assumed efficiency | No manufacturing tooth solids | Concept |
-| Cycloidal | Integer reduction and packaging concepts | No manufacturing contact geometry | Concept |
+| Workspace and method guide | Included capabilities | Try an example |
+| --- | --- | --- |
+| **[Geometry and operating duty](docs/OPEN_ENGINEERING.md)** | External spur/helical geometry, profile shifts, operating center distance, contact ratios, duty cases, mesh forces, energy and revolution exposure. | [250 W steel spur study](examples/steel-spur-250w.gearforge-study) |
+| **[Shaft loads and motion](docs/SHAFT_ANALYSIS.md)** | Stepped solid/hollow sections, two bearing supports, 3-axis forces and couples, reactions, deflection, slope, twist and nominal stress diagrams. | [Input shaft](examples/steel-spur-input.gearforge-shaft) |
+| **[Bearing duty and capacity](docs/BEARING_ANALYSIS.md)** | Explicit ratings and duty factors; per-bearing basic L10 exposure, stationary peak loads, static safety, speed, temperature and misalignment checks. | [Synthetic bearing study](examples/steel-spur-synthetic.gearforge-bearing) |
+| **[Shaft material and fatigue](docs/SHAFT_FATIGUE.md)** | Material evidence and bounded stress-life curves, selected critical sections, application factors, rotating bending and steady-torque fatigue blocks. | [NASA worked example](examples/nasa-shaft-fatigue.gearforge-fatigue) |
+| **[Tooth contact and surface fatigue](docs/CONTACT_ANALYSIS.md)** | Spur Hertz pressure and sliding diagrams, declared load sharing, opposite-flank exposure, each gear's tooth cycles and bounded pressure-life curves. | [Synthetic contact study](examples/synthetic-contact.gearforge-contact) |
+| **[Thermal network](docs/THERMAL_ANALYSIS.md)** | Thermal bodies and heat-transfer paths, ordered heating/cooling phases, continuous temperature extrema, energy balance, settled repeated duty and warm-up bounds. | [Synthetic thermal study](examples/synthetic-thermal.gearforge-thermal) |
+| **[Rack-generated tooth profiles](docs/TOOTH_PROFILES.md)** | Explicit spur cutter geometry, generated root/involute joins, undercut/fold rejection, active-path checks, whole-gear/tooth views and sampled DXF/SVG/CSV profiles. | [Synthetic cutter study](examples/synthetic-tooth.gearforge-tooth) |
+| **[Elastic tooth-root stress](docs/ROOT_STRESS.md)** | 2D finite-element stress on the generated spur profile, explicit supports and pressure patches, three mesh levels, a wider-sector comparison, stress maps and CSV/VTK fields. | [Synthetic root study](examples/synthetic-root.gearforge-root) |
+| **[Cyclic stress histories](docs/STRESS_HISTORY.md)** | Signed local stress samples, finite rainflow counts across repeated blocks, bounded uniaxial fatigue damage, duration/start coverage, CSV fingerprints and history/cycle/S–N plots. | [Synthetic history](examples/synthetic-history.gearforge-history) |
 
-| Manufacturing mode | Gears | Housing | Other hardware |
-| --- | --- | --- | --- |
-| Printed | Parametric printed gears | Printed | Purchased/machined steel shafts, bearings and fasteners |
-| Commercial | Compatible catalog entries, with their recorded bores | Machined | Purchased/machined hardware |
-| Hybrid | Printed and catalog combinations | Printed | Purchased/machined hardware |
+<table>
+  <tr>
+    <td width="50%"><strong>Generated tooth and root</strong><br><img src="screenshots/tooth.png" alt="Rack-generated tooth profile showing the involute and generated root"></td>
+    <td width="50%"><strong>Elastic root stress</strong><br><img src="screenshots/root.png" alt="Finite-element stress map at one sampled tooth-load position"></td>
+  </tr>
+  <tr>
+    <td><strong>Shaft deflection</strong><br><img src="screenshots/shaft.png" alt="Shaft support and deflection diagram from an explicit gear-load study"></td>
+    <td><strong>Tooth contact pressure</strong><br><img src="screenshots/contact.png" alt="Spur Hertz pressure along the nominal contact path using synthetic inputs"></td>
+  </tr>
+  <tr>
+    <td><strong>Heating and cooling</strong><br><img src="screenshots/thermal.png" alt="Synthetic thermal-network temperature history for the gear train"></td>
+    <td><strong>Signed stress history</strong><br><img src="screenshots/history.png" alt="One template block of signed local stress used for finite rainflow counting"></td>
+  </tr>
+</table>
 
-Commercial mode uses catalog gears in a custom assembly; it does not select a
-complete stocked gearbox. Catalog geometry is a dimensional reference, not
-manufacturer production CAD. Plain-bore gears require a reviewed torque-transfer
-attachment; the app does not silently assume a reboring operation.
+These are **actual app captures** using repository examples. [View all 18 images, example files and captions →](docs/GALLERY.md)
 
-Concept designs can be compared and exported as reports/layouts. Their detailed
-manufacturing solids and tooth-intersection checks are unavailable.
-
-The current search supports reductions greater than 1:1 and up to 100:1,
-modules from 0.8 to 3.0 mm, and at most two external-gear stages. Imported catalog
-records can cover wider dimensional ranges than this search currently uses.
-
-## Requirements and platform status
-
-Use **64-bit Python 3.12–3.13**. Python **3.12** is the locally tested build runtime.
-A graphical desktop is required for normal GUI use. Installation downloads
-Python dependencies; synthesis, preview, simulation and exports run locally.
-
-Core packages are PySide6 Essentials, CadQuery/Open CASCADE and ReportLab.
-`constraints-release.txt` pins the runtime dependency set and principal build
-tools. Per-platform builds retain an exact runtime inventory, vulnerability
-report and SBOM. This is not a hash-locked wheel archive for every platform.
-
-| Target | Current evidence |
-| --- | --- |
-| Linux x86_64 | Source and frozen executable checked with Qt offscreen; search, CAD preview and simulation workspace passed |
-| Linux portable bundle | Built on glibc 2.39; targets Ubuntu 24.04-class systems with glibc 2.39 or newer |
-| Interactive Linux desktop | Requires X11/Wayland display libraries; no interactive display was available for the recorded checks |
-| Windows x86_64 | See [current evidence](VALIDATION.json) for exact version-specific regression and native package checks |
-| macOS | macOS 14 build target, `.app` metadata and document integration configured; native/Finder/VoiceOver validation pending |
-
-The native assets are unsigned. The macOS runner builds its own architecture,
-not a universal Intel/Apple Silicon application.
+The prototype CAD pipeline and the rack-generated profile study are separate. Root stress evaluates sampled pressure-patch positions; it does not automatically produce a complete rolling-load fatigue history. See each method guide for its supported conditions and evidence requirements.
 
 ## Install and launch
 
-Clone this repository (or extract the source ZIP), then run the installation
-commands from the directory containing `pyproject.toml` and this README:
+Use **64-bit Python 3.12** for the tested setup. The package supports Python 3.12–3.13. A graphical desktop is required for normal GUI use; installation downloads dependencies, then design and calculation run locally.
 
 ```bash
 git clone https://github.com/jonahsaunders/Gearforge-Studio.git
 cd Gearforge-Studio
 ```
 
-### Linux and macOS
-
-On Ubuntu 24.04, install the Qt runtime libraries before launching the GUI or
-running desktop tests. Qt still loads EGL/OpenGL libraries in offscreen mode:
-
-```bash
-sudo apt-get update
-sudo apt-get install -y libegl1 libgl1 libopengl0 libxkbcommon0 libxcb-cursor0
-```
-
-Then create the Python environment (on macOS, start here):
-
-```bash
-python3 -m venv .venv
-.venv/bin/python -m pip install -c constraints-release.txt .
-.venv/bin/python -m gearforge doctor
-.venv/bin/python -m gearforge gui
-```
-
-### Windows PowerShell
-
-The following uses the recommended Python 3.12 installation:
+<details open>
+<summary><strong>Windows · PowerShell</strong></summary>
 
 ```powershell
 py -3.12 -m venv .venv
@@ -240,385 +98,87 @@ py -3.12 -m venv .venv
 .\.venv\Scripts\python.exe -m gearforge gui
 ```
 
-No shell activation is required when using these explicit interpreter paths.
-After installation, `gearforge-studio` is the GUI entry point and `gearforge`
-is the console entry point in the environment's `bin` or `Scripts` directory.
+</details>
 
-### Generated release packages
+<details>
+<summary><strong>macOS / Linux</strong></summary>
 
-A **source release kit** produced by `scripts/build_release.py` contains a wheel,
-`VERSION.txt` and top-level `Install-and-launch.sh`, `.command` and `.bat` launchers.
-Their first run installs dependencies into a version-specific environment.
-The files under `packaging/` are launcher templates used when creating that kit.
-
-A **Linux native archive** contains the executable and its `_internal` dependency
-folder. Extract the whole archive, keep those files together and run
-`./GearForgeStudio`. Read its `START_HERE.txt` and the platform notes in
-[packaging/LINUX_README.txt](packaging/LINUX_README.txt).
-
-## Design your first gearbox
-
-1. Launch the app and open [the 12:1 hybrid example](examples/12-to-1-hybrid.gearforge)
-   through **File → Open project**.
-2. Review input speed, available motor torque, desired output speed and required
-   output torque. Values use rpm, N·m and millimetres.
-3. Select the manufacturing mode, families, maximum stage count and envelope.
-   Use **Advanced constraints** for peak/safety factors, bearing life, ratio
-   tolerance, motor curve, module limits, shaft sizes and supplier filtering.
-4. Choose a ranking priority and select **Generate designs**.
-5. Select a candidate. Review its engineering checks, stage data, bill of
-   materials and assumptions. `PASS` means a modeled screen passed under those
-   assumptions; `WARN` identifies an unverified condition.
-6. Select **Load 3D CAD** for a prototype family. Inspect tooth geometry, shafts,
-   carrier where applicable, housing and exploded arrangement.
-7. Open **Simulation workspace** for the operating sweep and optional sampled
-   tooth check. See the methods and limits below.
-8. Compare multiple rows using Ctrl/Cmd or Shift selection, calibrate dimensional
-   print compensation if needed, then export to a new directory.
-
-The default example targets **1200 rpm input, 100 rpm output, 0.08 N·m motor
-torque and 0.65 N·m required output**. Your resulting shortlist depends on the
-project constraints and current catalog. Loading a saved project requires a new
-search against the current catalog before CAD/export.
-
-Examples also cover [helical](examples/helical-example.gearforge),
-[planetary](examples/planetary-example.gearforge),
-[commercial gears](examples/commercial-example.gearforge),
-[bevel](examples/bevel-example.gearforge), [worm](examples/worm-example.gearforge)
-and [cycloidal concepts](examples/cycloidal-example.gearforge).
-
-## Simulation workspace
-
-![Motor/load envelope and operating-point table](screenshots/simulation.png)
-
-### Rigid-body playback
-
-Playback integrates measured elapsed time and input RPM rather than advancing a
-fixed angle per rendered frame. External gear pairs counterrotate; compound
-shafts use accumulated stage ratios. The planetary configuration uses the Willis
-relation for a fixed ring, sun input and carrier output, with planet spin and orbit.
-
-| Control | Behavior |
-| --- | --- |
-| Play / pause | Start explicitly; retain the current pose when paused |
-| Time scale | `.001×`, `.01×`, `.1×` or `1×` simulated seconds per wall-clock second |
-| Reverse | Reverse the input direction |
-| Time field | Seek using the current speed from time zero |
-| Step tooth | Advance one input-tooth pitch while paused |
-| Arrow keys / drag | Orbit the CAD view |
-| `+` / `−` / scroll | Zoom the CAD view |
-| `R` / Space | Reset view / toggle playback when the viewer has focus |
-| Reduce motion | Disable continuous play while retaining seek and stepping |
-
-Playback scale changes display time, not the operating RPM used in the design.
-Bearings are stationary reference rings; rolling elements are not simulated.
-
-### Motor/load and power sweep
-
-With a supplied motor curve, torque is interpolated only within its recorded
-speed range. The curve format is `[[rpm, torque_Nm], ...]`, with distinct speed
-samples. Without a curve, the sweep assumes constant motor torque from 0.25 to
-2 times design input speed, bounded by the supported speed limits.
-
-For ratio `R`, assumed total efficiency `eta` and motor torque `T`:
-
-- Available output torque: `T_out = T × R × eta`.
-- Input power: `P_in = T × rpm × 2π / 60`.
-- Output power: `P_out = eta × P_in`; modeled loss: `P_in − P_out`.
-- Load margin: available output torque minus the requested output load.
-
-Displayed powers describe full modeled motor capability at the prescribed speed.
-They are not a partial-load power-consumption prediction. An overload flag marks
-an unsustainable prescribed operating point under this model; it does not solve
-stall or deceleration. Off-design sweep points do not rerun every stress,
-bearing or temperature screen.
-
-### Sampled tooth intersections
-
-The optional cancellable background check builds real B-rep tooth solids and
-checks mating gear pairs at **12 discrete poses over one input revolution**.
-Its JSON evidence includes phases, pair overlap volumes and a 0.05 mm³ reporting
-threshold. A passing sample check does not cover continuous contact, unsampled
-interference or a complete assembly repeat cycle.
-
-These are rigid kinematic and quasi-static models. They do not solve inertia,
-impact, elastic contact pressure, lubrication, wear, fatigue, temperature or
-planetary load sharing. See [simulation methods](docs/SIMULATION.md) and the
-[recorded example evidence](docs/mesh-sampling-evidence.json).
-
-## Component catalogs
-
-The seed catalog includes **six KHK gear records** with dimensional/rating facts,
-source URLs and retrieval dates. Price and stock are not fabricated. The generic
-bearing table provides screening references rather than supplier-verified ratings.
-
-In **Component catalog**, export a CSV/template, edit compatible records and
-import it. The exact ordered columns are:
-
-```text
-sku,supplier,family,module_mm,teeth,pressure_deg,helix_deg,width_mm,bore_mm,hub_diameter_mm,hub_width_mm,material,bending_nm,contact_nm,price,currency,source_url,rating_conditions,retrieved_date
-```
-
-Preserve column order, use HTTPS source URLs, unique SKUs and finite values in
-supported ranges. Leave unknown prices blank. Imports validate all rows before
-updating SQLite; an invalid row rejects the transaction. Catalog changes require
-regenerating previous designs. Double-click a record to open its supplier source.
-
-Supplier bending/contact ratings are conditional on mating gears, speed,
-lubrication, life and other stated conditions. A comparison with those values is
-not a certified rating for your application.
-
-## Print calibration
-
-In **Print calibration**, save a material profile, export the dimensional coupon,
-measure its outside size and bore, and apply the measured compensation. Reprint
-the coupon to verify the correction. Profiles include backlash, bore and bearing
-clearance, shrink compensation, print orientation and recorded test evidence.
-
-A dimensional coupon establishes dimensional compensation only. It does not
-measure allowable strength, fatigue, creep or wear. Initial material allowables
-are illustrative inputs and need independent characterization for the intended
-printer, orientation, temperature, batch and duty.
-
-## Exported files
-
-Exports publish a new directory atomically and refuse to overwrite an existing
-one. Use report-only export when reviewing a concept or a geometry issue.
-
-| File or folder | Purpose |
-| --- | --- |
-| `assembly.step` / `step/` | Nominal assembly and individual-part CAD for prototype families |
-| `print/` | Print-local STL/3MF for printed parts, with optional shrink compensation |
-| `bom.csv` | Quantities, component sources and known/unknown quotations |
-| `report.html` / `report.pdf` | Calculations, assumptions, checks and limitations |
-| `layout.svg` / `shafts.svg` | Reference layout and shaft schedule |
-| `cad-interference.json` | Static solid-intersection results when CAD is exported |
-| `simulation-sweep.json` / `.csv` | Quasi-static operating sweep and power/load data |
-| `design.gearforge` | Requirements, profile and selected design snapshot |
-| `catalog.csv` / `provenance.json` | Catalog snapshot, project metadata, calculation inputs and runtime versions |
-| `qualification.json` | Explicit unqualified status, unavailable service rating and engineering blockers |
-| `ASSEMBLY.txt` | Prototype assembly and inspection notes |
-| `manifest.json` | File SHA-256 hashes, UTC timestamp, app version, candidate identity and production-rating status |
-
-The Simulation workspace can also export sweep data with a completed sampled
-mesh check. Unexpected static interference blocks CAD export. SVG references
-are not production drawings with certified fits, surface finishes or GD&T.
-
-## Command-line interface
-
-Use the installed `gearforge` executable, or `python -m gearforge` with the
-appropriate environment interpreter:
+On Ubuntu 24.04, first install the Qt runtime libraries:
 
 ```bash
-gearforge --version
-gearforge doctor
-gearforge new example.gearforge
-gearforge search example.gearforge --out candidates.json --limit 60
-gearforge export example.gearforge --out design-export
-gearforge export example.gearforge --out report-export --report-only
-gearforge smoke --out desktop-diagnostics --cad
-gearforge verify design-export
-gearforge qualify example.gearforge --out qualification.json
-gearforge export example.gearforge --out production-export --require-production-rating
+sudo apt-get update
+sudo apt-get install -y libegl1 libgl1 libopengl0 libxkbcommon0 libxcb-cursor0
 ```
 
-`search` and `export` accept `--catalog custom.csv`. Export recalculates the
-shortlist. Use `--candidate ID` to select an ID from a search using the same
-project/catalog and a sufficient `--limit`; the default exports the highest-ranked
-candidate. Existing project/search-output/export paths are preserved.
-
-The smoke command writes screenshots and diagnostic JSON into a new folder.
-To run it on a headless host, use `QT_QPA_PLATFORM=offscreen`. Normal desktop
-launches require a display and should not use that variable.
-
-## Projects, local data and privacy
-
-Projects are versioned, size-limited `.gearforge` JSON documents, not executable
-scripts. Catalogs and saved print profiles are stored in local SQLite. Settings,
-rotating logs and autosave recovery are kept in the platform's Qt app-data location.
-Set `GEARFORGE_DATA_DIR` to a writable directory to choose a different location.
-
-Modified projects are autosaved every 30 seconds. Restore through
-**File → Restore autosave**. Project/profile changes require regeneration before
-CAD/export; stale background preview/check results are not applied to new inputs.
-
-The app has no telemetry, automatic purchasing, license-server connection or
-supplier scraping. Supplier pages open only through a user's catalog action.
-Dependency installation and GitHub Actions builds require network access.
-
-## Engineering methods and limitations
-
-The engine screens reduction and envelope constraints, available continuous
-output torque, accumulated backlash, pitch velocity, external contact ratio,
-printable dimensions, Lewis tooth bending, combined shaft bending/torsion and
-deflection, and generic bearing static/speed/L10 estimates. Requested safety and
-peak factors enter structural screens; continuous torque does not establish
-motor peak-load capability.
-
-Gear roots use sampled radial relief rather than a generated cutter trochoid.
-Stage efficiencies, dynamic factors and material/bearing allowables are screening
-assumptions. Housing, carrier, pins, retention, external shaft loads, manufactured
-fits, polymer aging/creep and service wear/life remain unverified.
-
-Establish a production design using reviewed supplier conditions, tolerances,
-retention and lubrication, independent reference calculations and physical
-gearbox tests. See [release status](docs/RELEASE_STATUS.md) and
-[architecture and load assumptions](docs/ARCHITECTURE.md).
-
-## Development and testing
-
-Install the development dependencies using the tested constraints:
+Then create the environment with Python 3.12 (on macOS, start here):
 
 ```bash
-python -m pip install -c constraints-release.txt --upgrade pip
-python -m pip install -c constraints-release.txt '.[dev]' pip-audit
-python scripts/check_version.py
-python -m pytest -q
+python3.12 -m venv .venv
+.venv/bin/python -m pip install -c constraints-release.txt .
+.venv/bin/python -m gearforge doctor
+.venv/bin/python -m gearforge gui
 ```
 
-For a headless Linux/macOS test run:
+</details>
 
-```bash
-QT_QPA_PLATFORM=offscreen python -m pytest -q --junitxml=build/test-results.xml
-```
+No environment activation is needed for these commands. After installation, `gearforge-studio` is the desktop entry point and `gearforge` is the CLI, in the environment's `Scripts` or `bin` folder.
 
-For PowerShell:
+**First design:** Open [`examples/12-to-1-hybrid.gearforge`](examples/12-to-1-hybrid.gearforge), choose **Generate designs**, select a candidate and choose **Load 3D CAD**. Inspect the checks, explore **Simulation workspace**, then export to a new folder. [Full walkthrough →](docs/USER_GUIDE.md#design-your-first-gearbox)
 
-```powershell
-$env:QT_QPA_PLATFORM = 'offscreen'
-python -m pytest -q --junitxml=build/test-results.xml
-Remove-Item Env:QT_QPA_PLATFORM
-```
+**First engineering study:** Choose **Design → Engineering study**, review the geometry and duty, then calculate. Open the other study examples in their matching workspaces using **Open study…** or **Open…**.
 
-Version-specific regression and native package evidence is indexed in
-[VALIDATION.json](VALIDATION.json). The rc4 additions include independent open
-geometry comparisons and desktop study workflows; rc3 and rc2 results remain
-historical records and do not validate a newer build.
-Coverage includes numerical constraints, catalogs/projects, CLI/worker flows,
-real CAD solids/interference/STEP round-trips, export manifests, timed motion,
-planetary relations, power balance, stale results and reduced-motion behavior.
-A deliberately misaligned gear phase is a negative control for collision detection.
-See [open engineering](docs/OPEN_ENGINEERING.md) for the numerical reference scope.
+For company installation, native archives and backup/restore, use the [deployment guide](docs/INTERNAL_DEPLOYMENT.md). The rc12 native builds were checked on Windows x86_64, Linux x86_64 and macOS ARM64. Packages are unsigned; Linux bundles target glibc 2.39 or newer. [Exact build evidence →](VALIDATION.json)
 
-The [regression workflow](https://github.com/jonahsaunders/Gearforge-Studio/actions/workflows/ci.yml)
-checks all three target operating systems and uploads test results. Headless
-desktop tests do not establish interactive platform usability or physical
-gearbox load/life validation.
+## Supported designs
 
-## Build packages and GitHub releases
-
-Build on the target operating system with development dependencies installed:
-
-```bash
-python -m build
-python scripts/collect_licenses.py
-python -m pip_audit --no-deps --disable-pip -r release-licenses/requirements-runtime.txt --format json --output release-licenses/vulnerability-audit.json
-python -m pip_audit --no-deps --disable-pip -r release-licenses/requirements-runtime.txt --format cyclonedx-json --output release-licenses/sbom.cdx.json
-python scripts/build_native.py
-python scripts/native_archive.py --smoke
-python scripts/build_release.py
-```
-
-To produce the clean repository ZIP for uploading source code, run
-`python scripts/package_github.py`. It places the archive under `release-assets/`
-with `README.md` at its root and includes a per-file SHA-256 list.
-
-The result includes wheel/source distributions, target-native archives,
-checksums and a source release kit. Keep dependency notices with native bundles.
-The macOS spec generates an `.app` with project document metadata; Windows uses a
-windowed executable and a file-based worker protocol. Windows also includes
-`GearForgeCLI.exe` for console commands, backup/restore and visible diagnostics.
-
-| Workflow | Trigger | Result |
+| Gear family | Search and arrangement | CAD scope |
 | --- | --- | --- |
-| `.github/workflows/ci.yml` | Pull requests, pushes to `main`, weekly and manual runs | Dependency audit and Python 3.12 tests on Linux, Windows and macOS |
-| `.github/workflows/release.yml` | `v*` tags or manual run | Tests, native builds, frozen smoke checks, archives and checksums |
-| Release draft job | Matching tag after all native builds succeed | Creates a draft prerelease with assets and release notes |
+| **Spur** | One or two stages; printed, catalog or mixed gears | Prototype solids with sampled involute teeth |
+| **Helical** | One or two stages; opposite helix hands | Prototype solids with twisted sampled involutes |
+| **Planetary** | Fixed ring, sun input, three planets, carrier output | Prototype external/internal gears and carrier |
+| **Bevel** | Single-stage ratio and packaging concepts | Reference layouts only |
+| **Worm** | Starts/wheel ratios and assumed efficiency | Reference layouts only |
+| **Cycloidal** | Integer reduction and packaging concepts | Reference layouts only |
 
-For the current release:
+**Manufacturing modes:** Printed gears and housing; catalog gears in a machined housing; or hybrid gear combinations in a printed housing. Shafts, bearings and fasteners are purchased or machined. Catalog mode builds a custom assembly from recorded gear dimensions.
 
-```bash
-git tag -a v1.0.0rc12 -m "GearForge Studio 1.0.0rc12"
-git push origin v1.0.0rc12
-```
+The current prototype search covers reductions greater than 1:1 through 100:1, modules from 0.8 to 3.0 mm and at most two external-gear stages. It searches bounded templates and returns a ranked shortlist; it does not establish a global optimum. The separate engineering studies have their own input ranges.
 
-The tag must match package/runtime versions. Manual builds on `main` upload
-workflow artifacts without creating a release draft. The separate numeric
-macOS build in `pyproject.toml` must increase for each distributed Mac build.
+## Exports and traceability
 
-Review platform results, manually launch on each target, and complete signing,
-macOS notarization and the accessibility/platform checks before publication.
-The workflow does not automatically publish its draft. Full instructions are in
-[GitHub release preparation](docs/GITHUB_RELEASE.md).
-
-## Upload this project to GitHub
-
-The GitHub source ZIP is a repository package. **Extract it first**, then upload
-its files and directories into the repository root so `README.md`,
-`pyproject.toml`, `src/` and `.github/` retain their relative positions.
-Uploading the ZIP alone stores an archive rather than populating the repository.
-
-Using GitHub's web interface, create a repository, choose **Add file → Upload
-files**, add the extracted contents and commit them. Include `.github/` and
-`.gitignore`, which may be hidden by your file manager. The Git method below
-includes them automatically and preserves file permissions:
-
-```bash
-git init -b main
-git add .
-git commit -m "Add GearForge Studio 1.0.0rc12"
-git remote add origin https://github.com/jonahsaunders/Gearforge-Studio.git
-git push -u origin main
-```
-
-Replace the example remote with your own empty repository and use your configured
-Git author identity. If you already created repository files on GitHub, clone
-that repository and copy the extracted source into it before committing.
-Native binaries, generated CAD, databases and build output are excluded from this
-source archive. Add distributable binaries as GitHub release assets.
-
-See [GitHub's upload instructions](https://docs.github.com/en/repositories/working-with-files/managing-files/adding-a-file-to-a-repository)
-and the [release guide](docs/GITHUB_RELEASE.md).
-
-## Troubleshooting
-
-| Symptom | What to check |
+| Output | Included formats and records |
 | --- | --- |
-| Installation cannot find compatible wheels | Use 64-bit Python 3.12 in a fresh environment; check the platform and core version constraints |
-| GUI cannot start on Linux | Run from a graphical session; inspect Qt display-library errors. The recorded host lacked `libxcb-cursor.so.0`, commonly supplied by `libxcb-cursor0` |
-| Tests report missing `libEGL.so.1` | Install the Ubuntu Qt runtime libraries listed under Install and launch; `QT_QPA_PLATFORM=offscreen` does not remove this shared-library requirement |
-| GUI is invisible after tests | Remove `QT_QPA_PLATFORM=offscreen` from the normal launch environment |
-| No feasible candidates | Review rejection explanations; check ratio, envelope, torque, module, backlash, mode and catalog constraints |
-| CAD/export requests regeneration | Requirements, profile or catalog changed; generate a new shortlist |
-| Detailed CAD unavailable | Bevel, worm and cycloidal entries are concept-only in rc3 |
-| CAD export reports interference | Export report-only, inspect geometry/fit assumptions and sample tooth poses; a static pass alone is insufficient |
-| CSV import rejected | Start with the exported template, preserve exact column order and inspect the reported row |
-| Job cannot start | Check the installed environment and writable app-data directory; inspect the local log or run CLI diagnostics |
-| Export path already exists | Choose a new output directory; existing exports are not overwritten |
+| **Prototype CAD and printing** | STEP assemblies/parts; STL and 3MF for printed components; optional print shrink compensation |
+| **Design review** | PDF/HTML reports, BOM CSV, SVG layout and shaft references, assembly notes |
+| **Engineering studies** | Retained study inputs, readable HTML assessment, calculation JSON and study-specific CSV data |
+| **Profile and field data** | Sampled tooth DXF/SVG/CSV; root-stress CSV and VTK; cycle and raw-sample CSV |
+| **Simulation** | Motor/load sweep JSON/CSV, static interference results and optional sampled tooth-check evidence |
+| **Reproducibility** | Source project, catalog snapshot where applicable, calculation inputs, runtime provenance, qualification status and SHA-256 manifest |
 
-## Repository guide
+Exports preserve existing directories. Changed inputs require recalculation. Unexpected static interference blocks CAD export; a report-only path remains available. `gearforge verify <directory>` checks a completed bundle against its manifest. Hashes establish file integrity, not engineering approval.
 
-| Path | Contents |
+[Complete design export inventory →](docs/USER_GUIDE.md#exported-files) · [Batch commands →](docs/USER_GUIDE.md#command-line-interface)
+
+## Verification and engineering scope
+
+The rc12 implementation passed **351 regression tests on each of Windows, Linux and macOS**, plus native-package checks on all three platforms. [Recorded tests and exact commits](docs/HISTORY_VALIDATION.json) are separate from the live CI badge above.
+
+Numerical comparisons cover geometry, shaft statics, bearing arithmetic, shaft fatigue, contact, heat balance, generated profiles, elastic fields and rainflow cycles. Reference checks use openly licensed tools or documented public worked examples; original synthetic fixtures are included in the repository. The history study alone has 25,788 independent numerical comparisons. [Methods and reference scope →](docs/OPEN_ENGINEERING.md)
+
+Software verification does not qualify a physical gearbox. Actual material/process data, supplier conditions, lubrication, fits, retention, complete load histories and physical validation remain part of the [production qualification work](docs/PRODUCTION_QUALIFICATION.md). Reports retain this boundary, and production-required exports refuse to issue an unverified rating.
+
+## Documentation
+
+| I want to… | Start here |
 | --- | --- |
-| `src/gearforge/` | Desktop UI, search engine, models, CAD, simulation, export and CLI code |
-| `src/gearforge/data/` | Source-traceable seed catalog and application icon |
-| `tests/` | Numerical, data, CAD, GUI, worker and release regression tests |
-| `examples/` | Editable `.gearforge` examples for supported families/modes |
-| `screenshots/` | Eight actual app captures: design, simulation, CAD variants, catalog, calibration and report |
-| `docs/` | Architecture, simulation methods, GUI audit and release instructions |
-| `packaging/` | Native build spec, launcher templates and supplemental license texts |
-| `scripts/` | Version checks, license collection, package/archive creation and reproducible app captures |
-| `.github/` | Test/release workflows and contribution templates |
-| `VALIDATION.json` | Index of current software evidence and historical validation |
+| Use the app, understand controls or troubleshoot | [User guide](docs/USER_GUIDE.md) |
+| See every workspace before installing | [18-image gallery](docs/GALLERY.md) |
+| Understand a calculation and its limits | [Engineering workspaces](#engineering-workspaces) · [Simulation methods](docs/SIMULATION.md) |
+| Install for employees, manage data or restore a backup | [Internal deployment](docs/INTERNAL_DEPLOYMENT.md) |
+| Review current readiness and remaining work | [Release status](docs/RELEASE_STATUS.md) · [Qualification](docs/PRODUCTION_QUALIFICATION.md) · [Changelog](CHANGELOG.md) |
+| Develop, test, build or refresh screenshots | [Development guide](docs/DEVELOPMENT.md) · [Architecture](docs/ARCHITECTURE.md) |
+| Prepare a GitHub release | [Release workflow](docs/GITHUB_RELEASE.md) |
 
-## Contributing and licensing
+Contributions are welcome; read [CONTRIBUTING.md](CONTRIBUTING.md). Report vulnerabilities using [SECURITY.md](SECURITY.md).
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the development workflow and
-[SECURITY.md](SECURITY.md) for vulnerability reporting. Include a minimal project,
-version, platform, reproduction steps and sanitized evidence when reporting a bug.
-
-GearForge application code is licensed under [Apache-2.0](LICENSE). Third-party
-packages retain their own licenses. Read [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)
-and the notices collected for the exact native build before redistribution.
-No commercial Qt license, mechanical certification or commercial support contract
-is supplied by this source repository.
+Application code is licensed under [Apache-2.0](LICENSE). Dependencies retain their own licenses; keep the [third-party notices](THIRD_PARTY_NOTICES.md) and the exact native build's notices with redistributed packages.

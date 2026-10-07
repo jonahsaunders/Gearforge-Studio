@@ -1,0 +1,135 @@
+{
+  "application_version": "1.0.0rc12",
+  "platform": "Windows",
+  "qt_platform": "offscreen",
+  "font_family": "Segoe UI",
+  "description": "Unmodified captures of the running application using repository examples. Synthetic data are illustrative, not component allowables.",
+  "captures": [
+    {
+      "file": "desktop.png",
+      "example": "examples/12-to-1-hybrid.gearforge",
+      "width": 1600,
+      "height": 1080,
+      "sha256": "7b3872a078c374977a75d678278a84001db45daef995485dadbadf7c7959d85b"
+    },
+    {
+      "file": "simulation.png",
+      "example": "examples/12-to-1-hybrid.gearforge",
+      "width": 1600,
+      "height": 1080,
+      "sha256": "77404df573738f66c13cea3d92b779454f688c91b50af3fafc15c9ef3f1f0e6c"
+    },
+    {
+      "file": "catalog.png",
+      "example": "examples/12-to-1-hybrid.gearforge",
+      "width": 1600,
+      "height": 1080,
+      "sha256": "7e4a2328ce0c6cacc711326dafd5fc25f8fe105a6e0a38179820b9b19de89592"
+    },
+    {
+      "file": "calibration.png",
+      "example": "examples/12-to-1-hybrid.gearforge",
+      "width": 1600,
+      "height": 1080,
+      "sha256": "d4f7d69c80fa00dd24b10b4741d6a30872aa0bbf5c2e369ee9cd1787a2b3ae1a"
+    },
+    {
+      "file": "report.png",
+      "example": "examples/12-to-1-hybrid.gearforge",
+      "width": 1600,
+      "height": 1080,
+      "sha256": "2c64135b0298a45decccb1a8e2f4f6fe1df2c08ba1d0f84b2ac256e5759e443f"
+    },
+    {
+      "file": "exploded.png",
+      "example": "examples/12-to-1-hybrid.gearforge",
+      "width": 1600,
+      "height": 1080,
+      "sha256": "3b9b432450622ce69df058ca479edcb949350f59edd55e1010beddfe84f65cc4"
+    },
+    {
+      "file": "planetary.png",
+      "example": "examples/planetary-example.gearforge",
+      "width": 1600,
+      "height": 1080,
+      "sha256": "f9cf9dc00027eb8f54c95a4b3201e2ec49d69ec947a96d800fe63d13c5b9364a"
+    },
+    {
+      "file": "helical.png",
+      "example": "examples/helical-example.gearforge",
+      "width": 1600,
+      "height": 1080,
+      "sha256": "e0336d59e45873caf1ac9efefe618e1ec01cc24807e478c41a7d7b08659e0d55"
+    },
+    {
+      "file": "engineering.png",
+      "example": "examples/steel-spur-250w.gearforge-study",
+      "width": 1320,
+      "height": 900,
+      "sha256": "28e17615a841b684c60427d3b44a2da2caf129e2257ae8a90dbf8c0cc9ef787f"
+    },
+    {
+      "file": "shaft.png",
+      "example": "examples/steel-spur-input.gearforge-shaft",
+      "width": 1320,
+      "height": 900,
+      "sha256": "8850f5ddacd65a790b60513b3720a6f63d8b054cbe841a04e9c39bd9e1e44bf0"
+    },
+    {
+      "file": "bearing.png",
+      "example": "examples/steel-spur-synthetic.gearforge-bearing",
+      "width": 1320,
+      "height": 900,
+      "sha256": "8dde91ff6fe7838da3c336538d06a890862e157593abbcee2e5b4970baffc3ca"
+    },
+    {
+      "file": "fatigue.png",
+      "example": "examples/nasa-shaft-fatigue.gearforge-fatigue",
+      "width": 1320,
+      "height": 900,
+      "sha256": "302cff345394a4dd44f80597402d0d36566474efd1904e2d11be9cdbe3341c93"
+    },
+    {
+      "file": "contact.png",
+      "example": "examples/synthetic-contact.gearforge-contact",
+      "width": 1320,
+      "height": 900,
+      "sha256": "ad394df6f8fac40847688be888c48a6f8205a629c3df6decff7b78f1e6e36fbe"
+    },
+    {
+      "file": "thermal.png",
+      "example": "examples/synthetic-thermal.gearforge-thermal",
+      "width": 1320,
+      "height": 900,
+      "sha256": "eb2550fcc631a04037e3f9110e0302deb79db107f80f5d1f4ef38c2b579d6605"
+    },
+    {
+      "file": "tooth.png",
+      "example": "examples/synthetic-tooth.gearforge-tooth",
+      "width": 1320,
+      "height": 900,
+      "sha256": "07f993922dfcf28ba83a0c9d2986b373d616f6e5b8c361c0ddc5508e2abd2fb5"
+    },
+    {
+      "file": "root.png",
+      "example": "examples/synthetic-root.gearforge-root",
+      "width": 1320,
+      "height": 900,
+      "sha256": "a8d9d9410615233308c6d1ac7ae99301766c9a28f60a67e1aaa7dce1eca614bb"
+    },
+    {
+      "file": "history.png",
+      "example": "examples/synthetic-history.gearforge-history",
+      "width": 1320,
+      "height": 900,
+      "sha256": "6b65cdcf0b129806e393edf9a8fd7887939eab03930706be7cefad85ab7afe41"
+    },
+    {
+      "file": "history-cycles.png",
+      "example": "examples/synthetic-history.gearforge-history",
+      "width": 1320,
+      "height": 900,
+      "sha256": "225e28848cc2b6f5cce47f3ba1734942a331850b25b56b95b52752a32e624cef"
+    }
+  ]
+}
