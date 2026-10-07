@@ -1,6 +1,6 @@
 # Isolated verification environment, never installed into the app build runtime.
 PyNiteFEA==3.2.0
-numpy==2.4.6
+numpy==2.5.3
 scipy==1.18.1
 matplotlib==3.11.2
 prettytable==3.16.0

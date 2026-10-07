@@ -1,4 +1,4 @@
 # Isolated open-source elastic verification; scikit-fem is not an app dependency.
-numpy==2.4.6
+numpy==2.5.3
 scipy==1.18.1
 scikit-fem==12.0.2
