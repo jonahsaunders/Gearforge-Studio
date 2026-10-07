@@ -28,6 +28,7 @@ def desktop_smoke(destination: Path, include_cad=False):
         result["contact_study"]=state.get("contact_study")
         result["thermal_study"]=state.get("thermal_study")
         result["tooth_profile"]=state.get("tooth_profile")
+        result["root_stress"]=state.get("root_stress")
         if window.selected:result["selected"]=window.selected.id
         (destination/"desktop-smoke.json").write_text(json.dumps(result,indent=2))
         if not errors:
@@ -274,6 +275,52 @@ def desktop_smoke(destination: Path, include_cad=False):
                 'study_sha256':tooth_result['study_sha256'],'production_approved':False}
         except Exception as exc:errors.append(f'Tooth profile: {exc}')
         finally:tooth_window.dirty=False;tooth_window.close()
+        from .root_ui import RootStressDialog
+        from .root_stress import RootStressStudy,synthetic_root_example
+        from dataclasses import asdict
+        root_window=RootStressDialog(window,synthetic_root_example())
+        root_window.show_error=lambda error:errors.append(str(error))
+        def wait_root_worker():
+            deadline=time.monotonic()+75
+            while root_window.process is not None and time.monotonic()<deadline:
+                app.processEvents();time.sleep(.01)
+            if root_window.process is not None:root_window.cancel_job();raise ValueError('Root worker timed out')
+            if errors:raise ValueError('Root worker failed')
+        try:
+            root_window.show()
+            if not root_window.calculate():raise ValueError('Root worker did not start')
+            wait_root_worker();root_result=root_window.result
+            if not root_result or not root_result['calculation_available']:raise ValueError('Root elastic fields unavailable')
+            for index in range(root_window.tabs.count()):
+                root_window.tabs.setCurrentIndex(index);app.processEvents();capture=root_window.grab()
+                if capture.isNull():raise ValueError(f'Root study tab {index} did not render')
+                capture.save(str(destination/f'root-stress-{index}.png'))
+            diagrams=0;root_window.tabs.setCurrentIndex(3)
+            for position in range(root_window.position_selector.count()):
+                root_window.position_selector.setCurrentIndex(position)
+                for view in range(2):
+                    root_window.view.setCurrentIndex(view);app.processEvents();capture=root_window.grab()
+                    if capture.isNull() or root_window.plot.rendered_items==0:raise ValueError('Root stress mesh did not render')
+                    capture.save(str(destination/f'root-mesh-{position}-{view}.png'));diagrams+=1
+            root_window.tabs.setCurrentIndex(4);app.processEvents()
+            if not root_window.curves.rendered_items:raise ValueError('Root stress curves did not render')
+            root=root_window.read_study();root.save(destination/'example.gearforge-root')
+            loaded=RootStressStudy.load(destination/'example.gearforge-root')
+            if asdict(loaded)!=root_result['inputs']:raise ValueError('Root stress inputs did not round-trip')
+            if not root_window.start_job('root-export',loaded,destination/'root-calculation'):raise ValueError('Root export worker did not start')
+            wait_root_worker();manifest=verify_bundle(destination/'root-calculation')
+            exported=json.loads((destination/'root-calculation/calculation.json').read_text())
+            if exported['study_sha256']!=root_result['study_sha256']:raise ValueError('Root exported fingerprint changed')
+            peak=max(p['root_von_mises_mpa'] for p in root_result['cases'][0]['positions'])
+            if not math.isclose(peak,8.183902564948463,rel_tol=1e-7):raise ValueError('Synthetic root stress changed')
+            if not root_result['mesh_convergence_passed'] or not root_result['domain_sensitivity_passed']:raise ValueError('Synthetic root numerical comparison failed')
+            if root_result['production_approved'] or root_result['rated_gearbox_life_hours'] is not None:raise ValueError('Root stress falsely approves gearbox life')
+            state['root_stress']={'app_version':root_result['app_version'],'tabs_rendered':root_window.tabs.count(),
+                'diagrams_rendered':diagrams+1,'verified_files':len(manifest['files']),'peak_sampled_root_von_mises_mpa':peak,
+                'mesh_convergence_passed':True,'domain_sensitivity_passed':True,'calculation_and_export_workers':True,
+                'study_sha256':root_result['study_sha256'],'production_approved':False}
+        except Exception as exc:errors.append(f'Root stress: {exc}')
+        finally:root_window.dirty=False;root_window.close()
         finish()
     window.generate();timer.timeout.connect(tick);timer.start()
     app.exec()

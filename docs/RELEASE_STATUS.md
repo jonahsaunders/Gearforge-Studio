@@ -1,4 +1,4 @@
-# Release status — 1.0.0rc10
+# Release status — 1.0.0rc11
 
 This is an implemented and tested desktop **release candidate**. It is not a finished
 commercially validated gearbox design product. The remaining work below is concrete
@@ -106,5 +106,12 @@ interference, real STEP imports, PDF signatures and output manifests. They do no
 establish mechanical fatigue life, wear, real printer accuracy or production readiness.
 
 The rc10 [rack-cutter profiles](TOOTH_PROFILES.md) add explicit generated spur
-roots and sampled geometry exports. See `TOOTH_VALIDATION.json` for current
+roots and sampled geometry exports. `TOOTH_VALIDATION.json` preserves rc10
 verification; earlier thermal/native records apply to rc9 only.
+
+The rc11 [tooth-root elastic study](ROOT_STRESS.md) adds generated-profile Q9
+plane elasticity, explicit material/support/pressure-patch data, three mesh levels,
+a wider-sector comparison, cancellable desktop workers and CSV/VTK field exports.
+Its 4,582 independent scikit-fem comparisons verify the numerical formulation.
+Actual material/process evidence, 3D loading, root fatigue and physical gearbox
+qualification remain. See the current evidence pointer in `VALIDATION.json`.

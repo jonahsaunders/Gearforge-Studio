@@ -1,5 +1,16 @@
 # Unreleased
 
+# 1.0.0rc11 — 2026-10-06
+
+- Add original generated-profile Q9 plane elasticity with explicit material,
+  support, patch loading, torque reversals and bounded field exports.
+- Compare three mesh levels and a wider sector; retain unresolved sensitivity
+  and evidence gaps without approving fatigue life or production strength.
+- Add a seven-tab editor, cancellable calculation/export workers, stress maps,
+  root curves, CLI, strict files and actual/unit-torque CSV plus VTK exports.
+- Independently compare 4,582 quantities with BSD scikit-fem and verify analytic
+  traction/bending patches. No restricted data or private solver is required.
+
 # 1.0.0rc10 — 2026-10-06
 
 - Add original rounded-rack spur tooth envelopes, continuous analytic fillets,

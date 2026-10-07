@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "gearforge-studio"
-version = "1.0.0rc10"
+version = "1.0.0rc11"
 description = "Desktop gearbox synthesis, engineering screening and parametric CAD"
 readme = "README.md"
 requires-python = ">=3.12,<3.14"
 license = "Apache-2.0"
 authors = [{name = "GearForge Studio contributors"}]
-dependencies = ["PySide6-Essentials>=6.11.2,<6.12", "cadquery>=2.8,<2.9", "reportlab>=4.4.9,<5", "numpy>=2.3.5,<3"]
+dependencies = ["PySide6-Essentials>=6.11.2,<6.12", "cadquery>=2.8,<2.9", "reportlab>=4.4.9,<5", "numpy>=2.3.5,<3", "scipy>=1.18.1,<1.19"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8,<10", "build>=1.2", "pyinstaller>=6.12"]
@@ -33,4 +33,4 @@ pythonpath = ["src"]
 markers = ["cad: real CAD generation and export", "gui: Qt desktop integration"]
 
 [tool.gearforge.release]
-macos-build = "10"
+macos-build = "11"

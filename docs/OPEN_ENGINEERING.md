@@ -180,3 +180,13 @@ with explicit bearing capacities, case factors and operating limits. Its open
 verification adapter checks basic fatigue arithmetic against 60-digit Decimal
 results from original synthetic cases; supplier factors and service life remain
 outside that verification. No restricted supplier table is included.
+
+## Open tooth-root elasticity
+
+The [generated-root stress study](ROOT_STRESS.md) uses original Q4/Q9 plane
+elasticity, explicit support/loading assumptions and synthetic material fixtures.
+A separate BSD-3-Clause scikit-fem 12.0.2 process verifies 4,582 quantities with
+its own basis/weak-form assembly. It is a test reference, not an app dependency.
+No material allowables, standard text or reference implementation is copied.
+SciPy, already present through CAD dependencies, is now an explicit direct
+dependency for the original sparse elastic solver. Root fatigue remains unqualified.

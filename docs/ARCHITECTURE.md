@@ -91,3 +91,15 @@ validity limits, a validated CAD builder, regression reference data, and physica
 verification fixtures. Promote export status only after those checks pass. Supplier
 adapters should generate the existing normalized CSV schema with provenance, declared
 units, rated-load conditions, retrieval date and non-fabricated price/stock fields.
+
+## Generated-root elastic analysis
+
+`elasticity.py` implements original Q4/Q9 plane elasticity on bilinear geometry,
+full integration, sparse stiffness assembly, rigid-mode/equilibrium checks and
+unaveraged stress recovery. `root_stress.py` constructs truncated sectors from
+`RackProfile`, integrates finite normal pressure patches, compares three meshes
+and a wider sector, scales unit-torque fields by duty and exports traceable fields.
+`root_ui.py` owns a cancellable QProcess worker, seven tabs, mesh/stress maps and
+root curves. `cli.py` provides file-protocol calculation/export worker tasks and
+the `root` command family. The engineering result never sets production approval.
+See [model limits and independent reference](ROOT_STRESS.md).

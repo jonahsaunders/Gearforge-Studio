@@ -114,3 +114,17 @@ optimization run in a separate process using BSD-3-Clause SciPy 1.18.1.
 No cutter tables, external gear implementation or restricted manufacturing data
 are copied or bundled. Existing SciPy/NumPy notices remain applicable.
 See [tooth profiles](docs/TOOTH_PROFILES.md).
+
+## Open tooth-root elasticity comparison
+
+The elastic solver, root mesher, load adapter and numerical fixtures are original
+Apache-2.0 code/data. Independent verification uses separately installed
+[scikit-fem 12.0.2](https://github.com/kinnala/scikit-fem), BSD-3-Clause,
+Copyright 2018–26 scikit-fem developers. Its installation retains
+[the license](https://github.com/kinnala/scikit-fem/blob/12.0.2/LICENSE).
+No scikit-fem implementation or documentation is bundled in the app or source
+kit. Original fixture meshes, loads and numerical results can be redistributed
+with this project. NumPy/SciPy retain their existing release notices; SciPy is
+now an explicit direct dependency rather than only a transitive CAD dependency.
+No restricted material properties, standard factors or private results are used.
+See [methods and reproduction](docs/ROOT_STRESS.md).

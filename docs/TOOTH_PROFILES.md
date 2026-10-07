@@ -157,6 +157,9 @@ content is copied. Existing dependency licenses/notices apply.
 Other tests check rolling-contact closure, both tangent joins, continuous-domain
 rejection, periodic symmetry, sampled closure/convergence, strict files, editing,
 save failures, CLI and manifest integrity. Numerical agreement establishes this
-geometry calculation only. Actual cutter/process evidence, tooth-root elasticity,
-fatigue, 3D load distribution, manufacturing tolerances and physical qualification
+geometry calculation only. The [root elastic study](ROOT_STRESS.md) now adds
+numerically checked stresses. Actual cutter/process evidence, root fatigue, 3D load distribution, manufacturing tolerances and physical qualification
 remain. The earlier prototype CAD retains its distinct approximate root outline.
+
+Use **Study root stress…** to retain this profile in the elastic editor with
+fresh material/support/load evidence. This does not modify the prototype CAD.

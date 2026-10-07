@@ -72,6 +72,9 @@ def main():
         tooth=evidence.get("tooth_profile") or {}
         if tooth.get("app_version")!=version or tooth.get("tabs_rendered")!=4 or tooth.get("diagrams_rendered")!=2 or tooth.get("verified_files")!=6:
             raise RuntimeError("Native tooth profile smoke failed: "+str(tooth))
+        root=evidence.get("root_stress") or {}
+        if root.get('app_version')!=version or root.get('tabs_rendered')!=7 or root.get('diagrams_rendered')!=7 or root.get('verified_files')!=6 or not root.get('calculation_and_export_workers') or not root.get('mesh_convergence_passed') or not root.get('domain_sensitivity_passed'):
+            raise RuntimeError('Native root stress smoke failed: '+str(root))
     output=ROOT/"release-assets";output.mkdir(exist_ok=True)
     if system!="darwin":
         platform_note=("Use GearForgeCLI.exe for console commands and diagnostics.\n" if system=="windows"

@@ -47,3 +47,14 @@ Gatekeeper. No signing or accessibility claim should be made before this pass.
 - [Qt 6.8 color-scheme hints](https://doc.qt.io/qtforpython-6.8/PySide6/QtGui/QStyleHints.html)
 
 Reviewed October 6, 2026. Platform tests are recorded separately in VALIDATION.json.
+
+## Generated-root elastic editor
+
+Seven native tabs expose material evidence, support/mesh controls, all retained
+duty cases, mesh/stress maps, root curves, assessment and complete source inputs.
+Numerical work runs in a separate cancellable file-protocol process. Inputs are
+disabled during that work; edits invalidate results. Failed saves preserve the
+previous path and unsaved state. Case/position selectors control both stress views;
+deformation exaggeration and field units stay visible. Automated source/native
+smoke captures every tab, six mesh views and a curve view, then reopens inputs,
+exports through the worker and checks the complete integrity manifest.

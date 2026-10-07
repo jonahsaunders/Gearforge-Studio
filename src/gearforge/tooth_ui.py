@@ -72,7 +72,7 @@ class ToothProfileDialog(QDialog):
         self.report=QTextBrowser();self.report.setOpenExternalLinks(False);self.tabs.addTab(self.report,'Assessment')
         self.status=QLabel();self.status.setWordWrap(True);layout.addWidget(self.status)
         for actions in [[('Open…',self.open_study),('Save…',self.save_study),('From gear study…',self.from_source),('Synthetic example',self.example)],
-                        [('Calculate',self.calculate),('Export profile package…',self.export),('Close',self.reject)]]:
+                        [('Calculate',self.calculate),('Study root stress…',self.root_study),('Export profile package…',self.export),('Close',self.reject)]]:
             row=QHBoxLayout()
             for label,callback in actions:
                 button=QPushButton(label);button.clicked.connect(callback);row.addWidget(button)
@@ -120,6 +120,12 @@ class ToothProfileDialog(QDialog):
         return True
 
     def show_error(self,error):QMessageBox.warning(self,'Tooth profile',str(error))
+    def root_study(self):
+        from .root_stress import root_from_profile
+        from .root_ui import RootStressDialog
+        try:study=root_from_profile(self.read_study())
+        except (ValueError,TypeError) as exc:self.show_error(exc);return False
+        dialog=RootStressDialog(self,study);dialog.dirty=True;dialog.exec();return True
     def confirm_discard(self):
         if not self.dirty:return True
         answer=QMessageBox.question(self,'Unsaved tooth profile','Save the tooth profile before continuing?',QMessageBox.Save|QMessageBox.Discard|QMessageBox.Cancel,QMessageBox.Save)

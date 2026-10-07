@@ -41,6 +41,10 @@ def worker(input_path=None):
         elif task == "mesh-check":
             from .simulation import sampled_mesh_check
             result = sampled_mesh_check(**payload)
+        elif task in ("root-calculate","root-export"):
+            from .root_stress import RootStressStudy,calculate_root_study,export_root_study
+            study=RootStressStudy.from_dict(payload['study'])
+            result=calculate_root_study(study) if task=='root-calculate' else export_root_study(study,Path(payload['destination']))
         else:
             raise ValueError("Unknown worker task")
         response = {"ok":True,"result":result}
@@ -142,6 +146,14 @@ def main(argv=None):
     tooth_from.add_argument("--role",choices=["pinion","wheel"],default="pinion")
     tooth_calculate = tooth_commands.add_parser("calculate",help="Export analytic dimensions, sampled DXF/SVG and coordinates; no production rating")
     tooth_calculate.add_argument("path",type=Path);tooth_calculate.add_argument("--out",type=Path,required=True)
+    root = subs.add_parser("root",help="Study elastic stress in a rack-generated spur root")
+    root_commands = root.add_subparsers(dest="root_command",required=True)
+    root_new = root_commands.add_parser("new",help="Create unknown material/support inputs or a synthetic example")
+    root_new.add_argument("path",type=Path);root_new.add_argument("--synthetic-example",action="store_true")
+    root_from = root_commands.add_parser("from-profile",help="Retain cutter geometry with fresh elastic material and load data")
+    root_from.add_argument("path",type=Path);root_from.add_argument("--out",type=Path,required=True)
+    root_calculate = root_commands.add_parser("calculate",help="Export 2D elastic fields, mesh checks and evidence gaps; no fatigue rating")
+    root_calculate.add_argument("path",type=Path);root_calculate.add_argument("--out",type=Path,required=True)
     search = subs.add_parser("search",help="Search a project and save candidate JSON")
     search.add_argument("project",type=Path)
     search.add_argument("--catalog",type=Path)
@@ -182,6 +194,15 @@ def main(argv=None):
             Project().save(args.path)
             print(args.path)
             return 0
+        if args.command == "root":
+            from .root_stress import RootStressStudy,root_from_profile,synthetic_root_example,export_root_study
+            from .tooth_profile import ToothProfileStudy
+            if args.root_command in ("new","from-profile"):
+                destination=args.path if args.root_command=='new' else args.out
+                if destination.exists() or destination.is_symlink():raise FileExistsError('Root study already exists')
+                study=(synthetic_root_example() if args.synthetic_example else RootStressStudy()) if args.root_command=='new' else root_from_profile(ToothProfileStudy.load(args.path))
+                study.save(destination);return 0
+            print(json.dumps(export_root_study(RootStressStudy.load(args.path),args.out),indent=2));return 0
         if args.command == "tooth":
             from .tooth_profile import ToothProfileStudy,profile_from_study,synthetic_profile_example,export_profile_study
             from .engineering import EngineeringStudy

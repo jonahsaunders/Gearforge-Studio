@@ -1,6 +1,6 @@
 # Internal company deployment
 
-GearForge Studio 1.0.0rc10 is an offline desktop tool for **prototype exploration
+GearForge Studio 1.0.0rc11 is an offline desktop tool for **prototype exploration
 and engineering review**. This deployment guide does not approve a gearbox for
 production, certify a load rating, or replace the company's engineering process.
 The application retains visible prototype/concept labels in reports and exports.
@@ -51,7 +51,7 @@ There is no automatic production rollout.
 ## Install and launch
 
 For an approved native archive, extract the **entire** directory to a
-version-specific location such as `C:\CompanyApps\GearForge\1.0.0rc10`. Keep
+version-specific location such as `C:\CompanyApps\GearForge\1.0.0rc11`. Keep
 `GearForgeStudio.exe` and `_internal` together. Launch the executable. Runtime
 operation does not require an internet connection or Python installation.
 
@@ -240,3 +240,19 @@ private vulnerability reporting. No vendor response-time commitment is implied.
   Inspect millimetre units and closed outlines in the company's DXF consumer.
 - Review actual cutter evidence, finishing, root tolerances and inspection
   separately; geometry output does not establish tooth bending or fatigue strength.
+
+## Tooth-root elastic study acceptance
+
+- Open **Design → Tooth-root elastic stress…**, load **Synthetic example** and
+  calculate. The calculation should remain cancellable; inspect all seven tabs.
+- Inspect every sampled load position, whole-sector/central-tooth meshes, root
+  curves and the explicitly labeled deformation multiplier.
+- Confirm the example's sampled peak root von Mises is about 8.183902565 MPa and
+  its mesh/sector checks meet the entered 5% threshold. Its material is synthetic.
+- Save/reopen `.gearforge-root`, export a new assessment directory and verify its
+  six-file manifest. Inspect actual versus unit-torque CSV units and VTK selection.
+- Cancel a calculation and confirm inputs remain. Remove a required material
+  value and confirm stress calculation is unavailable. Change an input and confirm
+  old plots disappear. An out-of-range case temperature must prevent its assessment.
+- Establish actual material, cutter, support and loading evidence independently.
+  [Elastic stress](ROOT_STRESS.md) is not a fatigue-life or production-load rating.
