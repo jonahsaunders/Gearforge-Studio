@@ -237,6 +237,15 @@ def test_cli_history_import_worker_and_no_overwrite(tmp_path, capsys):
     assert main(['history', 'calculate', str(imported), '--out', str(out)]) == 1
 
 
+def test_history_math_imports_without_site_packages():
+    import subprocess
+    import sys
+    source = str(Path(__file__).resolve().parents[1]/'src')
+    code = 'import sys; sys.path.insert(0,'+repr(source)+'); from gearforge.cyclic import synthetic_history_example, calculate_history_study; assert calculate_history_study(synthetic_history_example())["fatigue_damage_available"]'
+    result = subprocess.run([sys.executable, '-S', '-c', code], capture_output=True, text=True, timeout=15)
+    assert result.returncode == 0, result.stderr
+
+
 @pytest.mark.gui
 def test_history_editor_preserves_invalid_buffers_order_hashes_and_save_failure(tmp_path, monkeypatch):
     from PySide6.QtWidgets import QApplication, QFileDialog

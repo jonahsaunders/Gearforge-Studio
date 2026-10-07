@@ -18,7 +18,6 @@ import re
 import tempfile
 
 from . import __version__
-from .bearings import optional_number
 from .engineering import EngineeringStudy, _integer, _model, _text
 from .models import atomic_text, finite, read_text_limited, strict_json
 
@@ -27,6 +26,11 @@ MAX_BYTES = 16_000_000
 MAX_SAMPLES = 100_000
 MAX_EXPANDED_SAMPLES = 10**15
 EVIDENCE_STATES = ('unverified', 'synthetic', 'declared')
+
+
+def optional_number(value, name, lower, upper):
+    # Keep this mathematical history layer independent of shaft/NumPy imports.
+    return None if value is None else finite(value, name, lower, upper)
 
 
 class _CounterState:
