@@ -13,6 +13,10 @@ from PySide6.QtWidgets import (QComboBox, QDialog, QFileDialog, QFormLayout, QHB
     QHeaderView, QLabel, QLineEdit, QMessageBox, QPlainTextEdit, QPushButton, QScrollArea,
     QTabWidget, QTableWidget, QTableWidgetItem, QTextBrowser, QVBoxLayout, QWidget)
 
+from .chart_style import ChartWidget, ReportBrowser, chart_color
+
+from .desktop_ui import StudyDialog, StudyTabs
+
 from .cyclic import (HistoryStudy, HistoryBlock, SNPoint, synthetic_history_example, history_from_study,
     parse_sample_csv, import_sample_csv, history_report_html)
 from .engineering import EngineeringStudy
@@ -23,7 +27,7 @@ def sample_text(samples):
     return 'time_s,stress_mpa\n' + ''.join(f'{s.time_s!r},{s.stress_mpa!r}\n' for s in samples) if samples else ''
 
 
-class HistoryPlot(QWidget):
+class HistoryPlot(ChartWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setMinimumSize(500, 340)
@@ -36,8 +40,8 @@ class HistoryPlot(QWidget):
     def paintEvent(self, event):
         p = QPainter(self)
         p.setRenderHint(QPainter.Antialiasing)
-        p.fillRect(self.rect(), QColor('#f8fafc'))
-        p.setPen(QColor('#243349'))
+        p.fillRect(self.rect(), self.palette().base())
+        p.setPen(self.palette().text().color())
         self.rendered_items = 0
         if not self.result or not self.result['calculation_available']:
             p.drawText(self.rect(), Qt.AlignCenter, 'Calculate an entered history to view its plots.')
@@ -80,10 +84,10 @@ class HistoryPlot(QWidget):
         p.drawText(QRectF(0, self.height()-33, self.width(), 25), Qt.AlignCenter, xlabel)
         for index in range(5):
             x, y = left+(right-left)*index/4, low+(high-low)*index/4
-            p.setPen(QPen(QColor('#d5dce6'), 1))
+            p.setPen(QPen(self.palette().mid().color(), 1))
             p.drawLine(point((x, low)), point((x, high)))
             p.drawLine(point((left, y)), point((right, y)))
-            p.setPen(QColor('#243349'))
+            p.setPen(self.palette().text().color())
             p.drawText(QRectF(point((x, low)).x()-42, box.bottom()+5, 84, 20), Qt.AlignCenter, f'{x:.4g}')
             p.drawText(QRectF(4, point((left, y)).y()-10, 76, 20), Qt.AlignRight, f'{y:.4g}')
         if self.mode == 1:
@@ -95,8 +99,8 @@ class HistoryPlot(QWidget):
                 key = (int(pos.x()/3)*3, int(pos.y()/3)*3)
                 cells[key] = cells.get(key, 0)+cycle['count']
             maximum = max(math.log1p(count) for count in cells.values())
-            p.setPen(QColor('#2563eb'))
-            p.setBrush(QColor('#79a2ee'))
+            p.setPen(chart_color(self,'#2563eb'))
+            p.setBrush(chart_color(self,'#79a2ee'))
             for (x, y), count in cells.items():
                 radius = 2+7*math.sqrt(math.log1p(count)/maximum)
                 p.drawEllipse(QPointF(x, y), radius, radius)
@@ -112,12 +116,12 @@ class HistoryPlot(QWidget):
                     selected.update((min(group, key=lambda i: points[i][1]), max(group, key=lambda i: points[i][1])))
                 points = [points[i] for i in sorted(selected)]
                 p.drawText(24, self.height()-8, 'Display reduced with per-bucket extrema retained; complete samples are exported.')
-            p.setPen(QPen(QColor('#2563eb'), 2))
+            p.setPen(QPen(chart_color(self,'#2563eb'), 2))
             p.drawPolyline(QPolygonF([point(v) for v in points]))
             self.rendered_items = len(points)
 
 
-class HistoryStudyDialog(QDialog):
+class HistoryStudyDialog(StudyDialog):
     BLOCK_KEYS = ('name', 'duty_case_name', 'repetitions', 'starts_per_repeat', 'data_status', 'source_reference', 'applicable_conditions', 'redistribution_basis')
     MATERIAL_TEXT = ('designation', 'source_reference', 'applicable_conditions', 'redistribution_basis', 'failure_definition')
     BASIS_TEXT = ('name', 'point_definition', 'history_basis', 'coverage_basis', 'stress_factor_basis', 'mean_stress_basis', 'damage_limit_basis', 'notes')
@@ -142,7 +146,7 @@ class HistoryStudyDialog(QDialog):
         note = QLabel('Count changes in signed normal stress at one material point. Fatigue damage requires an elastic uniaxial history and applicable S-N data. No gearbox load or life rating is established.')
         note.setWordWrap(True)
         layout.addWidget(note)
-        self.tabs = QTabWidget()
+        self.tabs = StudyTabs()
         layout.addWidget(self.tabs, 1)
         basis = self.form_tab('Point and method')
         self.add_fields(basis, self.basis_fields, [
@@ -232,9 +236,9 @@ class HistoryStudyDialog(QDialog):
         self.plot_mode.currentIndexChanged.connect(self.refresh_plot)
         self.plot_block.currentIndexChanged.connect(self.refresh_plot)
         self.tabs.addTab(plots, 'Plots')
-        self.report = QTextBrowser()
+        self.report = ReportBrowser()
         self.tabs.addTab(self.report, 'Assessment')
-        self.source_view = QTextBrowser()
+        self.source_view = ReportBrowser()
         self.tabs.addTab(self.source_view, 'Retained gear duty')
         self.status = QLabel('Enter traceable local stress samples and applicable material data.')
         self.status.setWordWrap(True)
@@ -252,6 +256,8 @@ class HistoryStudyDialog(QDialog):
         row.addWidget(self.cancel)
         layout.addLayout(row)
         self.set_study(study or HistoryStudy())
+        self.finish_ui()
+
 
     @property
     def process(self):
@@ -504,7 +510,7 @@ class HistoryStudyDialog(QDialog):
         except (ValueError, TypeError, OverflowError) as exc:
             self.show_error(exc)
             return False
-        path, _ = QFileDialog.getSaveFileName(self, 'Save stress history', str(self.path or 'local.gearforge-history'), 'Stress history (*.gearforge-history)')
+        path, _ = self.save_destination('Save stress history', str(self.path or 'local.gearforge-history'), 'Stress history (*.gearforge-history)')
         if not path:
             return False
         try:

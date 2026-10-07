@@ -11,12 +11,16 @@ from PySide6.QtWidgets import (QComboBox,QDialog,QFileDialog,QFormLayout,QHBoxLa
     QLabel,QLineEdit,QMessageBox,QPushButton,QTabWidget,QTableWidget,QTableWidgetItem,QTextBrowser,
     QTextEdit,QVBoxLayout,QWidget)
 
+from .chart_style import ChartWidget, ReportBrowser, chart_color
+
+from .desktop_ui import StudyDialog, StudyTabs
+
 from .engineering_ui import StudyNumber
 from .shafts import (ShaftStudy,ShaftSection,ShaftCase,ShaftLoad,calculate_shaft_study,
                      export_shaft_study,shaft_report_html)
 
 
-class ShaftPlot(QWidget):
+class ShaftPlot(ChartWidget):
     QUANTITIES={
         'Deflection (mm)':('deflection_y_mm','deflection_z_mm'),
         'Bending moment magnitude (N·m)':('bending_moment_magnitude_nm',),
@@ -51,11 +55,11 @@ class ShaftPlot(QWidget):
         for section in inputs['sections']:
             painter.setPen(QPen(self.palette().text().color(),max(2,min(18,section['outer_diameter_mm']/2))))
             painter.drawLine(QPointF(xpos(section['start_mm']),50),QPointF(xpos(section['end_mm']),50))
-        painter.setPen(QPen(QColor('#25846b'),2))
+        painter.setPen(QPen(chart_color(self,'#25846b'),2))
         for label,key in (('A','bearing_a_mm'),('B','bearing_b_mm')):
             x=xpos(inputs[key]);painter.drawPolyline(QPolygonF([QPointF(x-9,68),QPointF(x,53),QPointF(x+9,68),QPointF(x-9,68)]))
             painter.drawText(QRectF(x-25,71,50,18),Qt.AlignCenter,label)
-        painter.setPen(QPen(QColor('#b85a15'),2))
+        painter.setPen(QPen(chart_color(self,'#b85a15'),2))
         for load in inputs['cases'][self.case_index]['loads']:
             x=xpos(load['position_mm']);painter.drawLine(QPointF(x,30),QPointF(x,44))
         box=QRectF(left,130,width,max(1,self.height()-180));self.box=box
@@ -73,7 +77,7 @@ class ShaftPlot(QWidget):
             painter.drawText(QRectF(xpos(x)-32,box.bottom()+4,64,20),Qt.AlignCenter,f'{x:.5g}')
             painter.drawText(QRectF(1,point(0,y).y()-10,74,20),Qt.AlignRight,f'{y:.5g}')
         for index,key in enumerate(fields):
-            painter.setPen(QPen(QColor(('#3478db','#b85a15')[index]),2.2,Qt.SolidLine if index==0 else Qt.DashLine))
+            painter.setPen(QPen(chart_color(self,('#3478db','#b85a15')[index]),2.2,Qt.SolidLine if index==0 else Qt.DashLine))
             painter.drawPolyline(QPolygonF([point(p['position_mm'],p[key]) for p in case['samples']]))
         painter.setPen(self.palette().text().color())
         painter.drawText(QRectF(0,self.height()-24,self.width(),20),Qt.AlignCenter,
@@ -87,7 +91,7 @@ class ShaftPlot(QWidget):
         super().mouseMoveEvent(event)
 
 
-class ShaftStudyDialog(QDialog):
+class ShaftStudyDialog(StudyDialog):
     SECTION_FIELDS=('start_mm','end_mm','outer_diameter_mm','inner_diameter_mm','youngs_modulus_mpa','shear_modulus_mpa','material_basis')
     CASE_FIELDS=('name','rpm','duration_hours','ambient_c')
     LOAD_FIELDS=('name','position_mm','axial_n','force_y_n','force_z_n','torque_nm','moment_y_nm','moment_z_nm')
@@ -99,7 +103,7 @@ class ShaftStudyDialog(QDialog):
         layout=QVBoxLayout(self)
         note=QLabel('Resolve the actual load path through the shaft and its two bearings. Elastic motion and nominal stress do not establish fatigue life or bearing capacity.')
         note.setWordWrap(True);layout.addWidget(note)
-        self.tabs=QTabWidget();layout.addWidget(self.tabs,1)
+        self.tabs=StudyTabs();layout.addWidget(self.tabs,1)
         page=QWidget();shaft_layout=QVBoxLayout(page);form=QFormLayout();shaft_layout.addLayout(form)
         self.name=QLineEdit();self.name.textEdited.connect(self.changed);form.addRow('Study name',self.name)
         self.numbers={}
@@ -138,13 +142,15 @@ class ShaftStudyDialog(QDialog):
         self.plot=ShaftPlot();results_layout.addWidget(self.plot,1)
         self.summary=QLabel();self.summary.setWordWrap(True);results_layout.addWidget(self.summary)
         self.tabs.addTab(page,'Load path and motion');self.result_page=page
-        self.report=QTextBrowser();self.report.setOpenExternalLinks(False);self.tabs.addTab(self.report,'Calculation report')
+        self.report=ReportBrowser();self.report.setOpenExternalLinks(False);self.tabs.addTab(self.report,'Calculation report')
         self.status=QLabel();self.status.setWordWrap(True);layout.addWidget(self.status)
         buttons=QHBoxLayout();layout.addLayout(buttons)
         for label,callback in (('Open shaft study…',self.open_study),('Save shaft study…',self.save_study),
                                ('Calculate',self.calculate),('Assess bearings…',self.assess_bearings),('Assess fatigue…',self.assess_fatigue),('Export calculation…',self.export),('Close',self.reject)):
             button=QPushButton(label);button.clicked.connect(callback);buttons.addWidget(button)
         self.set_study(study or ShaftStudy())
+        self.finish_ui()
+
 
     def make_table(self,headers):
         table=QTableWidget(0,len(headers));table.setHorizontalHeaderLabels(headers)
@@ -277,19 +283,19 @@ class ShaftStudyDialog(QDialog):
         from .bearing_ui import BearingStudyDialog
         try:study=bearings_from_shaft(self.read_study())
         except (ValueError,TypeError) as exc:self.show_error(exc);return False
-        dialog=BearingStudyDialog(self,study);dialog.dirty=True;dialog.exec();return True
+        dialog=BearingStudyDialog(self,study);dialog.dirty=True;dialog.present();return True
 
     def assess_fatigue(self):
         from .fatigue import fatigue_from_shaft
         from .fatigue_ui import FatigueStudyDialog
         try:study=fatigue_from_shaft(self.read_study())
         except (ValueError,TypeError) as exc:self.show_error(exc);return False
-        dialog=FatigueStudyDialog(self,study);dialog.dirty=True;dialog.exec();return True
+        dialog=FatigueStudyDialog(self,study);dialog.dirty=True;dialog.present();return True
 
     def save_study(self):
         try:study=self.read_study()
         except (ValueError,TypeError) as exc:self.show_error(exc);return False
-        path,_=QFileDialog.getSaveFileName(self,'Save shaft study',str(self.path or 'shaft.gearforge-shaft'),'Shaft study (*.gearforge-shaft)')
+        path,_=self.save_destination('Save shaft study',str(self.path or 'shaft.gearforge-shaft'),'Shaft study (*.gearforge-shaft)')
         if not path:return False
         try:study.save(Path(path))
         except (ValueError,OSError) as exc:self.show_error(exc);return False

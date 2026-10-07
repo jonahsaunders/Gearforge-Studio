@@ -1,0 +1,83 @@
+{
+  "date": "2026-10-07",
+  "scope": "Apple HIG source, behavior and Windows offscreen audit of 5 workspaces and 9 engineering editors / 51 study sections; no native macOS or VoiceOver certification.",
+  "base_revision": "15b570ba2e6f344676e0f2bed0f0cee09827c2b3",
+  "local_tests": {
+    "full_regression": {
+      "passed": 424,
+      "failed": 0,
+      "elapsed_seconds": 169.51,
+      "stage": "Before final layout polish; all calculation and GUI regressions passed."
+    },
+    "after_final_layout_polish": {
+      "passed": 68,
+      "failed": 0,
+      "elapsed_seconds": 31.52,
+      "files": [
+        "tests/test_desktop_guidelines.py",
+        "tests/test_gui_cli.py",
+        "tests/test_root_stress.py",
+        "tests/test_stress_probes.py"
+      ]
+    }
+  },
+  "rendering": {
+    "all_pages": {
+      "count": 224,
+      "sizes": [
+        [
+          1024,
+          768
+        ]
+      ],
+      "text_scales": [
+        1,
+        1.3
+      ],
+      "appearance": [
+        "light",
+        "dark"
+      ],
+      "manifest_sha256": "e8f427c9e4c49d182cdcd335b363cd0b37c0516c865aef1600d27d926f8249cb"
+    },
+    "calculated_dark_studies": {
+      "count": 11,
+      "size": [
+        1320,
+        900
+      ],
+      "text_scale": 1.3,
+      "manifest_sha256": "d2457badf8432a391af28d947d7524fabda68df626258e9238f0572a47ff9658"
+    }
+  },
+  "packages": {
+    "wheel_and_sdist": "built successfully",
+    "new_and_changed_runtime_files_match_wheel": true,
+    "native_bundles": "not rebuilt or certified by this audit"
+  },
+  "published_audit_images": {
+    "screenshots/root-dark.png": "20413a75eb25dcffdc26d8389829724157b967fdbbe7c0829d0213e865b98de6",
+    "screenshots/layout-large-text.png": "8893ab5be8946decc1465aeba107488b1b7e9cf18756c4cfdcdcc0e2e6ce7f1e"
+  },
+  "source_sha256_lf_normalized": {
+    "src/gearforge/app.py": "27c7f93f4ade787784f49d7291ba99388493fe8f54f68df76f5b890eb835907f",
+    "src/gearforge/appearance.py": "d6faba13394a94250a8a0ed050322dc12ede59468567bd1c6685d487e4fb5cdf",
+    "src/gearforge/desktop_ui.py": "99eb786e54d10caf618debbff3eac0515df8c5acc25285cc0491fad5e4e1671c",
+    "src/gearforge/chart_style.py": "bf4836c9689653c40835620d49aadbf4990807f4a57d338a8a0a0f2108513e42",
+    "src/gearforge/layouts.py": "3e172d319aba32da4f8899de0b595e1f3033b33215b61fa5878f363607b134ef",
+    "src/gearforge/plots.py": "c668f5a51f7076e903389c6e0cc3071cf952c5cde3f6231410317d5cb4aebd53",
+    "src/gearforge/viewer.py": "79d75d29ed73a1b94390bde11746663780b7c21a60e07eb3ddfbfa21a7ae5d47",
+    "src/gearforge/engineering_ui.py": "f665fc521f356bda93cfefddfcf66958b590134c81d4f487321ee1a88dd4596d",
+    "src/gearforge/shaft_ui.py": "f107b6fccef9bf2319ab52e04d0bb7b13ddba5aa6d5a98f4ec036ec32b1accca",
+    "src/gearforge/bearing_ui.py": "04aed55497e83f6dd8e03e6a1c974864b25ea7968da3df6126c81c0886961c99",
+    "src/gearforge/fatigue_ui.py": "513a156b9ca81703c2721346fbba2d3ffa17a17d4dd90c4ccecfd84ca60559d1",
+    "src/gearforge/contact_ui.py": "88c70fb10528e2f24049c6a66cf9d4c411dd6cddb1b76bca0f7bd5196d1339aa",
+    "src/gearforge/thermal_ui.py": "606b2e862e913e365e21b4e84e56d6fd6facd77f5aef1645279efb49c8aef1d7",
+    "src/gearforge/tooth_ui.py": "233ff99e8d8cd8e6e067cc78360bd14c2665f72afee5ed2929baadbf683bdceb",
+    "src/gearforge/root_ui.py": "13d6667cfa575da23561dc156dfc6d0d43440f224c6743bea5c2d3b3e9074ce5",
+    "src/gearforge/cyclic_ui.py": "df995842f500d12ae5a07c9c5afe46c3ea0fc6cd0a6b1a9f72587626e66255b0",
+    "tests/test_desktop_guidelines.py": "c9ec237776b3d8c1f2c7541cb9295a5be2d3589666633815204bb0434863bc3a",
+    "scripts/audit_desktop.py": "792f70569ccaa990d9c39c9faf6106c39ad36b250fb1a2b8131fe6e1305221e6",
+    "scripts/capture_screenshots.py": "2db33867f454ed02bae7c105229cdb7041d98ce1420bec91f68088651cad5af3"
+  }
+}

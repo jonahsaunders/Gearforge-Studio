@@ -3,6 +3,8 @@
   "platform": "Windows",
   "qt_platform": "offscreen",
   "font_family": "Segoe UI",
+  "appearance": "light",
+  "text_scale": 1.0,
   "description": "Unmodified captures of the running application using repository examples. Synthetic data are illustrative, not component allowables.",
   "captures": [
     {
@@ -10,126 +12,133 @@
       "example": "examples/12-to-1-hybrid.gearforge",
       "width": 1600,
       "height": 1080,
-      "sha256": "7b3872a078c374977a75d678278a84001db45daef995485dadbadf7c7959d85b"
+      "sha256": "1e635e99ce4ad14901d3893baefe9cc47fde98ff1448c1c8036ebf417d72b8bf"
     },
     {
       "file": "simulation.png",
       "example": "examples/12-to-1-hybrid.gearforge",
       "width": 1600,
       "height": 1080,
-      "sha256": "77404df573738f66c13cea3d92b779454f688c91b50af3fafc15c9ef3f1f0e6c"
+      "sha256": "e6f65033aa6e4861557b0f56426d83fa27c0e4da5a0b749d2ad1210cd536f51b"
     },
     {
       "file": "catalog.png",
       "example": "examples/12-to-1-hybrid.gearforge",
       "width": 1600,
       "height": 1080,
-      "sha256": "7e4a2328ce0c6cacc711326dafd5fc25f8fe105a6e0a38179820b9b19de89592"
+      "sha256": "9b3b0dc1404ccd443583f21ce4365b8064ccef1746b0ed22b8c01c19d7d6cfb2"
     },
     {
       "file": "calibration.png",
       "example": "examples/12-to-1-hybrid.gearforge",
       "width": 1600,
       "height": 1080,
-      "sha256": "d4f7d69c80fa00dd24b10b4741d6a30872aa0bbf5c2e369ee9cd1787a2b3ae1a"
+      "sha256": "0bfe551cea7b44c5bd8d853bde163005d479954ab64f0ca598839903b9d24856"
     },
     {
       "file": "report.png",
       "example": "examples/12-to-1-hybrid.gearforge",
       "width": 1600,
       "height": 1080,
-      "sha256": "2c64135b0298a45decccb1a8e2f4f6fe1df2c08ba1d0f84b2ac256e5759e443f"
+      "sha256": "4c9790276d0ccc2f14e2b2f1a4a72f0fbadf5f9514a4e88d9ea72dfd071b2117"
     },
     {
       "file": "exploded.png",
       "example": "examples/12-to-1-hybrid.gearforge",
       "width": 1600,
       "height": 1080,
-      "sha256": "3b9b432450622ce69df058ca479edcb949350f59edd55e1010beddfe84f65cc4"
+      "sha256": "e103c8c1aa14c0312810409a38462fe47ce3db53c37df2ebaa8c24c89df884b4"
     },
     {
       "file": "planetary.png",
       "example": "examples/planetary-example.gearforge",
       "width": 1600,
       "height": 1080,
-      "sha256": "f9cf9dc00027eb8f54c95a4b3201e2ec49d69ec947a96d800fe63d13c5b9364a"
+      "sha256": "7f5eb323e2429084a63bc5c6f62ab7f8a678189a3ec029bf68cf84ce1a792772"
     },
     {
       "file": "helical.png",
       "example": "examples/helical-example.gearforge",
       "width": 1600,
       "height": 1080,
-      "sha256": "e0336d59e45873caf1ac9efefe618e1ec01cc24807e478c41a7d7b08659e0d55"
+      "sha256": "b74162c338c968d14f1f7473cb724506a64f864cff2f2f24b4de1ab2d8efe41b"
     },
     {
       "file": "engineering.png",
       "example": "examples/steel-spur-250w.gearforge-study",
       "width": 1320,
       "height": 900,
-      "sha256": "28e17615a841b684c60427d3b44a2da2caf129e2257ae8a90dbf8c0cc9ef787f"
+      "sha256": "2385a75497721538fbc1c2b1450031402561f6f4b58be2ac440948a8db3f37e9"
     },
     {
       "file": "shaft.png",
       "example": "examples/steel-spur-input.gearforge-shaft",
       "width": 1320,
       "height": 900,
-      "sha256": "8850f5ddacd65a790b60513b3720a6f63d8b054cbe841a04e9c39bd9e1e44bf0"
+      "sha256": "cf39206338a97f71214cd5af05f1356997f7076bea6afe9db116b4790a7b58b8"
     },
     {
       "file": "bearing.png",
       "example": "examples/steel-spur-synthetic.gearforge-bearing",
       "width": 1320,
       "height": 900,
-      "sha256": "8dde91ff6fe7838da3c336538d06a890862e157593abbcee2e5b4970baffc3ca"
+      "sha256": "44a47e41ba8642d595fc5fad0808a75eb7bb4b38a730668bdc0641e5c09673a0"
     },
     {
       "file": "fatigue.png",
       "example": "examples/nasa-shaft-fatigue.gearforge-fatigue",
       "width": 1320,
       "height": 900,
-      "sha256": "302cff345394a4dd44f80597402d0d36566474efd1904e2d11be9cdbe3341c93"
+      "sha256": "dbf398698a98cee996802ac7e91f046a2eb714793b257993b67b8bb955660549"
     },
     {
       "file": "contact.png",
       "example": "examples/synthetic-contact.gearforge-contact",
       "width": 1320,
       "height": 900,
-      "sha256": "ad394df6f8fac40847688be888c48a6f8205a629c3df6decff7b78f1e6e36fbe"
+      "sha256": "b93afa7c169a702e7abd30690675ad2d13e9565825e92c3c291e91270d3f85fc"
     },
     {
       "file": "thermal.png",
       "example": "examples/synthetic-thermal.gearforge-thermal",
       "width": 1320,
       "height": 900,
-      "sha256": "eb2550fcc631a04037e3f9110e0302deb79db107f80f5d1f4ef38c2b579d6605"
+      "sha256": "dd62ceecdee837c1d274648ff0fc51120b7f4f7ee227ceebcc568a53e7612153"
     },
     {
       "file": "tooth.png",
       "example": "examples/synthetic-tooth.gearforge-tooth",
       "width": 1320,
       "height": 900,
-      "sha256": "07f993922dfcf28ba83a0c9d2986b373d616f6e5b8c361c0ddc5508e2abd2fb5"
+      "sha256": "4cb4ead473fd63262858d6925b9a62a40a6a53bd53e82208c8293deeb8b4d9de"
     },
     {
       "file": "root.png",
       "example": "examples/synthetic-root.gearforge-root",
       "width": 1320,
       "height": 900,
-      "sha256": "a8d9d9410615233308c6d1ac7ae99301766c9a28f60a67e1aaa7dce1eca614bb"
+      "sha256": "7fdb1bc0b49f8488032ada481145a264f362ea54d30ca833b59a1a64312a44a0"
+    },
+    {
+      "file": "root-probes.png",
+      "example": "examples/synthetic-root-probes.gearforge-root",
+      "width": 1320,
+      "height": 900,
+      "sha256": "49fd468e2d7c44aabecf634b042b0c66c5fc901e6204910a9dde382bcaf80507"
     },
     {
       "file": "history.png",
       "example": "examples/synthetic-history.gearforge-history",
       "width": 1320,
       "height": 900,
-      "sha256": "6b65cdcf0b129806e393edf9a8fd7887939eab03930706be7cefad85ab7afe41"
+      "sha256": "a426435a3f4a687323975ca6d3cd473cb129548427ff1321077373ea628367d0"
     },
     {
       "file": "history-cycles.png",
       "example": "examples/synthetic-history.gearforge-history",
       "width": 1320,
       "height": 900,
-      "sha256": "225e28848cc2b6f5cce47f3ba1734942a331850b25b56b95b52752a32e624cef"
+      "sha256": "4c24553aaf46c825f422306a77772faf904f3c52969f3c5c12b78e9e019e3e92"
     }
   ]
 }

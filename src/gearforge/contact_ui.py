@@ -10,12 +10,16 @@ from PySide6.QtWidgets import (QComboBox,QDialog,QFileDialog,QFormLayout,QHBoxLa
     QLabel,QLineEdit,QMessageBox,QPushButton,QScrollArea,QTabWidget,QTableWidget,QTableWidgetItem,
     QTextBrowser,QTextEdit,QVBoxLayout,QWidget)
 
+from .chart_style import ChartWidget, ReportBrowser, chart_color
+
+from .desktop_ui import StudyDialog, StudyTabs
+
 from .contact import (ContactMaterial,ContactLifePoint,ContactCase,ContactStudy,contact_from_study,
     synthetic_contact_example,calculate_contact_study,contact_report_html,export_contact_study)
 from .engineering import EngineeringStudy
 
 
-class ContactPlot(QWidget):
+class ContactPlot(ChartWidget):
     QUANTITIES={"Peak Hertz pressure (MPa)":"peak_pressure_mpa","Contact half-width (mm)":"half_width_mm",
         "Sliding speed (m/s)":"sliding_speed_m_s","Pair load fraction":"pair_load_fraction"}
     def __init__(self):
@@ -38,12 +42,12 @@ class ContactPlot(QWidget):
             x=left+i*width/5;p.drawText(int(x-18),int(top+height+23),f"{x0+(x1-x0)*i/5:.4g}")
         if x0<=0<=x1:
             x=left-x0/(x1-x0)*width;p.setPen(QPen(self.palette().mid().color(),1,Qt.DashLine));p.drawLine(QPointF(x,top),QPointF(x,top+height))
-        p.setPen(QPen(QColor('#2878b8'),2))
+        p.setPen(QPen(chart_color(self,'#2878b8'),2))
         for a,b in zip(self.profile,self.profile[1:]):p.drawLine(point(a),point(b))
         p.setPen(self.palette().text().color());p.drawText(int(left+width/2-100),self.height()-10,"Distance from pitch point (mm)")
 
 
-class ContactStudyDialog(QDialog):
+class ContactStudyDialog(StudyDialog):
     NUMBERS={"youngs_modulus_mpa":"Young's modulus at operating conditions (MPa)","poisson_ratio":"Poisson ratio",
         "maximum_elastic_pressure_mpa":"Declared maximum elastic contact pressure (MPa)",
         "minimum_temperature_c":"Minimum operating temperature (°C)","maximum_temperature_c":"Maximum operating temperature (°C)"}
@@ -58,7 +62,7 @@ class ContactStudyDialog(QDialog):
         self.sharing=QComboBox();self.sharing.addItem("Full mesh-load envelope at each pair","full_load_envelope");self.sharing.addItem("Ideal equal sharing between contacting pairs","equal_pairs")
         self.sharing.currentIndexChanged.connect(self.changed);form.addRow("Load-sharing assumption",self.sharing)
         self.factor=QLineEdit();self.factor.textEdited.connect(self.changed);form.addRow("Pressure design factor (not a load multiplier)",self.factor)
-        self.tabs=QTabWidget();layout.addWidget(self.tabs,1);self.materials={};self.curves={}
+        self.tabs=StudyTabs();layout.addWidget(self.tabs,1);self.materials={};self.curves={}
         for role in ('pinion','wheel'):
             scroll=QScrollArea();scroll.setWidgetResizable(True);page=QWidget();page_layout=QVBoxLayout(page);form=QFormLayout();page_layout.addLayout(form);scroll.setWidget(page)
             editors={};self.materials[role]=editors
@@ -87,17 +91,19 @@ class ContactStudyDialog(QDialog):
         self.quantity=QComboBox();self.quantity.addItems(ContactPlot.QUANTITIES);self.quantity.currentIndexChanged.connect(self.update_plot);controls.addWidget(self.quantity)
         self.plot=ContactPlot();path_layout.addWidget(self.plot,1);self.path_summary=QLabel();self.path_summary.setWordWrap(True);path_layout.addWidget(self.path_summary)
         self.tabs.addTab(page,'Contact path')
-        page=QWidget();provenance=QVBoxLayout(page);self.source_view=QTextBrowser();provenance.addWidget(self.source_view,1)
+        page=QWidget();provenance=QVBoxLayout(page);self.source_view=ReportBrowser();provenance.addWidget(self.source_view,1)
         self.sharing_basis=QTextEdit();self.notes=QTextEdit()
         for label,w in (("Load-sharing basis and omitted effects",self.sharing_basis),("Study notes",self.notes)):
             w.setAcceptRichText(False);w.setMaximumHeight(90);w.textChanged.connect(self.changed);provenance.addWidget(QLabel(label));provenance.addWidget(w)
         self.tabs.addTab(page,'Gear study and provenance')
-        self.report=QTextBrowser();self.report.setOpenExternalLinks(False);self.tabs.addTab(self.report,'Assessment')
+        self.report=ReportBrowser();self.report.setOpenExternalLinks(False);self.tabs.addTab(self.report,'Assessment')
         self.status=QLabel();self.status.setWordWrap(True);layout.addWidget(self.status);buttons=QHBoxLayout();layout.addLayout(buttons)
         for label,callback in (("Open study…",self.open_study),("New from gear study…",self.open_source),("Synthetic example",self.load_example),
             ("Save study…",self.save_study),("Calculate",self.calculate),("Export assessment…",self.export),("Close",self.reject)):
             button=QPushButton(label);button.clicked.connect(callback);buttons.addWidget(button)
         self.set_study(study or ContactStudy())
+        self.finish_ui()
+
 
     def table(self,headers):
         table=QTableWidget(0,len(headers));table.setHorizontalHeaderLabels(headers);table.setAlternatingRowColors(True)
@@ -187,7 +193,7 @@ class ContactStudyDialog(QDialog):
     def save_study(self):
         try:study=self.read_study()
         except (ValueError,TypeError) as exc:self.show_error(exc);return False
-        path,_=QFileDialog.getSaveFileName(self,'Save contact study',str(self.path or 'tooth.gearforge-contact'),'Contact study (*.gearforge-contact)')
+        path,_=self.save_destination('Save contact study',str(self.path or 'tooth.gearforge-contact'),'Contact study (*.gearforge-contact)')
         if not path:return False
         try:study.save(Path(path))
         except (ValueError,OSError) as exc:self.show_error(exc);return False

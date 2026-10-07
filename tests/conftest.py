@@ -1,6 +1,8 @@
 import os
 
 os.environ.setdefault("QT_QPA_PLATFORM","offscreen")
+if os.name == "nt":
+    os.environ.setdefault("QT_QPA_FONTDIR", os.path.join(os.environ["SystemRoot"], "Fonts"))
 
 import pytest
 from gearforge.catalog import Catalog

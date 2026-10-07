@@ -9,6 +9,10 @@ from PySide6.QtWidgets import (
     QTableWidget, QTableWidgetItem, QTextBrowser, QTextEdit, QVBoxLayout, QWidget,
 )
 
+from .chart_style import ReportBrowser
+
+from .desktop_ui import StudyDialog, StudyTabs
+
 from .engineering import DutyPoint, EngineeringStudy, GearPair, calculate_study, export_study, study_html
 
 
@@ -20,7 +24,7 @@ class StudyNumber(QDoubleSpinBox):
         return text.rstrip("0").removesuffix(decimal) if decimal in text else text
 
 
-class EngineeringStudyDialog(QDialog):
+class EngineeringStudyDialog(StudyDialog):
     DUTY_FIELDS = ("name", "input_rpm", "input_torque_nm", "duration_hours", "ambient_c", "starts")
 
     def __init__(self, parent=None):
@@ -37,7 +41,7 @@ class EngineeringStudyDialog(QDialog):
         note = QLabel("Spur/helical geometry and operating loads. Fatigue, material allowables and production approval are not yet established.")
         note.setWordWrap(True)
         layout.addWidget(note)
-        self.tabs = QTabWidget()
+        self.tabs = StudyTabs()
         layout.addWidget(self.tabs, 1)
         inputs = QWidget(); input_layout = QVBoxLayout(inputs)
         scroll = QScrollArea(); scroll.setWidgetResizable(True)
@@ -91,7 +95,7 @@ class EngineeringStudyDialog(QDialog):
         warning = QLabel("Record source documents and their revisions. Entering a reference does not verify its contents or approve a rating.")
         warning.setWordWrap(True); context_form.addRow(warning)
         self.tabs.addTab(context, "Materials and evidence")
-        self.report = QTextBrowser(); self.report.setOpenExternalLinks(False)
+        self.report = ReportBrowser(); self.report.setOpenExternalLinks(False)
         self.tabs.addTab(self.report, "Calculation")
         self.status = QLabel(); self.status.setWordWrap(True); layout.addWidget(self.status)
         actions = QHBoxLayout()
@@ -113,6 +117,8 @@ class EngineeringStudyDialog(QDialog):
                     label_item.widget().setBuddy(field_item.widget())
                     field_item.widget().setAccessibleName(label_item.widget().text())
         self.set_study(EngineeringStudy())
+        self.finish_ui()
+
 
     def number(self, form, label, lower, upper, integer, suffix):
         widget = QSpinBox() if integer else StudyNumber()
@@ -189,28 +195,28 @@ class EngineeringStudyDialog(QDialog):
         from .cyclic_ui import HistoryStudyDialog
         try:study=history_from_study(self.read_study())
         except (ValueError,TypeError) as exc:self.show_error(exc);return False
-        dialog=HistoryStudyDialog(self,study);dialog.dirty=True;dialog.exec();return True
+        dialog=HistoryStudyDialog(self,study);dialog.dirty=True;dialog.present();return True
 
     def study_tooth(self):
         from .tooth_profile import profile_from_study
         from .tooth_ui import ToothProfileDialog
         try:study=profile_from_study(self.read_study())
         except (ValueError,TypeError) as exc:self.show_error(exc);return False
-        dialog=ToothProfileDialog(self,study);dialog.dirty=True;dialog.exec();return True
+        dialog=ToothProfileDialog(self,study);dialog.dirty=True;dialog.present();return True
 
     def study_contact(self):
         from .contact import contact_from_study
         from .contact_ui import ContactStudyDialog
         try:study=contact_from_study(self.read_study())
         except (ValueError,TypeError) as exc:self.show_error(exc);return False
-        dialog=ContactStudyDialog(self,study);dialog.dirty=True;dialog.exec();return True
+        dialog=ContactStudyDialog(self,study);dialog.dirty=True;dialog.present();return True
 
     def study_thermal(self):
         from .thermal import thermal_from_study
         from .thermal_ui import ThermalStudyDialog
         try:study=thermal_from_study(self.read_study())
         except (ValueError,TypeError) as exc:self.show_error(exc);return False
-        dialog=ThermalStudyDialog(self,study);dialog.dirty=True;dialog.exec();return True
+        dialog=ThermalStudyDialog(self,study);dialog.dirty=True;dialog.present();return True
 
     def study_shaft(self):
         from .shafts import shaft_from_gear_study
@@ -221,7 +227,7 @@ class EngineeringStudyDialog(QDialog):
         if not ok:return False
         try:study=shaft_from_gear_study(source,role.lower())
         except (ValueError,TypeError) as exc:self.show_error(exc);return False
-        dialog=ShaftStudyDialog(self,study);dialog.dirty=True;dialog.exec();return True
+        dialog=ShaftStudyDialog(self,study);dialog.dirty=True;dialog.present();return True
 
     def show_error(self, error):
         QMessageBox.warning(self, "Engineering study", str(error))
@@ -236,7 +242,7 @@ class EngineeringStudyDialog(QDialog):
     def save_study(self):
         try:study = self.read_study()
         except (ValueError, TypeError) as exc:self.show_error(exc); return False
-        path, _ = QFileDialog.getSaveFileName(self, "Save engineering study", str(self.path or "gearbox.gearforge-study"), "Engineering study (*.gearforge-study)")
+        path, _ = self.save_destination("Save engineering study", str(self.path or "gearbox.gearforge-study"), "Engineering study (*.gearforge-study)")
         if not path:return False
         try:study.save(Path(path))
         except (ValueError, OSError) as exc:self.show_error(exc); return False

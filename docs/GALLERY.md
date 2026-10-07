@@ -2,9 +2,9 @@
 
 [Back to the overview](../README.md) · [User guide](USER_GUIDE.md)
 
-These are unmodified captures of **GearForge Studio 1.0.0rc12**, running on Windows with Qt’s offscreen platform, light appearance and Segoe UI. All views use the repository’s example files. Native controls and fonts vary by platform. Click an image to inspect it at full resolution.
+These are unmodified captures of the **current development app after 1.0.0rc12**, running on Windows with Qt’s offscreen platform, light appearance and Segoe UI. All views use the repository’s example files. Native controls and fonts vary by platform. Click an image to inspect it at full resolution.
 
-The fixed material-point view shows the current development addition documented in the changelog. Its separate capture record is [captures-probes.json](../screenshots/captures-probes.json).
+All 19 images were refreshed during the [desktop interface audit](GUI_AUDIT.md). Their example inputs, dimensions and hashes are recorded in [captures-all.json](../screenshots/captures-all.json). These are not screenshots of a released macOS bundle.
 
 **Example scope:** Synthetic inputs demonstrate calculations; they are not measured material, manufacturing or component allowables. The app does not provide qualified production gearbox ratings.
 

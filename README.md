@@ -16,7 +16,7 @@ GearForge Studio brings gearbox search, 3D CAD, motion playback and nine enginee
 
 **[Get started](#install-and-launch)** · **[Features](#features)** · **[Engineering workspaces](#engineering-workspaces)** · **[Screenshot gallery](docs/GALLERY.md)** · **[Documentation](#documentation)**
 
-![GearForge Studio rc12: a 12:1 hybrid gearbox, generated 3D assembly, ranked candidates and engineering checks](screenshots/desktop.png)
+![GearForge Studio development app: a 12:1 hybrid gearbox, generated 3D assembly, ranked candidates and engineering checks](screenshots/desktop.png)
 
 > **Current version: 1.0.0rc12 — engineering release candidate.** Supports prototype design and engineering studies. Final production gearbox load/life ratings remain unqualified. Synthetic examples illustrate the methods; they are not material allowables. [Scope and remaining work →](docs/PRODUCTION_QUALIFICATION.md)
 
@@ -32,7 +32,7 @@ GearForge Studio brings gearbox search, 3D CAD, motion playback and nine enginee
 | **Calibrate printed parts** | Save material profiles, set backlash and fit clearances, export a dimensional coupon and apply measured shrink compensation. |
 | **Save and recover work** | Use validated project files, autosave/recovery, local profiles, a data-directory lock and verified backup/restore. Background jobs can be cancelled; changed inputs invalidate stale results. |
 | **Review and share** | Export CAD, print files, BOMs, reports, layouts and calculation evidence. New export directories are published atomically with file hashes and explicit qualification status. |
-| **Make the workspace yours** | Use system/light/dark appearance, text sizing, a resizable sidebar, keyboard controls, accessible field labels and reduced-motion playback. |
+| **Make the workspace yours** | Use independent study windows, system/light/dark charts and reports, larger text, adaptable layouts, keyboard controls and reduced-motion playback. |
 | **Run batches offline** | Search, calculate, export, verify and diagnose from the command line. Normal design work stays on the workstation; there are no accounts or telemetry. |
 
 <table>

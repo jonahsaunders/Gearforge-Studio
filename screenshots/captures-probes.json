@@ -3,6 +3,8 @@
   "platform": "Windows",
   "qt_platform": "offscreen",
   "font_family": "Segoe UI",
+  "appearance": "light",
+  "text_scale": 1.0,
   "description": "Unmodified captures of the running application using repository examples. Synthetic data are illustrative, not component allowables.",
   "captures": [
     {
@@ -10,7 +12,7 @@
       "example": "examples/synthetic-root-probes.gearforge-root",
       "width": 1320,
       "height": 900,
-      "sha256": "a7eb2f018e049e85fa5fed575673bf7ee50e410fa4b703f10b71c3964f36521a"
+      "sha256": "49fd468e2d7c44aabecf634b042b0c66c5fc901e6204910a9dde382bcaf80507"
     }
   ]
 }

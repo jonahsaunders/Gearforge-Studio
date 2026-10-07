@@ -124,3 +124,13 @@ to select another directory. `captures-all.json` (or the selected section name)
 records the app version, platform, font, example paths, dimensions and hashes.
 Review the images and the [gallery captions](GALLERY.md) before committing them.
 Do not conceal prototype labels, synthetic-data notices or engineering limits.
+
+## Desktop interface review
+
+The shared document controls and appearance behavior are covered by
+`tests/test_desktop_guidelines.py`. Use `python scripts/audit_desktop.py` for all
+224 small-window/light/dark/text-size views. Use
+`python scripts/capture_screenshots.py --section studies --appearance dark --text-scale 1.3 --out build/gui-dark`
+for calculated dark-mode examples. The normal screenshot command refreshes the
+README gallery. See [GUI_AUDIT.md](GUI_AUDIT.md) for findings and the real-Mac
+acceptance boundary; these scripts are not assistive-technology certification.

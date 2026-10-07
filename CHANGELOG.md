@@ -1,5 +1,13 @@
 # Unreleased
 
+- Audit all main pages and nine study editors against Apple’s desktop interface guidance.
+- Add independent study windows, native document menus, Save/Save As behavior,
+  unsaved indicators, wrapping actions, scrolling forms and narrow-window layouts.
+- Make charts and in-app reports follow appearance and text settings; add line
+  patterns, accessible labels, keyboard activation and a visible CAD focus cue.
+- Refresh all 19 feature screenshots and add reproducible appearance/layout checks.
+  Native macOS accessibility and menu acceptance remain a separate manual gate.
+
 - Correct the driven-wheel flank/sign convention in root method revision 3;
   report signed mesh torque and member speed. Earlier wheel studies need
   recalculation before their signed fields are interpreted.

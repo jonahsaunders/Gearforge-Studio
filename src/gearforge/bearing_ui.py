@@ -7,13 +7,17 @@ from PySide6.QtWidgets import (QComboBox,QDialog,QFileDialog,QFormLayout,QHBoxLa
     QHeaderView,QLabel,QLineEdit,QMessageBox,QPushButton,QScrollArea,QTabWidget,
     QTableWidget,QTableWidgetItem,QTextBrowser,QTextEdit,QVBoxLayout,QWidget)
 
+from .chart_style import ReportBrowser
+
+from .desktop_ui import StudyDialog, StudyTabs
+
 from .bearings import (BearingCase,BearingDefinition,BearingStudy,bearings_from_shaft,
                        calculate_bearing_study,bearing_report_html,export_bearing_study)
 from .engineering_ui import StudyNumber
 from .shafts import ShaftStudy,calculate_shaft_study
 
 
-class BearingStudyDialog(QDialog):
+class BearingStudyDialog(StudyDialog):
     NUMBERS = {
         'bore_mm':'Nominal bore (mm)', 'dynamic_capacity_n':'Dynamic capacity C (N)',
         'static_capacity_n':'Static capacity C0 (N)', 'speed_limit_rpm':'Applicable speed limit (rpm)',
@@ -35,7 +39,7 @@ class BearingStudyDialog(QDialog):
         self.name=QLineEdit();self.name.textEdited.connect(self.changed);top.addRow('Study name',self.name)
         self.hours=StudyNumber();self.hours.setRange(.000001,2e8);self.hours.setDecimals(6);self.hours.setSuffix(' h')
         self.hours.setKeyboardTracking(False);self.hours.valueChanged.connect(self.changed);top.addRow('Required repeated-duty duration',self.hours)
-        self.tabs=QTabWidget();layout.addWidget(self.tabs,1);self.editors={}
+        self.tabs=StudyTabs();layout.addWidget(self.tabs,1);self.editors={}
         for position in ('a','b'):
             scroll=QScrollArea();scroll.setWidgetResizable(True);page=QWidget();form=QFormLayout(page);scroll.setWidget(page)
             editors={};self.editors[position]=editors
@@ -63,18 +67,20 @@ class BearingStudyDialog(QDialog):
         self.cases.setAccessibleName('Bearing conditions for every shaft duty case');case_layout.addWidget(self.cases,1)
         self.tabs.addTab(page,'Duty conditions')
         page=QWidget();source_layout=QVBoxLayout(page)
-        self.source=QTextBrowser();source_layout.addWidget(self.source,1)
+        self.source=ReportBrowser();source_layout.addWidget(self.source,1)
         source_layout.addWidget(QLabel('Assessment notes'))
         self.notes=QTextEdit();self.notes.setAcceptRichText(False);self.notes.setMaximumHeight(110)
         self.notes.textChanged.connect(self.changed);source_layout.addWidget(self.notes)
         self.tabs.addTab(page,'Shaft and provenance')
-        self.report=QTextBrowser();self.report.setOpenExternalLinks(False);self.tabs.addTab(self.report,'Assessment')
+        self.report=ReportBrowser();self.report.setOpenExternalLinks(False);self.tabs.addTab(self.report,'Assessment')
         self.status=QLabel();self.status.setWordWrap(True);layout.addWidget(self.status)
         buttons=QHBoxLayout();layout.addLayout(buttons)
         for label,callback in (('Open bearing study…',self.open_study),('New from shaft…',self.open_shaft),
             ('Save study…',self.save_study),('Calculate',self.calculate),('Export assessment…',self.export),('Close',self.reject)):
             button=QPushButton(label);button.clicked.connect(callback);buttons.addWidget(button)
         self.set_study(study or BearingStudy())
+        self.finish_ui()
+
 
     def changed(self,*_):
         if self._loading:return
@@ -145,7 +151,7 @@ class BearingStudyDialog(QDialog):
     def save_study(self):
         try:study=self.read_study()
         except (ValueError,TypeError) as exc:self.show_error(exc);return False
-        path,_=QFileDialog.getSaveFileName(self,'Save bearing study',str(self.path or 'bearings.gearforge-bearing'),'Bearing study (*.gearforge-bearing)')
+        path,_=self.save_destination('Save bearing study',str(self.path or 'bearings.gearforge-bearing'),'Bearing study (*.gearforge-bearing)')
         if not path:return False
         try:study.save(Path(path))
         except (ValueError,OSError) as exc:self.show_error(exc);return False

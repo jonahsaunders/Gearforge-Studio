@@ -20,6 +20,8 @@ from PySide6.QtWidgets import (
     QSizePolicy, QTabWidget, QTextBrowser, QTextEdit, QVBoxLayout, QWidget,
 )
 
+from .chart_style import ReportBrowser
+
 from . import __version__
 from .calibration import calibrate_profile
 from .catalog import Catalog
@@ -31,6 +33,7 @@ from .appearance import STYLE, apply_appearance, system_reduced_motion
 from .simulation import operating_sweep, shaft_rates
 from .plots import OperatingPlot
 from .layouts import FlowLayout
+from .desktop_ui import accessible_forms, add_edit_menu, close_studies, scroll_page
 
 
 def label(text,name=None):
@@ -75,7 +78,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("Untitled gearbox[*] — GearForge Studio")
         self.resize(1340,920)
-        self.setMinimumSize(1100,720)
+        self.setMinimumSize(960,680)
         self.data_dir=Path(data_dir or os.environ.get("GEARFORGE_DATA_DIR") or QStandardPaths.writableLocation(QStandardPaths.AppDataLocation))
         self.data_dir.mkdir(parents=True,exist_ok=True)
         from .maintenance import lock_data_directory
@@ -119,8 +122,28 @@ class MainWindow(QMainWindow):
     def update_text_metrics(self):
         self.sidebar.setMinimumWidth(max(225,self.nav.fontMetrics().horizontalAdvance("Simulation workspace")+50))
         self.navigate(self.nav.currentRow())
+        self.update_design_layout()
+
+    def eventFilter(self, watched, event):
+        if watched is getattr(self,"pages",None) and event.type()==QEvent.Resize:
+            self.update_design_layout()
+        return super().eventFilter(watched,event)
+
+    def update_design_layout(self):
+        if not hasattr(self,"design_results"):return
+        narrow=self.pages.width()<920*float(self.settings.value("text_scale",1.))
+        orientation=Qt.Vertical if narrow else Qt.Horizontal
+        changed=self.design_splitter.orientation()!=orientation
+        self.requirements_scroll.setMaximumWidth(16777215 if narrow else 440)
+        self.requirements_scroll.setMinimumHeight(300 if narrow else 0)
+        self.requirements_scroll.setMaximumHeight(360 if narrow else 16777215)
+        self.design_results.setMinimumHeight(760 if narrow else 0)
+        if changed:
+            self.design_splitter.setOrientation(orientation)
+            self.design_splitter.setSizes([340,800])
 
     def _accessibility(self):
+        accessible_forms(self)
         for form in self.findChildren(QFormLayout):
             for row in range(form.rowCount()):
                 label_item=form.itemAt(row,QFormLayout.LabelRole);field_item=form.itemAt(row,QFormLayout.FieldRole)
@@ -147,6 +170,7 @@ class MainWindow(QMainWindow):
             if title=="Quit":action.setMenuRole(QAction.QuitRole)
             file.addAction(action)
             self.command_actions[title]=action
+        add_edit_menu(self.menuBar())
         design=self.menuBar().addMenu("Design")
         for title,callback,shortcut in [("Engineering study…",self.engineering_study,None),("Shaft and bearing loads…",self.shaft_study,None),("Bearing duty and capacity…",self.bearing_study,None),("Shaft fatigue and material evidence…",self.fatigue_study,None),("Tooth contact and surface fatigue…",self.contact_study,None),("Thermal network and cooling duty…",self.thermal_study,None),("Rack-generated tooth roots…",self.tooth_study,None),("Tooth-root elastic stress…",self.root_study,None),("Cyclic stress history and fatigue…",self.history_study,None),("Study selected stage…",self.study_selected_stage,None),("Generate designs",self.generate,"Ctrl+Return"),("Load CAD preview",self.load_preview,"Ctrl+Shift+L"),("Sample tooth meshing…",self.check_mesh,None),("Compare selected rows",self.compare,None)]:
             action=QAction(title,self);action.triggered.connect(callback)
@@ -154,6 +178,10 @@ class MainWindow(QMainWindow):
             design.addAction(action)
             self.command_actions[title]=action
         view=self.menuBar().addMenu("View")
+        for index, title in enumerate(["Design workspace", "Component catalog", "Print calibration", "Design report", "Simulation workspace"]):
+            action=view.addAction(title);action.setShortcut(f"Ctrl+{index+1}")
+            action.triggered.connect(lambda checked=False, i=index:self.nav.setCurrentRow(i))
+        view.addSeparator()
         self.sidebar_action=QAction("Show sidebar",self,checkable=True,checked=True)
         self.sidebar_action.setShortcut("Ctrl+Alt+S")
         self.sidebar_action.toggled.connect(lambda shown:self.sidebar.setVisible(shown));view.addAction(self.sidebar_action)
@@ -163,6 +191,8 @@ class MainWindow(QMainWindow):
         settings_action.setShortcut("Ctrl+,");settings_action.triggered.connect(self.preferences);view.addAction(settings_action)
         window=self.menuBar().addMenu("Window")
         minimize=QAction("Minimize",self);minimize.setShortcut("Ctrl+M");minimize.triggered.connect(self.showMinimized);window.addAction(minimize)
+        fullscreen=window.addAction("Toggle Full Screen");fullscreen.setShortcut(QKeySequence.FullScreen)
+        fullscreen.triggered.connect(lambda:self.showNormal() if self.isFullScreen() else self.showFullScreen())
         helpmenu=self.menuBar().addMenu("Help")
         action=QAction("About and release status",self)
         action.setMenuRole(QAction.AboutRole)
@@ -172,51 +202,51 @@ class MainWindow(QMainWindow):
 
     def engineering_study(self):
         from .engineering_ui import EngineeringStudyDialog
-        EngineeringStudyDialog(self).exec()
+        EngineeringStudyDialog(self).present()
 
     def shaft_study(self):
         from .shaft_ui import ShaftStudyDialog
         from .shafts import shaft_from_gear_study
         from .engineering import EngineeringStudy
-        ShaftStudyDialog(self,shaft_from_gear_study(EngineeringStudy())).exec()
+        ShaftStudyDialog(self,shaft_from_gear_study(EngineeringStudy())).present()
 
     def bearing_study(self):
         from .bearing_ui import BearingStudyDialog
         from .bearings import bearings_from_shaft
         from .shafts import shaft_from_gear_study
         from .engineering import EngineeringStudy
-        BearingStudyDialog(self,bearings_from_shaft(shaft_from_gear_study(EngineeringStudy()))).exec()
+        BearingStudyDialog(self,bearings_from_shaft(shaft_from_gear_study(EngineeringStudy()))).present()
 
     def fatigue_study(self):
         from .fatigue_ui import FatigueStudyDialog
         from .fatigue import fatigue_from_shaft
         from .shafts import shaft_from_gear_study
         from .engineering import EngineeringStudy
-        FatigueStudyDialog(self,fatigue_from_shaft(shaft_from_gear_study(EngineeringStudy()))).exec()
+        FatigueStudyDialog(self,fatigue_from_shaft(shaft_from_gear_study(EngineeringStudy()))).present()
 
     def contact_study(self):
         from .contact_ui import ContactStudyDialog
         from .contact import contact_from_study
         from .engineering import EngineeringStudy
-        ContactStudyDialog(self,contact_from_study(EngineeringStudy())).exec()
+        ContactStudyDialog(self,contact_from_study(EngineeringStudy())).present()
 
     def tooth_study(self):
         from .tooth_ui import ToothProfileDialog
-        ToothProfileDialog(self).exec()
+        ToothProfileDialog(self).present()
 
     def history_study(self):
         from .cyclic_ui import HistoryStudyDialog
-        HistoryStudyDialog(self).exec()
+        HistoryStudyDialog(self).present()
 
     def root_study(self):
         from .root_ui import RootStressDialog
-        RootStressDialog(self).exec()
+        RootStressDialog(self).present()
 
     def thermal_study(self):
         from .thermal_ui import ThermalStudyDialog
         from .thermal import thermal_from_study
         from .engineering import EngineeringStudy
-        ThermalStudyDialog(self,thermal_from_study(EngineeringStudy())).exec()
+        ThermalStudyDialog(self,thermal_from_study(EngineeringStudy())).present()
 
     def study_selected_stage(self):
         from .engineering import study_for_stage
@@ -230,7 +260,7 @@ class MainWindow(QMainWindow):
                 if not ok:return
                 index=choices.index(choice)
             study=study_for_stage(self.selected,Requirements(**payload["requirements"]),index)
-            dialog=EngineeringStudyDialog(self);dialog.set_study(study);dialog.dirty=True;dialog.exec()
+            dialog=EngineeringStudyDialog(self);dialog.set_study(study);dialog.dirty=True;dialog.present()
         except (ValueError,TypeError) as exc:self.error(exc)
 
     def open_licenses(self):
@@ -249,6 +279,7 @@ class MainWindow(QMainWindow):
         motion=QCheckBox("Use single-step simulation instead of playback");motion.setChecked(self.reduced_motion);form.addRow("Reduce motion",motion)
         note=QLabel("macOS Reduce Motion is read at launch. Simulation playback always requires an explicit action.");note.setWordWrap(True);form.addRow(note)
         buttons=QDialogButtonBox(QDialogButtonBox.Ok|QDialogButtonBox.Cancel);buttons.accepted.connect(dialog.accept);buttons.rejected.connect(dialog.reject);form.addRow(buttons)
+        accessible_forms(dialog)
         if dialog.exec()==QDialog.Accepted:
             self.settings.setValue("appearance",["system","light","dark"][appearance.currentIndex()]);self.settings.setValue("text_scale",[1,1.15,1.3][textsize.currentIndex()])
             self.settings.setValue("reduced_motion",motion.isChecked());self.reduced_motion=motion.isChecked();self.viewer.reduced_motion=self.reduced_motion
@@ -274,7 +305,7 @@ class MainWindow(QMainWindow):
         content=QWidget();column=QVBoxLayout(content);column.setContentsMargins(24,20,24,12)
         header=QHBoxLayout()
         self.title=label("Design workspace","title");header.addWidget(self.title)
-        self.title.setSizePolicy(QSizePolicy.Minimum,QSizePolicy.Preferred)
+        self.title.setSizePolicy(QSizePolicy.Preferred,QSizePolicy.Preferred);self.title.setWordWrap(True)
         header.addStretch()
         self.project_name=QLineEdit(self.project.name);self.project_name.setMaximumWidth(270)
         self.project_name.textChanged.connect(self.mark_dirty)
@@ -285,9 +316,9 @@ class MainWindow(QMainWindow):
         busyrow=QHBoxLayout();self.job_status=label("","subtle");busyrow.addWidget(self.job_status)
         busyrow.addStretch();self.cancel_button=QPushButton("Cancel job");self.cancel_button.clicked.connect(self.cancel_job);self.cancel_button.hide();busyrow.addWidget(self.cancel_button)
         column.addLayout(busyrow)
-        self.pages=QStackedWidget();column.addWidget(self.pages)
+        self.pages=QStackedWidget();self.pages.installEventFilter(self);column.addWidget(self.pages)
         self._design_page();self._catalog_page();self._profile_page();self._report_page()
-        self.pages.addWidget(self.simulation_page)
+        self.pages.addWidget(scroll_page(self.simulation_page))
         self.nav.currentRowChanged.connect(self.navigate)
         self.nav.setCurrentRow(0)
         shell.addWidget(content);shell.setSizes([240,1100]);shell.setStretchFactor(1,1)
@@ -296,7 +327,7 @@ class MainWindow(QMainWindow):
         if index<0:return
         self.pages.setCurrentIndex(index)
         self.title.setText(["Design workspace","Component catalog","Print calibration","Design report","Simulation workspace"][index])
-        self.title.ensurePolished();self.title.setMinimumWidth(self.title.fontMetrics().horizontalAdvance(self.title.text())+8)
+
         if index==3:self.update_report()
 
     def _design_page(self):
@@ -305,6 +336,7 @@ class MainWindow(QMainWindow):
         self.notice.setWordWrap(True);outer.addWidget(self.notice)
         splitter=QSplitter(Qt.Horizontal);self.design_splitter=splitter;outer.addWidget(splitter)
         scroll=QScrollArea();scroll.setWidgetResizable(True);scroll.setMinimumWidth(330);scroll.setMaximumWidth(440)
+        self.requirements_scroll=scroll
         form_widget=QWidget();form=QVBoxLayout(form_widget);form.setContentsMargins(10,10,18,10)
         form.addWidget(label("OPERATING REQUIREMENTS","eyebrow"))
         fieldform=QFormLayout();fieldform.setVerticalSpacing(12)
@@ -337,10 +369,12 @@ class MainWindow(QMainWindow):
         self.generate_button=QPushButton("Generate designs  →");self.generate_button.setObjectName("primary");self.generate_button.clicked.connect(self.generate);form.addWidget(self.generate_button)
         form.addStretch();scroll.setWidget(form_widget);splitter.addWidget(scroll)
         right=QWidget();rightlayout=QVBoxLayout(right);rightlayout.setContentsMargins(10,0,0,0)
+        self.design_results=right
         metrics=QHBoxLayout();self.metrics={}
         for key,caption in [("ratio","REDUCTION"),("rpm","OUTPUT RPM"),("torque","AVAILABLE N·m"),("eff","EFFICIENCY")]:
             card=QFrame();card.setObjectName("card");cardlayout=QVBoxLayout(card)
-            value=label("—","metricValue");self.metrics[key]=value;cardlayout.addWidget(value);cardlayout.addWidget(label(caption,"metricCaption"));metrics.addWidget(card)
+            value=label("—","metricValue");self.metrics[key]=value;cardlayout.addWidget(value)
+            caption_label=label(caption,"metricCaption");caption_label.setWordWrap(True);cardlayout.addWidget(caption_label);metrics.addWidget(card)
         rightlayout.addLayout(metrics)
         self.viewer=AssemblyViewer();rightlayout.addWidget(self.viewer,3)
         toolrow=QWidget();tools=FlowLayout(toolrow);self.cad_button=QPushButton("Load 3D CAD");self.cad_button.clicked.connect(self.load_preview);tools.addWidget(self.cad_button)
@@ -382,7 +416,7 @@ class MainWindow(QMainWindow):
         open_sim=QPushButton("Open simulation workspace");open_sim.clicked.connect(lambda:self.nav.setCurrentRow(4));linklayout.addWidget(open_sim);linklayout.addStretch()
         self.inspection.addTab(simulation_link,"Simulation")
         self.inspection.setMinimumHeight(150);rightlayout.addWidget(self.inspection,2)
-        splitter.addWidget(right);splitter.setSizes([330,850]);self.pages.addWidget(page)
+        splitter.addWidget(right);splitter.setSizes([330,850]);self.pages.addWidget(scroll_page(page))
 
     def _catalog_page(self):
         page=QWidget();column=QVBoxLayout(page)
@@ -392,9 +426,9 @@ class MainWindow(QMainWindow):
             button=QPushButton(title);button.clicked.connect(callback);row.addWidget(button)
         column.addLayout(row)
         self.catalog_table=table(["SKU","Supplier","Family","Module","Teeth","Bore mm","Face mm","Bending N·m","Contact N·m","Price","Retrieved","Source"])
-        self.catalog_table.cellDoubleClicked.connect(self.open_catalog_source);column.addWidget(self.catalog_table)
-        column.addWidget(label("Double-click a row to open its supplier source. Import validates all rows before updating the SQLite catalog.","subtle"))
-        self.pages.addWidget(page)
+        self.catalog_table.cellActivated.connect(self.open_catalog_source);column.addWidget(self.catalog_table)
+        column.addWidget(label("Open a selected row with Return or a double-click to visit its supplier source. Import validates all rows before updating the SQLite catalog.","subtle"))
+        self.pages.addWidget(scroll_page(page))
 
     def _profile_page(self):
         page=QWidget();column=QVBoxLayout(page)
@@ -422,18 +456,18 @@ class MainWindow(QMainWindow):
         coupon=QPushButton("Export calibration coupon…");coupon.clicked.connect(self.export_coupon);toolslayout.addWidget(coupon)
         apply=QPushButton("Apply dimensional measurements");apply.clicked.connect(self.apply_calibration);toolslayout.addWidget(apply)
         toolslayout.addSpacing(24);toolslayout.addWidget(label("SAVED PRINT PROFILES","eyebrow"))
-        self.profile_list=QListWidget();self.profile_list.itemDoubleClicked.connect(self.load_profile);toolslayout.addWidget(self.profile_list)
+        self.profile_list=QListWidget();self.profile_list.setAccessibleName("Saved print profiles");self.profile_list.itemActivated.connect(self.load_profile);toolslayout.addWidget(self.profile_list)
         save=QPushButton("Save current profile");save.clicked.connect(self.save_profile);toolslayout.addWidget(save)
         note=label("Strength values begin as conservative illustrative assumptions. Attaching evidence does not automatically certify a profile.","subtle");note.setWordWrap(True);toolslayout.addWidget(note)
-        splitter.addWidget(tools);splitter.setSizes([600,450]);column.addWidget(splitter);self.pages.addWidget(page);self.refresh_profiles()
+        splitter.addWidget(tools);splitter.setSizes([600,450]);column.addWidget(splitter);self.pages.addWidget(scroll_page(page));self.refresh_profiles()
 
     def _report_page(self):
         page=QWidget();column=QVBoxLayout(page)
         tools=QHBoxLayout();tools.addWidget(label("Traceable calculations, assumptions and build documentation","subtle"));tools.addStretch()
         for title,callback in [("Export report only…",lambda:self.export_selected(False)),("Export full design…",self.export_selected)]:
             b=QPushButton(title);b.clicked.connect(lambda checked=False,cb=callback:cb());tools.addWidget(b)
-        column.addLayout(tools);self.report_browser=QTextBrowser();self.report_browser.setOpenExternalLinks(False);column.addWidget(self.report_browser)
-        self.pages.addWidget(page)
+        column.addLayout(tools);self.report_browser=ReportBrowser();self.report_browser.setOpenExternalLinks(False);column.addWidget(self.report_browser)
+        self.pages.addWidget(scroll_page(page))
 
     def mark_dirty(self,*args):
         self.dirty=True
@@ -482,7 +516,7 @@ class MainWindow(QMainWindow):
         try:self.capture()
         except Exception as exc:self.error(exc);return
         dialog=QDialog(self);dialog.setWindowTitle("Advanced constraints and motor curve");dialog.resize(580,720)
-        outer=QVBoxLayout(dialog);form=QFormLayout();r=self.project.requirements;widgets={}
+        outer=QVBoxLayout(dialog);content=QWidget();column=QVBoxLayout(content);form=QFormLayout();r=self.project.requirements;widgets={}
         for key,title,lo,hi,dec,suffix in [
             ("peak_factor","Peak load multiplier",1,10,2,""),("safety_factor","Safety factor",1,10,2,""),
             ("life_hours","Required bearing life",.1,100000,1," h"),("ratio_tolerance_percent","Ratio tolerance",.01,20,2," %"),
@@ -494,10 +528,12 @@ class MainWindow(QMainWindow):
         supplier=QLineEdit(r.supplier);form.addRow("Supplier filter",supplier)
         currency=QLineEdit(r.currency);form.addRow("Cost currency",currency)
         mounting=QComboBox();mounting.addItems(["Foot","Flange"]);mounting.setCurrentIndex(0 if r.mounting=="foot" else 1);form.addRow("Mounting",mounting)
-        outer.addLayout(form)
-        outer.addWidget(label("Motor curve JSON: [[rpm, torque_Nm], …]. Empty uses Motor torque.","subtle"))
-        curve=QTextEdit(json.dumps(r.motor_curve));curve.setMaximumHeight(90);outer.addWidget(curve)
+        column.addLayout(form)
+        column.addWidget(label("Motor curve JSON: [[rpm, torque_Nm], …]. Empty uses Motor torque.","subtle"))
+        curve=QTextEdit(json.dumps(r.motor_curve));curve.setMaximumHeight(90);column.addWidget(curve);curve.setAccessibleName("Motor curve JSON");outer.addWidget(scroll_page(content))
         buttons=QDialogButtonBox(QDialogButtonBox.Ok|QDialogButtonBox.Cancel);buttons.accepted.connect(dialog.accept);buttons.rejected.connect(dialog.reject);outer.addWidget(buttons)
+        accessible_forms(dialog)
+        buttons.button(QDialogButtonBox.Ok).setText("Apply")
         if dialog.exec()==QDialog.Accepted:
             try:
                 data=asdict(r);data.update({k:w.value() for k,w in widgets.items()});data.update(supplier=supplier.text(),currency=currency.text().upper(),mounting=["foot","flange"][mounting.currentIndex()],motor_curve=json.loads(curve.toPlainText() or "[]"))
@@ -695,7 +731,8 @@ class MainWindow(QMainWindow):
         dialog=QDialog(self);dialog.setWindowTitle("Compare gearbox alternatives");dialog.resize(1000,440);layout=QVBoxLayout(dialog)
         t=table(["Metric"]+[c.label for c in chosen]);layout.addWidget(t)
         metrics=[("Score",lambda c:c.score),("Output speed rpm",lambda c:round(c.output_rpm,2)),("Available output N·m",lambda c:round(c.available_output_nm,4)),("Efficiency",lambda c:f"{c.efficiency:.1%}"),("Backlash deg",lambda c:round(c.backlash_deg,4)),("Envelope mm",lambda c:" × ".join(f"{v:.1f}" for v in c.size_mm)),("Total cost",lambda c:"Unknown" if c.estimated_cost is None else c.estimated_cost),("Export status",lambda c:c.export_level),("Uncharacterized checks",lambda c:sum(k.status=="warn" for k in c.checks))]
-        fill_table(t,[(name,*[get(c) for c in chosen]) for name,get in metrics]);dialog.exec()
+        fill_table(t,[(name,*[get(c) for c in chosen]) for name,get in metrics]);t.setAccessibleName("Comparison of selected gearbox alternatives")
+        buttons=QDialogButtonBox(QDialogButtonBox.Close);buttons.rejected.connect(dialog.reject);layout.addWidget(buttons);dialog.exec()
 
     def export_selected(self,include_cad=True):
         if isinstance(include_cad,bool):pass
@@ -816,10 +853,10 @@ class MainWindow(QMainWindow):
             self.path=None;self.setWindowFilePath("");self.mark_dirty()
 
     def error(self,error):
-        QMessageBox.warning(self,"GearForge Studio",str(error))
+        QMessageBox.warning(self,"Couldn’t complete the operation",str(error))
 
     def closeEvent(self,event):
-        if not self.may_discard():event.ignore();return
+        if not self.may_discard() or not close_studies(self):event.ignore();return
         self.autosave.stop()
         self.cancel_job();self.viewer.animate(False);self.settings.setValue("geometry",self.saveGeometry());self.settings.setValue("design_splitter",self.design_splitter.saveState());self.settings.setValue("sidebar_visible",self.sidebar_action.isChecked());self.settings.sync();self.catalog.close();self.data_lock.unlock();event.accept()
 

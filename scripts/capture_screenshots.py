@@ -19,6 +19,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=Path, default=ROOT / "screenshots")
     parser.add_argument("--section", choices=("all", "desktop", "studies", "probes"), default="all")
+    parser.add_argument("--appearance", choices=("light", "dark"), default="light")
+    parser.add_argument("--text-scale", type=float, choices=(1., 1.15, 1.3), default=1.)
     args = parser.parse_args()
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
     if sys.platform == "win32":
@@ -45,7 +47,8 @@ def main():
     errors = []
     with tempfile.TemporaryDirectory(prefix="gearforge-gallery-") as directory:
         settings = QSettings(str(Path(directory) / "settings.ini"), QSettings.IniFormat)
-        settings.setValue("appearance", "light")
+        settings.setValue("appearance", args.appearance)
+        settings.setValue("text_scale", args.text_scale)
         settings.setValue("reduced_motion", False)
         settings.sync()
         window = MainWindow(directory)
@@ -129,8 +132,10 @@ def main():
                 dialog.show_error = lambda error: errors.append(str(error))
                 try:
                     dialog.set_study(study_type.load(ROOT / "examples" / example))
-                    dialog.resize(1320, 900)
                     dialog.show()
+                    # Reproducible capture dimensions, independent of the
+                    # offscreen platform's synthetic 800-pixel display.
+                    dialog.resize(1320, 900)
                     if not dialog.calculate():
                         raise RuntimeError(f"Could not calculate {example}")
                     wait_for_worker(dialog)
@@ -171,6 +176,7 @@ def main():
             (output / f"captures-{args.section}.json").write_text(json.dumps({
                 "application_version": __version__, "platform": platform.system(),
                 "qt_platform": app.platformName(), "font_family": font_family,
+                "appearance": args.appearance, "text_scale": args.text_scale,
                 "description": "Unmodified captures of the running application using repository examples. Synthetic data are illustrative, not component allowables.",
                 "captures": captures,
             }, indent=2) + "\n", encoding="utf-8")

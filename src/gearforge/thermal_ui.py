@@ -12,12 +12,16 @@ from PySide6.QtWidgets import (QCheckBox,QComboBox,QDialog,QFileDialog,QFormLayo
     QLabel,QLineEdit,QMessageBox,QPushButton,QTableWidget,QTableWidgetItem,QTabWidget,QTextBrowser,
     QTextEdit,QVBoxLayout,QWidget)
 
+from .chart_style import ChartWidget, ReportBrowser, chart_color
+
+from .desktop_ui import StudyDialog, StudyTabs
+
 from .engineering import EngineeringStudy
 from .thermal import (AMBIENT,ThermalNode,ThermalLink,ThermalPhase,ThermalStudy,
     thermal_from_study,synthetic_thermal_example,calculate_thermal_study,thermal_report_html,export_thermal_study)
 
 
-class TemperaturePlot(QWidget):
+class TemperaturePlot(ChartWidget):
     def __init__(self):
         super().__init__();self.points=[];self.body='';self.logarithmic=False;self.setMinimumHeight(300)
         self.setAccessibleName('Body temperature over the selected thermal phase')
@@ -37,12 +41,12 @@ class TemperaturePlot(QWidget):
             p.setPen(self.palette().text().color());p.drawText(7,int(y+4),f'{low+(high-low)*i/5:.6g}')
             x=left+i*width/5;seconds=math.expm1(end*i/5) if self.logarithmic else end*i/5
             p.drawText(int(x-20),int(top+height+23),f'{seconds/60:.5g}')
-        p.setPen(QPen(QColor('#b9581b'),2))
+        p.setPen(QPen(chart_color(self,'#b9581b'),2))
         for a,b in zip(self.points,self.points[1:]):p.drawLine(point(a),point(b))
         p.setPen(self.palette().text().color());p.drawText(int(left+width/2-85),self.height()-10,'Elapsed time in phase (minutes)')
 
 
-class ThermalStudyDialog(QDialog):
+class ThermalStudyDialog(StudyDialog):
     BODY_NUMBERS={'capacity_j_per_k':'Thermal capacity (J/K)','initial_temperature_c':'Initial temperature (°C)',
         'minimum_allowable_c':'Minimum allowable temperature (°C)','maximum_allowable_c':'Maximum allowable temperature (°C)',
         'model_minimum_c':'Minimum temperature supported by the model (°C)','model_maximum_c':'Maximum temperature supported by the model (°C)'}
@@ -53,7 +57,7 @@ class ThermalStudyDialog(QDialog):
         layout=QVBoxLayout(self);note=QLabel('Calculate heating and cooling through explicit thermal bodies and paths. Enter actual heat losses and cooling evidence; assumed gearbox efficiency does not supply those inputs. No production gearbox rating.')
         note.setWordWrap(True);layout.addWidget(note);form=QFormLayout();layout.addLayout(form)
         self.name=QLineEdit();self.name.textEdited.connect(self.changed);form.addRow('Study name',self.name)
-        self.tabs=QTabWidget();layout.addWidget(self.tabs,1)
+        self.tabs=StudyTabs();layout.addWidget(self.tabs,1)
         page=QWidget();body_layout=QVBoxLayout(page);controls=QHBoxLayout();body_layout.addLayout(controls)
         self.body_selector=QComboBox();self.body_selector.currentIndexChanged.connect(self.select_body);controls.addWidget(self.body_selector,1)
         self.buttons(controls,(('Add body',self.add_body),('Remove body',self.remove_body)))
@@ -90,15 +94,17 @@ class ThermalStudyDialog(QDialog):
         self.plot_body=QComboBox();self.plot_body.currentIndexChanged.connect(self.update_plot);controls.addWidget(self.plot_body)
         self.early=QCheckBox('Expand early times');self.early.toggled.connect(self.update_plot);controls.addWidget(self.early)
         self.plot=TemperaturePlot();trajectory.addWidget(self.plot,1);self.plot_summary=QLabel();self.plot_summary.setWordWrap(True);trajectory.addWidget(self.plot_summary);self.tabs.addTab(page,'Temperature history')
-        page=QWidget();provenance=QVBoxLayout(page);self.source_view=QTextBrowser();provenance.addWidget(self.source_view,1)
+        page=QWidget();provenance=QVBoxLayout(page);self.source_view=ReportBrowser();provenance.addWidget(self.source_view,1)
         self.sequence_basis=QTextEdit();self.notes=QTextEdit()
         for label,w in (('Chronology, repeat pattern and relation to lifetime duty',self.sequence_basis),('Model assumptions and omitted effects',self.notes)):
             w.setAcceptRichText(False);w.setMaximumHeight(95);w.textChanged.connect(self.changed);provenance.addWidget(QLabel(label));provenance.addWidget(w)
-        self.tabs.addTab(page,'Source and evidence');self.report=QTextBrowser();self.report.setOpenExternalLinks(False);self.tabs.addTab(self.report,'Assessment')
+        self.tabs.addTab(page,'Source and evidence');self.report=ReportBrowser();self.report.setOpenExternalLinks(False);self.tabs.addTab(self.report,'Assessment')
         self.status=QLabel();self.status.setWordWrap(True);layout.addWidget(self.status);controls=QHBoxLayout();layout.addLayout(controls)
         self.buttons(controls,(('Open study…',self.open_study),('New from gear study…',self.open_source),('Synthetic example',self.load_example),
             ('Save study…',self.save_study),('Calculate',self.calculate),('Export assessment…',self.export),('Close',self.reject)))
         self.set_study(study or thermal_from_study(EngineeringStudy()))
+        self.finish_ui()
+
 
     @staticmethod
     def buttons(layout,items):
@@ -273,7 +279,7 @@ class ThermalStudyDialog(QDialog):
     def save_study(self):
         try:study=self.read_study()
         except (ValueError,TypeError) as exc:self.show_error(exc);return False
-        path,_=QFileDialog.getSaveFileName(self,'Save thermal study',str(self.path or 'gearbox.gearforge-thermal'),'Thermal study (*.gearforge-thermal)')
+        path,_=self.save_destination('Save thermal study',str(self.path or 'gearbox.gearforge-thermal'),'Thermal study (*.gearforge-thermal)')
         if not path:return False
         try:study.save(Path(path))
         except (ValueError,OSError) as exc:self.show_error(exc);return False

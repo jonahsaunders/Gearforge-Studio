@@ -12,20 +12,24 @@ from PySide6.QtWidgets import (QComboBox,QDialog,QFileDialog,QFormLayout,QHBoxLa
     QLabel,QLineEdit,QMessageBox,QPushButton,QTabWidget,QTableWidget,QTableWidgetItem,
     QTextBrowser,QTextEdit,QVBoxLayout,QWidget)
 
+from .chart_style import ChartWidget, ReportBrowser, chart_color
+
+from .desktop_ui import StudyDialog, StudyTabs, labeled_control_row
+
 from .models import atomic_text,read_text_limited,strict_json
 from .root_stress import RootStressStudy,root_from_profile,synthetic_root_example,root_report_html
 from .tooth_profile import ToothProfileStudy
 
 
-class ProbePlot(QWidget):
+class ProbePlot(ChartWidget):
     def __init__(self,parent=None):
         super().__init__(parent);self.setMinimumSize(520,260)
         self.result=None;self.case_index=0;self.probe_index=0;self.rendered_items=0
         self.setAccessibleName('Signed normal and shear stress at one fixed material point')
 
     def paintEvent(self,event):
-        p=QPainter(self);p.setRenderHint(QPainter.Antialiasing);p.fillRect(self.rect(),QColor('#f8fafc'))
-        p.setPen(QColor('#263449'));self.rendered_items=0
+        p=QPainter(self);p.setRenderHint(QPainter.Antialiasing);p.fillRect(self.rect(),self.palette().base())
+        p.setPen(self.palette().text().color());self.rendered_items=0
         if not self.result or not 0<=self.case_index<len(self.result['cases']) or not 0<=self.probe_index<len(self.result['inputs']['probes']):
             p.drawText(self.rect(),Qt.AlignCenter,'Define fixed points and calculate to view signed stress.');return
         case=self.result['cases'][self.case_index];probe=self.result['inputs']['probes'][self.probe_index];groups={}
@@ -43,18 +47,18 @@ class ProbePlot(QWidget):
         p.drawText(20,46,f"Fixed X {probe['x_mm']:.6g}, Y {probe['y_mm']:.6g} mm · normal {probe['normal_direction_deg']:g}° from +X")
         p.drawLine(82,75,82,self.height()-65);p.drawLine(82,self.height()-65,self.width()-38,self.height()-65)
         p.drawText(5,80,f'{high:.4g}');p.drawText(5,self.height()-64,f'{low:.4g}')
-        p.setPen(QPen(QColor('#94a3b8'),1,Qt.DashLine));p.drawLine(point((0,0),1),point((1,0),1))
+        p.setPen(QPen(self.palette().mid().color(),1,Qt.DashLine));p.drawLine(point((0,0),1),point((1,0),1))
         for values in groups.values():
             for index,color in ((1,'#2563eb'),(2,'#b44418')):
-                p.setPen(QPen(QColor(color),1.5));p.setBrush(QColor(color))
+                p.setPen(QPen(chart_color(self,color),1.5,Qt.SolidLine if index==1 else Qt.DashLine));p.setBrush(chart_color(self,color))
                 p.drawPolyline(QPolygonF([point(value,index) for value in values]))
                 for value in values:p.drawEllipse(point(value,index),2.5,2.5);self.rendered_items+=1
-        p.setPen(QColor('#263449'));p.drawText(82,self.height()-44,'0');p.drawText(self.width()-42,self.height()-44,'1')
-        p.drawText(20,self.height()-25,'Path fraction · Blue: normal MPa · Orange: shear MPa · separate element sides')
+        p.setPen(self.palette().text().color());p.drawText(82,self.height()-44,'0');p.drawText(self.width()-42,self.height()-44,'1')
+        p.drawText(20,self.height()-25,'Path fraction · Solid: normal MPa · Dashed: shear MPa · separate element sides')
         p.drawText(20,self.height()-7,'Sampled positions only; no chronology or full loading cycle. Not a fatigue history.')
 
 
-class RootPlot(QWidget):
+class RootPlot(ChartWidget):
     def __init__(self,curves=False,parent=None):
         super().__init__(parent);self.setMinimumSize(520,360);self.result=None;self.case_index=0;self.position_index=0
         self.curves=curves;self.zoom=False;self.deformation=0.;self.rendered_items=0
@@ -70,8 +74,8 @@ class RootPlot(QWidget):
         return case,position,self.result['mesh_levels'][-1]['responses'][position['unit_response_index']]
 
     def paintEvent(self,event):
-        p=QPainter(self);p.setRenderHint(QPainter.Antialiasing);p.fillRect(self.rect(),QColor('#f8fafc'))
-        p.setPen(QColor('#263449'));self.rendered_items=0
+        p=QPainter(self);p.setRenderHint(QPainter.Antialiasing);p.fillRect(self.rect(),self.palette().base())
+        p.setPen(self.palette().text().color());self.rendered_items=0
         if not self.result or not self.result['calculation_available']:
             p.drawText(self.rect(),Qt.AlignCenter,'Calculate a supported elastic study to view results.');return
         case,position,response=self.selection();scale=case['ideal_applied_member_torque_n_mm'] if response else None
@@ -84,15 +88,15 @@ class RootPlot(QWidget):
             left=min(v[0] for values in groups.values() for v in values);right=max(v[0] for values in groups.values() for v in values)
             maximum=max(1e-12,max(max(v[1:]) for values in groups.values() for v in values))
             def point(v,index):return QPointF(75+(v[0]-left)/(right-left)*(self.width()-110),self.height()-75-v[index]/maximum*(self.height()-155))
-            p.setPen(QColor('#263449'));p.drawText(24,26,'Root edge samples · unaveraged element values')
+            p.setPen(self.palette().text().color());p.drawText(24,26,'Root edge samples · unaveraged element values')
             p.drawText(24,49,f"{case['name'][:65]} · path fraction {position['position_fraction']:g}")
             p.drawText(24,74,f'{maximum:.5g} MPa');p.drawLine(75,80,75,self.height()-75);p.drawLine(75,self.height()-75,self.width()-35,self.height()-75)
             for values in groups.values():
                 values.sort(key=lambda v:v[0])
                 for index,color in [(1,'#b44418'),(2,'#2563eb')]:
-                    p.setPen(QPen(QColor(color),1.5));p.drawPolyline(QPolygonF([point(v,index) for v in values]));self.rendered_items+=len(values)
-            p.setPen(QColor('#263449'));p.drawText(75,self.height()-50,f'{left:.4g}°');p.drawText(self.width()-100,self.height()-50,f'{right:.4g}°')
-            p.drawText(24,self.height()-26,'Angle from +Y · Orange: von Mises · Blue: tensile principal · sampled positions only')
+                    p.setPen(QPen(chart_color(self,color),1.5,Qt.SolidLine if index==1 else Qt.DashLine));p.drawPolyline(QPolygonF([point(v,index) for v in values]));self.rendered_items+=len(values)
+            p.setPen(self.palette().text().color());p.drawText(75,self.height()-50,f'{left:.4g}°');p.drawText(self.width()-100,self.height()-50,f'{right:.4g}°')
+            p.drawText(24,self.height()-26,'Angle from +Y · Solid: von Mises · Dashed: tensile principal · sampled positions only')
             return
         fine=self.result['mesh_levels'][-1];mesh=fine['mesh'];nodes=mesh['nodes_mm']
         displacement=response['displacement_mm_per_n_mm'] if response and self.deformation else None
@@ -112,24 +116,24 @@ class RootPlot(QWidget):
             if max(v[0] for v in polygon)<left or min(v[0] for v in polygon)>right or max(v[1] for v in polygon)<bottom:continue
             value=response['element_von_mises_mpa_per_n_mm'][index]*scale if response else 0.
             color=QColor.fromHsvF(.65*(1-min(1,value/maximum)) if maximum>0 else .65,.68,.94)
-            p.setBrush(color if response else QColor('#e2e8f0'));p.setPen(QPen(QColor('#475569'),.2));p.drawPolygon(QPolygonF([transform(v) for v in polygon]));self.rendered_items+=1
-        p.setPen(QPen(QColor('#171717'),2))
+            p.setBrush(color if response else self.palette().alternateBase());p.setPen(QPen(chart_color(self,'#475569'),.2));p.drawPolygon(QPolygonF([transform(v) for v in polygon]));self.rendered_items+=1
+        p.setPen(QPen(self.palette().text().color(),2))
         for node in mesh['fixed_node_indices']:p.drawPoint(transform(points[node]))
-        p.restore();p.setPen(QColor('#263449'))
+        p.restore();p.setPen(self.palette().text().color())
         p.drawText(24,26,'Central tooth detail' if self.zoom else f"{fine['sector_teeth']}-tooth sector · {fine['elements']:,} Q9 elements")
         p.drawText(24,49,f"{case['name'][:65]} · path fraction {position['position_fraction']:g}" if response else 'Geometry only — selected case stress is unassessed')
-        p.drawText(24,self.height()-57,f'Cell Gauss von Mises: blue 0 → red {maximum:.5g} MPa · black: fixed support' if response else 'Unloaded mesh · black: fixed support')
+        p.drawText(24,self.height()-57,f'Cell Gauss von Mises: blue 0 → red {maximum:.5g} MPa · dots: fixed support' if response else 'Unloaded mesh · dots: fixed support')
         p.drawText(24,self.height()-34,f'Displacement drawn ×{self.deformation:g} · millimetres · ' + ('undeformed geometry' if not self.deformation else 'exaggerated shape, not actual geometry'))
         p.drawText(24,self.height()-12,'Elastic model only. Mesh checks and material evidence appear in Assessment.')
 
 
-class RootStressDialog(QDialog):
+class RootStressDialog(StudyDialog):
     def __init__(self,parent=None,study=None):
         super().__init__(parent);self.resize(1160,850);self.setWindowTitle('Tooth-root elastic stress')
         self.path=None;self.result=None;self.dirty=False;self._loading=True;self.process=None;self.temporary=None
         self.error_output='';self.fields={};self.actions=[]
         layout=QVBoxLayout(self);note=QLabel('Calculate 2D elastic stress from a generated spur root. Material, support and loading are explicit inputs. Mesh checks do not establish fatigue life or a production rating.')
-        note.setWordWrap(True);layout.addWidget(note);self.tabs=QTabWidget();layout.addWidget(self.tabs,1)
+        note.setWordWrap(True);layout.addWidget(note);self.tabs=StudyTabs();layout.addWidget(self.tabs,1)
         material=QWidget();form=QFormLayout(material)
         self.name=QLineEdit();self.name.textChanged.connect(self.changed);form.addRow('Study name',self.name)
         self.material_status=QComboBox();self.material_status.addItems(['unverified','synthetic','declared']);self.material_status.currentIndexChanged.connect(self.changed)
@@ -154,14 +158,14 @@ class RootStressDialog(QDialog):
         page=QWidget();column=QVBoxLayout(page);row=QHBoxLayout()
         self.case_selector=QComboBox();self.position_selector=QComboBox();self.view=QComboBox();self.view.addItems(['Whole sector','Central tooth'])
         self.deformation=QComboBox();self.deformation.addItems(['Undeformed','Displacement ×1','Displacement ×1000','Displacement ×10000'])
-        for label,widget in [('Case',self.case_selector),('Position',self.position_selector),('View',self.view),('Shape',self.deformation)]:row.addWidget(QLabel(label));row.addWidget(widget)
+        row=labeled_control_row([('Case',self.case_selector),('Position',self.position_selector),('View',self.view),('Shape',self.deformation)])
         self.case_selector.currentIndexChanged.connect(self.select_case);self.position_selector.currentIndexChanged.connect(self.refresh_plots)
         self.view.currentIndexChanged.connect(self.refresh_plots);self.deformation.currentIndexChanged.connect(self.refresh_plots)
         column.addLayout(row);self.plot=RootPlot();column.addWidget(self.plot,1);self.tabs.addTab(page,'Mesh and stress')
         page=QWidget();column=QVBoxLayout(page);hint=QLabel('Uses the case and path position selected in Mesh and stress. Curves retain separate element-side values at shared points.');hint.setWordWrap(True);column.addWidget(hint)
         self.curves=RootPlot(curves=True);column.addWidget(self.curves,1);self.tabs.addTab(page,'Root stress curves')
-        self.report=QTextBrowser();self.report.setOpenExternalLinks(False);self.tabs.addTab(self.report,'Assessment')
-        self.source_view=QTextBrowser();self.source_view.setOpenExternalLinks(False);self.tabs.addTab(self.source_view,'Retained cutter and duty')
+        self.report=ReportBrowser();self.report.setOpenExternalLinks(False);self.tabs.addTab(self.report,'Assessment')
+        self.source_view=ReportBrowser();self.source_view.setOpenExternalLinks(False);self.tabs.addTab(self.source_view,'Retained cutter and duty')
         page=QWidget();column=QVBoxLayout(page)
         hint=QLabel('Track up to 16 fixed material points. X/Y are millimetres from the gear center in the undeformed body frame; the central tooth points along +Y. The normal direction is counterclockwise from +X. Points outside any mesh remain unavailable.');hint.setWordWrap(True);column.addWidget(hint)
         self.probe_table=QTableWidget(0,5);self.probe_table.setHorizontalHeaderLabels(['Point name','X mm','Y mm','Normal direction °','Location / direction basis'])
@@ -171,7 +175,8 @@ class RootStressDialog(QDialog):
         self.add_probe_button.clicked.connect(self.add_probe);self.remove_probe_button.clicked.connect(self.remove_probe)
         row.addWidget(self.add_probe_button);row.addWidget(self.remove_probe_button);row.addStretch();column.addLayout(row)
         row=QHBoxLayout();self.probe_case_selector=QComboBox();self.probe_selector=QComboBox()
-        for label,widget in [('Case',self.probe_case_selector),('Point',self.probe_selector)]:row.addWidget(QLabel(label));row.addWidget(widget);widget.currentIndexChanged.connect(self.refresh_plots)
+        row=labeled_control_row([('Case',self.probe_case_selector),('Point',self.probe_selector)])
+        for widget in (self.probe_case_selector,self.probe_selector):widget.currentIndexChanged.connect(self.refresh_plots)
         column.addLayout(row);self.probe_plot=ProbePlot();column.addWidget(self.probe_plot,1);self.tabs.addTab(page,'Fixed material points')
         self.status=QLabel();self.status.setWordWrap(True);layout.addWidget(self.status)
         for actions in [[('Open…',self.open_study),('Save…',self.save_study),('From tooth profile…',self.from_source),('Synthetic example',self.example)],
@@ -183,6 +188,8 @@ class RootStressDialog(QDialog):
         row=QHBoxLayout();self.cancel=QPushButton('Cancel calculation');self.cancel.clicked.connect(self.cancel_job);self.cancel.setEnabled(False);row.addWidget(self.cancel)
         close=QPushButton('Close');close.clicked.connect(self.reject);row.addWidget(close);row.addStretch();layout.addLayout(row)
         self.set_study(study or RootStressStudy())
+        self.finish_ui()
+
 
     def add_field(self,form,key,label,multiline=False):
         widget=QTextEdit() if multiline else QLineEdit();widget.setAccessibleName(label)
@@ -336,7 +343,7 @@ class RootStressDialog(QDialog):
     def save_study(self):
         try:study=self.read_study()
         except (ValueError,TypeError) as exc:self.show_error(exc);return False
-        path,_=QFileDialog.getSaveFileName(self,'Save root study',str(self.path or 'gearbox.gearforge-root'),'Root study (*.gearforge-root)')
+        path,_=self.save_destination('Save root study',str(self.path or 'gearbox.gearforge-root'),'Root study (*.gearforge-root)')
         if not path:return False
         try:study.save(Path(path))
         except (ValueError,OSError) as exc:self.show_error(exc);return False

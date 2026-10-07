@@ -8,19 +8,23 @@ from PySide6.QtGui import QColor, QPainter, QPen, QPolygonF
 from PySide6.QtWidgets import (QComboBox,QDialog,QFileDialog,QFormLayout,QHBoxLayout,QLabel,
     QLineEdit,QMessageBox,QPushButton,QTabWidget,QTextBrowser,QTextEdit,QVBoxLayout,QWidget)
 
+from .chart_style import ChartWidget, ReportBrowser, chart_color
+
+from .desktop_ui import StudyDialog, StudyTabs
+
 from .engineering import EngineeringStudy
 from .tooth_profile import (ToothProfileStudy,calculate_profile_study,export_profile_study,
     profile_from_study,profile_report_html,synthetic_profile_example)
 
 
-class ToothPlot(QWidget):
+class ToothPlot(ChartWidget):
     def __init__(self,parent=None):
         super().__init__(parent);self.result=None;self.whole=False;self.setMinimumSize(520,360)
         self.setAccessibleName('Generated tooth root and involute profile')
 
     def paintEvent(self,event):
         painter=QPainter(self);painter.setRenderHint(QPainter.Antialiasing)
-        painter.fillRect(self.rect(),QColor('#f8fafc'));painter.setPen(QColor('#25324a'))
+        painter.fillRect(self.rect(),self.palette().base());painter.setPen(self.palette().text().color())
         if not self.result or not self.result['profile_available']:
             painter.drawText(self.rect(),Qt.AlignCenter,'Calculate a supported cutter profile to view geometry.');return
         colors=['#475569','#2563eb','#bc4a0b','#15803d']
@@ -36,21 +40,22 @@ class ToothPlot(QWidget):
         scale=min((self.width()-100)/max(right-left,1e-9),(self.height()-120)/max(top-bottom,1e-9))
         def transform(p):return QPointF(self.width()/2+(p[0]-(left+right)/2)*scale,45+(top-p[1])*scale)
         for path,color in paths:
-            painter.setPen(QPen(QColor(color),2));painter.drawPolyline(QPolygonF([transform(p) for p in path]))
-        painter.setPen(QColor('#25324a'))
+            style = {"#475569":Qt.DotLine,"#2563eb":Qt.SolidLine,"#bc4a0b":Qt.DashLine,"#15803d":Qt.DashDotLine}.get(color,Qt.SolidLine)
+            painter.setPen(QPen(chart_color(self,color),2,style));painter.drawPolyline(QPolygonF([transform(p) for p in path]))
+        painter.setPen(self.palette().text().color())
         painter.drawText(24,25,'Whole gear' if self.whole else 'Central tooth · +Y radial · millimetres')
-        painter.drawText(24,self.height()-48,'Grey: tip   Blue: involute   Orange: generated root   Green: root land' if not self.whole else 'Closed outline · sampled representation of the analytic profile')
+        painter.drawText(24,self.height()-48,'Tip: dots   Involute: solid   Root: dashes   Root land: dash-dot' if not self.whole else 'Closed outline · sampled representation of the analytic profile')
         painter.drawText(24,self.height()-24,'Geometry only. Cutter evidence and production strength remain to be established.')
 
 
-class ToothProfileDialog(QDialog):
+class ToothProfileDialog(StudyDialog):
     def __init__(self,parent=None,study=None):
         super().__init__(parent);self.resize(1100,800);self.setWindowTitle('Rack-generated tooth roots')
         self.path=None;self.result=None;self.dirty=False;self._loading=True
         layout=QVBoxLayout(self)
         note=QLabel('Define the actual rack cutter before using root geometry for stress analysis. Synthetic inputs are examples; this study does not establish a production load rating.')
         note.setWordWrap(True);layout.addWidget(note)
-        self.tabs=QTabWidget();layout.addWidget(self.tabs,1)
+        self.tabs=StudyTabs();layout.addWidget(self.tabs,1)
         inputs=QWidget();form=QFormLayout(inputs);self.fields={}
         self.name=QLineEdit();form.addRow('Study name',self.name);self.name.textChanged.connect(self.changed)
         self.role=QComboBox();self.role.addItems(['pinion','wheel']);form.addRow('Gear member',self.role);self.role.currentIndexChanged.connect(self.changed)
@@ -68,8 +73,8 @@ class ToothProfileDialog(QDialog):
         page=QWidget();plot_layout=QVBoxLayout(page);self.view=QComboBox();self.view.addItems(['Tooth and root detail','Whole gear'])
         self.view.currentIndexChanged.connect(self.change_view);plot_layout.addWidget(self.view)
         self.plot=ToothPlot();plot_layout.addWidget(self.plot,1);self.tabs.addTab(page,'Generated profile')
-        self.source_view=QTextBrowser();self.source_view.setOpenExternalLinks(False);self.tabs.addTab(self.source_view,'Retained gear study')
-        self.report=QTextBrowser();self.report.setOpenExternalLinks(False);self.tabs.addTab(self.report,'Assessment')
+        self.source_view=ReportBrowser();self.source_view.setOpenExternalLinks(False);self.tabs.addTab(self.source_view,'Retained gear study')
+        self.report=ReportBrowser();self.report.setOpenExternalLinks(False);self.tabs.addTab(self.report,'Assessment')
         self.status=QLabel();self.status.setWordWrap(True);layout.addWidget(self.status)
         for actions in [[('Open…',self.open_study),('Save…',self.save_study),('From gear study…',self.from_source),('Synthetic example',self.example)],
                         [('Calculate',self.calculate),('Study root stress…',self.root_study),('Export profile package…',self.export),('Close',self.reject)]]:
@@ -81,6 +86,8 @@ class ToothProfileDialog(QDialog):
             label=form.itemAt(row,QFormLayout.LabelRole);field=form.itemAt(row,QFormLayout.FieldRole)
             if label and field:label.widget().setBuddy(field.widget())
         self.set_study(study or ToothProfileStudy())
+        self.finish_ui()
+
 
     def set_study(self,study):
         self.model=ToothProfileStudy.from_dict(asdict(study));self._loading=True
@@ -125,7 +132,7 @@ class ToothProfileDialog(QDialog):
         from .root_ui import RootStressDialog
         try:study=root_from_profile(self.read_study())
         except (ValueError,TypeError) as exc:self.show_error(exc);return False
-        dialog=RootStressDialog(self,study);dialog.dirty=True;dialog.exec();return True
+        dialog=RootStressDialog(self,study);dialog.dirty=True;dialog.present();return True
     def confirm_discard(self):
         if not self.dirty:return True
         answer=QMessageBox.question(self,'Unsaved tooth profile','Save the tooth profile before continuing?',QMessageBox.Save|QMessageBox.Discard|QMessageBox.Cancel,QMessageBox.Save)
@@ -134,7 +141,7 @@ class ToothProfileDialog(QDialog):
     def save_study(self):
         try:study=self.read_study()
         except (ValueError,TypeError) as exc:self.show_error(exc);return False
-        path,_=QFileDialog.getSaveFileName(self,'Save tooth profile',str(self.path or 'gearbox.gearforge-tooth'),'Tooth profile (*.gearforge-tooth)')
+        path,_=self.save_destination('Save tooth profile',str(self.path or 'gearbox.gearforge-tooth'),'Tooth profile (*.gearforge-tooth)')
         if not path:return False
         try:study.save(Path(path))
         except (ValueError,OSError) as exc:self.show_error(exc);return False

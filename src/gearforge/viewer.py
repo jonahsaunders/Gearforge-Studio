@@ -93,7 +93,14 @@ class AssemblyViewer(QWidget):
         else:super().keyPressEvent(event);return
         self.update();event.accept()
 
+    def focusInEvent(self,event):
+        super().focusInEvent(event);self.update()
+
+    def focusOutEvent(self,event):
+        super().focusOutEvent(event);self.update()
+
     def mousePressEvent(self,event):
+        self.setFocus(Qt.MouseFocusReason)
         self.last_pos=event.position()
 
     def mouseMoveEvent(self,event):
@@ -117,6 +124,8 @@ class AssemblyViewer(QWidget):
         painter.setPen(QPen(QColor("#1b2a3b"),1))
         for x in range(0,self.width(),30):painter.drawLine(x,0,x,self.height())
         for y in range(0,self.height(),30):painter.drawLine(0,y,self.width(),y)
+        if self.hasFocus():
+            painter.setPen(QPen(QColor("#b9d9ff"),3));painter.drawRect(self.rect().adjusted(2,2,-3,-3))
         if self.candidate is None:
             painter.setPen(QColor("#8394ac"))
             painter.drawText(self.rect(),Qt.AlignCenter,"Your next transmission starts here\nSet requirements and generate designs")

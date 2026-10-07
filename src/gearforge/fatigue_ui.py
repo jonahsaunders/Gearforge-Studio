@@ -9,12 +9,16 @@ from PySide6.QtWidgets import (QComboBox,QDialog,QFileDialog,QFormLayout,QHBoxLa
     QLabel,QLineEdit,QMessageBox,QPushButton,QScrollArea,QTabWidget,QTableWidget,QTableWidgetItem,
     QTextBrowser,QTextEdit,QVBoxLayout,QWidget)
 
+from .chart_style import ReportBrowser
+
+from .desktop_ui import StudyDialog, StudyTabs
+
 from .fatigue import (FatigueMaterial,FatigueStation,FatigueCase,FatigueStudy,fatigue_from_shaft,
     nasa_example,calculate_fatigue_study,fatigue_report_html,export_fatigue_study)
 from .shafts import ShaftStudy
 
 
-class FatigueStudyDialog(QDialog):
+class FatigueStudyDialog(StudyDialog):
     NUMBERS={"yield_strength_mpa":"Yield strength at operating conditions (MPa)",
         "fatigue_coefficient_mpa":"Stress–life coefficient at one cycle (MPa)",
         "reference_strength_mpa":"Uncorrected reference fatigue strength (MPa)",
@@ -38,7 +42,7 @@ class FatigueStudyDialog(QDialog):
             ("bending_design_factor","Alternating bending design factor",1,100),("static_design_factor","Static design factor",1,100)):
             widget=QLineEdit();widget.setAccessibleName(label);widget.textEdited.connect(self.changed)
             self.numbers[key]=widget;form.addRow(label,widget)
-        self.tabs=QTabWidget();layout.addWidget(self.tabs,1)
+        self.tabs=StudyTabs();layout.addWidget(self.tabs,1)
         scroll=QScrollArea();scroll.setWidgetResizable(True);page=QWidget();form=QFormLayout(page);scroll.setWidget(page)
         self.material={}
         for key,label in {"designation":"Exact material and condition",**self.NUMBERS}.items():
@@ -65,18 +69,20 @@ class FatigueStudyDialog(QDialog):
         hint.setWordWrap(True);cases.addWidget(hint)
         self.cases=self.table(["Retained case","Shaft rpm","Hours","Within-block load model","Shaft °C","Load-model evidence"])
         cases.addWidget(self.cases,1);self.tabs.addTab(page,"Duty conditions")
-        page=QWidget();source_layout=QVBoxLayout(page);self.source=QTextBrowser();source_layout.addWidget(self.source,1)
+        page=QWidget();source_layout=QVBoxLayout(page);self.source=ReportBrowser();source_layout.addWidget(self.source,1)
         self.coverage=QTextEdit();self.coverage.setAcceptRichText(False);self.coverage.setMaximumHeight(90);self.coverage.textChanged.connect(self.changed)
         source_layout.addWidget(QLabel("Duty coverage and omitted transients"));source_layout.addWidget(self.coverage)
         self.notes=QTextEdit();self.notes.setAcceptRichText(False);self.notes.setMaximumHeight(90);self.notes.textChanged.connect(self.changed)
         source_layout.addWidget(QLabel("Study notes"));source_layout.addWidget(self.notes);self.tabs.addTab(page,"Shaft and provenance")
-        self.report=QTextBrowser();self.report.setOpenExternalLinks(False);self.tabs.addTab(self.report,"Assessment")
+        self.report=ReportBrowser();self.report.setOpenExternalLinks(False);self.tabs.addTab(self.report,"Assessment")
         self.status=QLabel();self.status.setWordWrap(True);layout.addWidget(self.status)
         buttons=QHBoxLayout();layout.addLayout(buttons)
         for label,callback in (("Open study…",self.open_study),("New from shaft…",self.open_shaft),("Worked example",self.load_example),
             ("Save study…",self.save_study),("Calculate",self.calculate),("Export assessment…",self.export),("Close",self.reject)):
             button=QPushButton(label);button.clicked.connect(callback);buttons.addWidget(button)
         self.set_study(study or FatigueStudy())
+        self.finish_ui()
+
 
     def table(self,headers):
         widget=QTableWidget(0,len(headers));widget.setHorizontalHeaderLabels(headers);widget.setAlternatingRowColors(True)
@@ -170,7 +176,7 @@ class FatigueStudyDialog(QDialog):
     def save_study(self):
         try:study=self.read_study()
         except (ValueError,TypeError) as exc:self.show_error(exc);return False
-        path,_=QFileDialog.getSaveFileName(self,"Save fatigue study",str(self.path or "shaft.gearforge-fatigue"),"Fatigue study (*.gearforge-fatigue)")
+        path,_=self.save_destination("Save fatigue study",str(self.path or "shaft.gearforge-fatigue"),"Fatigue study (*.gearforge-fatigue)")
         if not path:return False
         try:study.save(Path(path))
         except (ValueError,OSError) as exc:self.show_error(exc);return False

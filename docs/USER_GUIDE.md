@@ -5,6 +5,7 @@
 Install the app using the [quick start](../README.md#install-and-launch). This guide covers the prototype design workflow, controls, data and exports. The nine engineering workspaces have dedicated [method guides and examples](../README.md#engineering-workspaces).
 
 - [Design your first gearbox](#design-your-first-gearbox)
+- [Windows and keyboard controls](#windows-appearance-and-keyboard-controls)
 - [Simulation workspace](#simulation-workspace)
 - [Component catalogs](#component-catalogs)
 - [Print calibration](#print-calibration)
@@ -44,6 +45,40 @@ Examples also cover [helical](../examples/helical-example.gearforge),
 [commercial gears](../examples/commercial-example.gearforge),
 [bevel](../examples/bevel-example.gearforge), [worm](../examples/worm-example.gearforge)
 and [cycloidal concepts](../examples/cycloidal-example.gearforge).
+
+## Windows, appearance and keyboard controls
+
+Engineering studies open in independent windows, so you can compare results
+without closing the current study. Open a study from **Design**, or transfer
+inputs using a study’s related-analysis buttons. Each study has its own File,
+Edit, Study and Window menus. Closing the main app checks unsaved studies first.
+
+**Save** updates the current file; **Save As** creates another file. A changed
+study displays an unsaved marker in its title. Cancelling Save As or a failed
+save retains the current document and its changes. Projects retain their existing
+autosave recovery; independent study files must be saved explicitly.
+
+| Action | macOS | Windows / Linux |
+| --- | --- | --- |
+| Open / Save | Cmd+O / Cmd+S | Ctrl+O / Ctrl+S |
+| Save As | Cmd+Shift+S | Ctrl+Shift+S |
+| Calculate study / generate designs | Cmd+Return | Ctrl+Return |
+| Export study | Cmd+Shift+E | Ctrl+Shift+E |
+| Close study window | Cmd+W | Ctrl+W |
+| Main workspace 1–5 | Cmd+1–5 | Ctrl+1–5 |
+| Settings | Cmd+, | Ctrl+, |
+
+Use **Settings** for System/Light/Dark appearance, 115% or 130% text and reduced
+motion. Charts and in-app reports follow the selected appearance. Forms and
+button rows adapt to available space; the design workspace stacks vertically in
+narrow windows. Scroll within long forms and wide data tables. Tab headings stay
+available through the tab bar’s arrow controls.
+
+The CAD viewer supports arrow keys to orbit, +/− to zoom, R to reset and Space to
+play/pause, with a visible keyboard focus border. Catalog rows and saved print
+profiles can be opened with Return. Reports and exported data provide numeric
+alternatives to plots. See the [GUI audit](GUI_AUDIT.md) for the tested scope and
+remaining native macOS accessibility checks.
 
 ## Simulation workspace
 

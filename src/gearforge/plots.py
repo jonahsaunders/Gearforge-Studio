@@ -3,8 +3,10 @@ from PySide6.QtCore import QPointF, QRectF, Qt
 from PySide6.QtGui import QColor, QPainter, QPen, QPolygonF
 from PySide6.QtWidgets import QWidget
 
+from .chart_style import ChartWidget, chart_color
 
-class OperatingPlot(QWidget):
+
+class OperatingPlot(ChartWidget):
     def __init__(self,parent=None):
         super().__init__(parent)
         self.points=[];self.load=0.
@@ -33,7 +35,7 @@ class OperatingPlot(QWidget):
             p.setPen(self.palette().text().color())
             p.drawText(QRectF(point(x,0).x()-28,box.bottom()+3,56,18),Qt.AlignCenter,f"{x:.0f}")
             p.drawText(QRectF(1,point(0,y).y()-9,60,18),Qt.AlignRight,f"{y:.3g}")
-        p.setPen(QPen(QColor("#3478db"),2.5))
+        p.setPen(QPen(chart_color(self,"#3478db"),2.5))
         p.drawPolyline(QPolygonF([point(row["output_rpm"],row["available_output_nm"]) for row in self.points]))
-        p.setPen(QPen(QColor("#b85a15"),2,Qt.DashLine));p.drawLine(point(0,self.load),point(xmax,self.load))
+        p.setPen(QPen(chart_color(self,"#b85a15"),2,Qt.DashLine));p.drawLine(point(0,self.load),point(xmax,self.load))
         p.setPen(self.palette().text().color());p.drawText(int(box.right()-230),20,"Solid: available   Dashed: load")
