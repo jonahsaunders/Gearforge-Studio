@@ -2,7 +2,7 @@
   "schema_version": 1,
   "app_version": "1.0.0rc11",
   "date": "2026-10-06",
-  "status": "314 local Windows source tests and desktop checks passed; rc11 native/cross-platform evidence pending; production qualification remains outstanding",
+  "status": "314 source tests and native desktop checks passed on all three platforms, including cancellable root calculation/export workers and VTK import; production qualification remains outstanding",
   "production_qualified": false,
   "methods": "docs/ROOT_STRESS.md",
   "distribution_constraint": "Original GitHub-publishable solver/adapters/fixtures; BSD scikit-fem reference; no restricted data",
@@ -17,7 +17,7 @@
     "errors": [],
     "candidates": 60,
     "cad_meshes": 15,
-    "elapsed_s": 47.953,
+    "elapsed_s": 56.109,
     "simulation_points": 25,
     "native_platform": "offscreen",
     "engineering_study": {
@@ -96,6 +96,7 @@
   "independent_elastic_reference": {
     "passed": true,
     "comparisons": 4582,
+    "ci_run_url": "https://github.com/jonahsaunders/Gearforge-Studio/actions/runs/37553637888",
     "reference": "https://github.com/kinnala/scikit-fem",
     "reference_version": "12.0.2",
     "reference_license": "BSD-3-Clause",
@@ -119,10 +120,10 @@
       ]
     },
     "maximum_absolute_error": {
-      "displacements": 1.2553705904666534e-16,
+      "displacements": 1.176901458233015e-16,
       "reactions": 1.2732925824820995e-11,
-      "gauss_sample_mean_stress": 1.9042545318370685e-12,
-      "strain_energy_n_mm": 4.973799150320701e-14
+      "gauss_sample_mean_stress": 1.6768808563938364e-12,
+      "strain_energy_n_mm": 3.4638958368304884e-14
     }
   },
   "local_dependency_audit": {
@@ -131,10 +132,309 @@
     "missing_license_texts": []
   },
   "regression_ci": {
-    "status": "pending"
+    "status": "passed",
+    "commit": "212a84b52dca5461d4fc3b4c13cc5078f8a5b8ff",
+    "run_url": "https://github.com/jonahsaunders/Gearforge-Studio/actions/runs/37553637888",
+    "platforms": {
+      "Linux-X64": {
+        "tests": 314,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "fatigue_comparisons": 100,
+        "bearing_comparisons": 218
+      },
+      "Windows-X64": {
+        "tests": 314,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "fatigue_comparisons": 100,
+        "bearing_comparisons": 218
+      },
+      "macOS-ARM64": {
+        "tests": 314,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "fatigue_comparisons": 100,
+        "bearing_comparisons": 218
+      }
+    }
   },
   "native_packages": {
-    "status": "pending"
+    "status": "passed",
+    "commit": "212a84b52dca5461d4fc3b4c13cc5078f8a5b8ff",
+    "run_url": "https://github.com/jonahsaunders/Gearforge-Studio/actions/runs/37553632758",
+    "platforms": {
+      "Linux-X64": {
+        "tests": {
+          "tests": 314,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "smoke": {
+          "ok": true,
+          "errors": [],
+          "candidates": 60,
+          "cad_meshes": 15,
+          "elapsed_s": 56.74,
+          "simulation_points": 25,
+          "native_platform": "offscreen",
+          "engineering_study": {
+            "app_version": "1.0.0rc11",
+            "tabs_rendered": 4,
+            "verified_files": 3,
+            "input_power_w": 250.0,
+            "study_sha256": "6351727be05d242e0a8445d16b21249f8be1a491e9996a71ab658bbb123b8838",
+            "production_approved": false
+          },
+          "shaft_study": {
+            "app_version": "1.0.0rc11",
+            "tabs_rendered": 6,
+            "verified_files": 3,
+            "maximum_equilibrium_residual": 0.0,
+            "study_sha256": "5786457039a04580d2d7bec531f69b4e904f7cc0f044d8afa92daad40321ec7e",
+            "production_approved": false
+          },
+          "bearing_study": {
+            "app_version": "1.0.0rc11",
+            "tabs_rendered": 5,
+            "verified_files": 3,
+            "synthetic_basic_l10_hours": 18295.51049310608,
+            "study_sha256": "f73a5b330272ed1758d70f9711f62b1ba50f7e3459f0f64a15b6b639c0995f94",
+            "production_approved": false
+          },
+          "fatigue_study": {
+            "app_version": "1.0.0rc11",
+            "tabs_rendered": 5,
+            "verified_files": 3,
+            "nasa_example_corrected_endpoint_mpa": 125.06778394565542,
+            "study_sha256": "7ac9696d45671f4941e4973b93ddd55725a2c8eeccf05e8365f867390b996ece",
+            "production_approved": false
+          },
+          "contact_study": {
+            "app_version": "1.0.0rc11",
+            "tabs_rendered": 6,
+            "diagrams_rendered": 4,
+            "verified_files": 3,
+            "synthetic_peak_pressure_mpa": 342.5004364419622,
+            "study_sha256": "ae257b3248ced8e6985884a2269cde8db7cd129e2c17e0a9c1c5817593a33456",
+            "production_approved": false
+          },
+          "thermal_study": {
+            "app_version": "1.0.0rc11",
+            "tabs_rendered": 6,
+            "diagrams_rendered": 12,
+            "verified_files": 3,
+            "synthetic_gear_peak_c": 60.79234545102813,
+            "study_sha256": "c09e9947f8c0ab7ad47d44a1fd40ece6c488a66e14719c30140c9393b26e0c78",
+            "production_approved": false
+          },
+          "tooth_profile": {
+            "app_version": "1.0.0rc11",
+            "tabs_rendered": 4,
+            "diagrams_rendered": 2,
+            "verified_files": 6,
+            "involute_start_radius_mm": 18.820066532283924,
+            "study_sha256": "d2844cdf282f91a4e6ece791bb62a12efddf983745f2e4c201502f57daa01bfe",
+            "production_approved": false
+          },
+          "root_stress": {
+            "app_version": "1.0.0rc11",
+            "tabs_rendered": 7,
+            "diagrams_rendered": 7,
+            "verified_files": 6,
+            "peak_sampled_root_von_mises_mpa": 8.183902564945,
+            "mesh_convergence_passed": true,
+            "domain_sensitivity_passed": true,
+            "calculation_and_export_workers": true,
+            "study_sha256": "88a303a3e8a2efc31d5387257a609c5bf5054ea5537cc8571e69a80e1a4db2a3",
+            "production_approved": false
+          },
+          "selected": "416647d929c4"
+        }
+      },
+      "Windows-X64": {
+        "tests": {
+          "tests": 314,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "smoke": {
+          "ok": true,
+          "errors": [],
+          "candidates": 60,
+          "cad_meshes": 15,
+          "elapsed_s": 63.468,
+          "simulation_points": 25,
+          "native_platform": "offscreen",
+          "engineering_study": {
+            "app_version": "1.0.0rc11",
+            "tabs_rendered": 4,
+            "verified_files": 3,
+            "input_power_w": 250.0,
+            "study_sha256": "6351727be05d242e0a8445d16b21249f8be1a491e9996a71ab658bbb123b8838",
+            "production_approved": false
+          },
+          "shaft_study": {
+            "app_version": "1.0.0rc11",
+            "tabs_rendered": 6,
+            "verified_files": 3,
+            "maximum_equilibrium_residual": 0.0,
+            "study_sha256": "5786457039a04580d2d7bec531f69b4e904f7cc0f044d8afa92daad40321ec7e",
+            "production_approved": false
+          },
+          "bearing_study": {
+            "app_version": "1.0.0rc11",
+            "tabs_rendered": 5,
+            "verified_files": 3,
+            "synthetic_basic_l10_hours": 18295.51049310608,
+            "study_sha256": "f73a5b330272ed1758d70f9711f62b1ba50f7e3459f0f64a15b6b639c0995f94",
+            "production_approved": false
+          },
+          "fatigue_study": {
+            "app_version": "1.0.0rc11",
+            "tabs_rendered": 5,
+            "verified_files": 3,
+            "nasa_example_corrected_endpoint_mpa": 125.06778394565542,
+            "study_sha256": "7ac9696d45671f4941e4973b93ddd55725a2c8eeccf05e8365f867390b996ece",
+            "production_approved": false
+          },
+          "contact_study": {
+            "app_version": "1.0.0rc11",
+            "tabs_rendered": 6,
+            "diagrams_rendered": 4,
+            "verified_files": 3,
+            "synthetic_peak_pressure_mpa": 342.5004364419622,
+            "study_sha256": "ae257b3248ced8e6985884a2269cde8db7cd129e2c17e0a9c1c5817593a33456",
+            "production_approved": false
+          },
+          "thermal_study": {
+            "app_version": "1.0.0rc11",
+            "tabs_rendered": 6,
+            "diagrams_rendered": 12,
+            "verified_files": 3,
+            "synthetic_gear_peak_c": 60.79234545102813,
+            "study_sha256": "c09e9947f8c0ab7ad47d44a1fd40ece6c488a66e14719c30140c9393b26e0c78",
+            "production_approved": false
+          },
+          "tooth_profile": {
+            "app_version": "1.0.0rc11",
+            "tabs_rendered": 4,
+            "diagrams_rendered": 2,
+            "verified_files": 6,
+            "involute_start_radius_mm": 18.820066532283924,
+            "study_sha256": "d2844cdf282f91a4e6ece791bb62a12efddf983745f2e4c201502f57daa01bfe",
+            "production_approved": false
+          },
+          "root_stress": {
+            "app_version": "1.0.0rc11",
+            "tabs_rendered": 7,
+            "diagrams_rendered": 7,
+            "verified_files": 6,
+            "peak_sampled_root_von_mises_mpa": 8.183902564948463,
+            "mesh_convergence_passed": true,
+            "domain_sensitivity_passed": true,
+            "calculation_and_export_workers": true,
+            "study_sha256": "88a303a3e8a2efc31d5387257a609c5bf5054ea5537cc8571e69a80e1a4db2a3",
+            "production_approved": false
+          },
+          "selected": "416647d929c4"
+        }
+      },
+      "macOS-ARM64": {
+        "tests": {
+          "tests": 314,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        "smoke": {
+          "ok": true,
+          "errors": [],
+          "candidates": 60,
+          "cad_meshes": 15,
+          "elapsed_s": 79.026,
+          "simulation_points": 25,
+          "native_platform": "offscreen",
+          "engineering_study": {
+            "app_version": "1.0.0rc11",
+            "tabs_rendered": 4,
+            "verified_files": 3,
+            "input_power_w": 250.0,
+            "study_sha256": "6351727be05d242e0a8445d16b21249f8be1a491e9996a71ab658bbb123b8838",
+            "production_approved": false
+          },
+          "shaft_study": {
+            "app_version": "1.0.0rc11",
+            "tabs_rendered": 6,
+            "verified_files": 3,
+            "maximum_equilibrium_residual": 0.0,
+            "study_sha256": "4b1c86918a77060dee64f310ad5358f3b9c6fb4b17d64ff5c7dbbd3d9fff393f",
+            "production_approved": false
+          },
+          "bearing_study": {
+            "app_version": "1.0.0rc11",
+            "tabs_rendered": 5,
+            "verified_files": 3,
+            "synthetic_basic_l10_hours": 18295.510493106085,
+            "study_sha256": "b0458a94c67456a0d2a9b6a7feeab7b858b265437b50d85add873de41eee6a29",
+            "production_approved": false
+          },
+          "fatigue_study": {
+            "app_version": "1.0.0rc11",
+            "tabs_rendered": 5,
+            "verified_files": 3,
+            "nasa_example_corrected_endpoint_mpa": 125.06778394565542,
+            "study_sha256": "7ac9696d45671f4941e4973b93ddd55725a2c8eeccf05e8365f867390b996ece",
+            "production_approved": false
+          },
+          "contact_study": {
+            "app_version": "1.0.0rc11",
+            "tabs_rendered": 6,
+            "diagrams_rendered": 4,
+            "verified_files": 3,
+            "synthetic_peak_pressure_mpa": 342.50043644196217,
+            "study_sha256": "ae257b3248ced8e6985884a2269cde8db7cd129e2c17e0a9c1c5817593a33456",
+            "production_approved": false
+          },
+          "thermal_study": {
+            "app_version": "1.0.0rc11",
+            "tabs_rendered": 6,
+            "diagrams_rendered": 12,
+            "verified_files": 3,
+            "synthetic_gear_peak_c": 60.792345451028076,
+            "study_sha256": "c09e9947f8c0ab7ad47d44a1fd40ece6c488a66e14719c30140c9393b26e0c78",
+            "production_approved": false
+          },
+          "tooth_profile": {
+            "app_version": "1.0.0rc11",
+            "tabs_rendered": 4,
+            "diagrams_rendered": 2,
+            "verified_files": 6,
+            "involute_start_radius_mm": 18.820066532283924,
+            "study_sha256": "d2844cdf282f91a4e6ece791bb62a12efddf983745f2e4c201502f57daa01bfe",
+            "production_approved": false
+          },
+          "root_stress": {
+            "app_version": "1.0.0rc11",
+            "tabs_rendered": 7,
+            "diagrams_rendered": 7,
+            "verified_files": 6,
+            "peak_sampled_root_von_mises_mpa": 8.183902564944654,
+            "mesh_convergence_passed": true,
+            "domain_sensitivity_passed": true,
+            "calculation_and_export_workers": true,
+            "study_sha256": "88a303a3e8a2efc31d5387257a609c5bf5054ea5537cc8571e69a80e1a4db2a3",
+            "production_approved": false
+          },
+          "selected": "416647d929c4"
+        }
+      }
+    }
   },
   "limitations": [
     "Numerical elasticity checks do not qualify physical material, support, loading, manufacturing process or fatigue life.",
@@ -147,5 +447,152 @@
     "errors": 0,
     "skipped": 0
   },
-  "local_test_scope": "Full 314-test source suite passed before the declared-cutter evidence refinement; all 34 elastic/root tests passed after it. Final cross-platform and native checks are pending."
+  "local_test_scope": "Full 314-test local source suite passed before the declared-cutter evidence refinement; all 34 elastic/root tests and source desktop checks passed after it. Final CI runs contain 314 tests each on the tested implementation commit.",
+  "tested_implementation_commit": "212a84b52dca5461d4fc3b4c13cc5078f8a5b8ff",
+  "dependency_audit": {
+    "Linux-X64": {
+      "runtime_packages": 48,
+      "known_package_advisories": 0,
+      "missing_license_texts": []
+    },
+    "Windows-X64": {
+      "runtime_packages": 48,
+      "known_package_advisories": 0,
+      "missing_license_texts": []
+    },
+    "macOS-ARM64": {
+      "runtime_packages": 48,
+      "known_package_advisories": 0,
+      "missing_license_texts": []
+    },
+    "scope": "Known Python-package advisories and collected notices, not exhaustive native-library coverage or a legal opinion. See SECURITY.md and THIRD_PARTY_NOTICES.md."
+  },
+  "local_windows_native_smoke": {
+    "ok": true,
+    "errors": [],
+    "candidates": 60,
+    "cad_meshes": 15,
+    "elapsed_s": 52.954,
+    "simulation_points": 25,
+    "native_platform": "offscreen",
+    "engineering_study": {
+      "app_version": "1.0.0rc11",
+      "tabs_rendered": 4,
+      "verified_files": 3,
+      "input_power_w": 250.0,
+      "study_sha256": "6351727be05d242e0a8445d16b21249f8be1a491e9996a71ab658bbb123b8838",
+      "production_approved": false
+    },
+    "shaft_study": {
+      "app_version": "1.0.0rc11",
+      "tabs_rendered": 6,
+      "verified_files": 3,
+      "maximum_equilibrium_residual": 0.0,
+      "study_sha256": "5786457039a04580d2d7bec531f69b4e904f7cc0f044d8afa92daad40321ec7e",
+      "production_approved": false
+    },
+    "bearing_study": {
+      "app_version": "1.0.0rc11",
+      "tabs_rendered": 5,
+      "verified_files": 3,
+      "synthetic_basic_l10_hours": 18295.51049310608,
+      "study_sha256": "f73a5b330272ed1758d70f9711f62b1ba50f7e3459f0f64a15b6b639c0995f94",
+      "production_approved": false
+    },
+    "fatigue_study": {
+      "app_version": "1.0.0rc11",
+      "tabs_rendered": 5,
+      "verified_files": 3,
+      "nasa_example_corrected_endpoint_mpa": 125.06778394565542,
+      "study_sha256": "7ac9696d45671f4941e4973b93ddd55725a2c8eeccf05e8365f867390b996ece",
+      "production_approved": false
+    },
+    "contact_study": {
+      "app_version": "1.0.0rc11",
+      "tabs_rendered": 6,
+      "diagrams_rendered": 4,
+      "verified_files": 3,
+      "synthetic_peak_pressure_mpa": 342.5004364419622,
+      "study_sha256": "ae257b3248ced8e6985884a2269cde8db7cd129e2c17e0a9c1c5817593a33456",
+      "production_approved": false
+    },
+    "thermal_study": {
+      "app_version": "1.0.0rc11",
+      "tabs_rendered": 6,
+      "diagrams_rendered": 12,
+      "verified_files": 3,
+      "synthetic_gear_peak_c": 60.79234545102813,
+      "study_sha256": "c09e9947f8c0ab7ad47d44a1fd40ece6c488a66e14719c30140c9393b26e0c78",
+      "production_approved": false
+    },
+    "tooth_profile": {
+      "app_version": "1.0.0rc11",
+      "tabs_rendered": 4,
+      "diagrams_rendered": 2,
+      "verified_files": 6,
+      "involute_start_radius_mm": 18.820066532283924,
+      "study_sha256": "d2844cdf282f91a4e6ece791bb62a12efddf983745f2e4c201502f57daa01bfe",
+      "production_approved": false
+    },
+    "root_stress": {
+      "app_version": "1.0.0rc11",
+      "tabs_rendered": 7,
+      "diagrams_rendered": 7,
+      "verified_files": 6,
+      "peak_sampled_root_von_mises_mpa": 8.183902564948463,
+      "mesh_convergence_passed": true,
+      "domain_sensitivity_passed": true,
+      "calculation_and_export_workers": true,
+      "study_sha256": "88a303a3e8a2efc31d5387257a609c5bf5054ea5537cc8571e69a80e1a4db2a3",
+      "production_approved": false
+    },
+    "selected": "416647d929c4"
+  },
+  "local_windows_native_archive": {
+    "name": "GearForge-Studio-1.0.0rc11-windows-x86_64-unsigned.zip",
+    "sha256": "4ac9def918def0eef488c134c16dc39ac2b176d0b903d48e6b797107c1beec7f",
+    "bytes": 298885802,
+    "unsigned": true
+  },
+  "local_windows_console_root": {
+    "passed": true,
+    "app_version": "1.0.0rc11",
+    "study_sha256": "88a303a3e8a2efc31d5387257a609c5bf5054ea5537cc8571e69a80e1a4db2a3",
+    "verified_files": 6,
+    "windowed_root_worker": true,
+    "commands": [
+      "--version",
+      "tooth new --synthetic-example",
+      "root from-profile",
+      "root new --synthetic-example",
+      "root calculate",
+      "verify",
+      "windowed --worker-file root-calculate"
+    ]
+  },
+  "independent_geometry_reference": {
+    "passed": true,
+    "comparisons": 72,
+    "ci_run_url": "https://github.com/jonahsaunders/Gearforge-Studio/actions/runs/37553637888"
+  },
+  "independent_shaft_reference": {
+    "passed": true,
+    "comparisons": 1452,
+    "ci_run_url": "https://github.com/jonahsaunders/Gearforge-Studio/actions/runs/37553637888"
+  },
+  "independent_contact_reference": {
+    "passed": true,
+    "comparisons": 208,
+    "ci_run_url": "https://github.com/jonahsaunders/Gearforge-Studio/actions/runs/37553637888"
+  },
+  "independent_thermal_reference": {
+    "passed": true,
+    "comparisons": 3539,
+    "ci_run_url": "https://github.com/jonahsaunders/Gearforge-Studio/actions/runs/37553637888"
+  },
+  "independent_tooth_reference": {
+    "passed": true,
+    "comparisons": 266,
+    "ci_run_url": "https://github.com/jonahsaunders/Gearforge-Studio/actions/runs/37553637888"
+  }
 }
