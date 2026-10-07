@@ -13,14 +13,17 @@ ROOT=Path(__file__).resolve().parents[1]
 
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument("--smoke",action="store_true");args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument("--smoke",action="store_true")
+    parser.add_argument("--smoke-out",type=Path,default=ROOT/"build"/"frozen-smoke")
+    args=parser.parse_args()
     version=tomllib.loads((ROOT/"pyproject.toml").read_text())["project"]["version"]
     system=platform.system().lower();arch=platform.machine().lower().replace("amd64","x86_64").replace("aarch64","arm64")
     folder=ROOT/"dist"/("GearForgeStudio.app" if system=="darwin" else "GearForgeStudio")
     executable=folder/"Contents/MacOS/GearForgeStudio" if system=="darwin" else folder/("GearForgeStudio.exe" if system=="windows" else "GearForgeStudio")
     if not executable.is_file():raise FileNotFoundError(executable)
     if args.smoke:
-        destination=ROOT/"build"/"frozen-smoke"
+        destination=args.smoke_out.resolve()
+        if not destination.is_relative_to((ROOT/"build").resolve()):raise ValueError("Smoke output must stay in the build directory")
         if destination.exists():
             if destination.resolve().parent != (ROOT/"build").resolve():raise ValueError("Unsafe smoke output path")
             import shutil;shutil.rmtree(destination)
@@ -73,7 +76,7 @@ def main():
         if tooth.get("app_version")!=version or tooth.get("tabs_rendered")!=4 or tooth.get("diagrams_rendered")!=2 or tooth.get("verified_files")!=6:
             raise RuntimeError("Native tooth profile smoke failed: "+str(tooth))
         root=evidence.get("root_stress") or {}
-        if root.get('app_version')!=version or root.get('tabs_rendered')!=7 or root.get('diagrams_rendered')!=7 or root.get('verified_files')!=6 or not root.get('calculation_and_export_workers') or not root.get('mesh_convergence_passed') or not root.get('domain_sensitivity_passed'):
+        if root.get('app_version')!=version or root.get('tabs_rendered')!=8 or root.get('diagrams_rendered')!=7 or root.get('verified_files')!=6 or not root.get('calculation_and_export_workers') or not root.get('mesh_convergence_passed') or not root.get('domain_sensitivity_passed'):
             raise RuntimeError('Native root stress smoke failed: '+str(root))
         history=evidence.get('stress_history') or {}
         if history.get('app_version')!=version or history.get('tabs_rendered')!=7 or history.get('diagrams_rendered')!=3 or history.get('verified_files')!=5 or not history.get('calculation_and_export_workers') or history.get('production_approved') is not False:

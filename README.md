@@ -14,11 +14,13 @@
 
 GearForge Studio brings gearbox search, 3D CAD, motion playback and nine engineering study workspaces into one local desktop application. Compare printed, catalog and hybrid designs; investigate geometry, loads, heat and fatigue; export the inputs and calculations behind each result.
 
+**[Download for Windows (.exe)](https://github.com/jonahsaunders/Gearforge-Studio/releases/download/v1.0.0rc13/GearForge-Studio-1.0.0rc13-Windows-x64-Setup.exe)** · [Release notes and checksums](https://github.com/jonahsaunders/Gearforge-Studio/releases/tag/v1.0.0rc13)
+
 **[Get started](#install-and-launch)** · **[Features](#features)** · **[Engineering workspaces](#engineering-workspaces)** · **[Screenshot gallery](docs/GALLERY.md)** · **[Documentation](#documentation)**
 
 ![GearForge Studio development app: a 12:1 hybrid gearbox, generated 3D assembly, ranked candidates and engineering checks](screenshots/desktop.png)
 
-> **Current version: 1.0.0rc12 — engineering release candidate.** Supports prototype design and engineering studies. Final production gearbox load/life ratings remain unqualified. Synthetic examples illustrate the methods; they are not material allowables. [Scope and remaining work →](docs/PRODUCTION_QUALIFICATION.md)
+> **Current version: 1.0.0rc13 — engineering release candidate.** Supports prototype design and engineering studies. Final production gearbox load/life ratings remain unqualified. Synthetic examples illustrate the methods; they are not material allowables. [Scope and remaining work →](docs/PRODUCTION_QUALIFICATION.md)
 
 ## Features
 
@@ -81,6 +83,18 @@ The prototype CAD pipeline and the rack-generated profile study are separate. Ro
 
 ## Install and launch
 
+### Windows installer
+
+1. [Download GearForge Studio for Windows x64](https://github.com/jonahsaunders/Gearforge-Studio/releases/download/v1.0.0rc13/GearForge-Studio-1.0.0rc13-Windows-x64-Setup.exe).
+2. Run the installer, then launch **GearForge Studio** from the Start Menu.
+
+The installer includes Python, the desktop app and all required CAD libraries.
+No separate setup or internet connection is required to run it. It installs for
+your Windows account and includes an uninstaller. The package is unsigned, so
+Windows may identify its publisher as unknown. [Installation details →](docs/WINDOWS_INSTALL.md)
+
+### Run from source
+
 Use **64-bit Python 3.12** for the tested setup. The package supports Python 3.12–3.13. A graphical desktop is required for normal GUI use; installation downloads dependencies, then design and calculation run locally.
 
 ```bash
@@ -127,7 +141,7 @@ No environment activation is needed for these commands. After installation, `gea
 
 **First engineering study:** Choose **Design → Engineering study**, review the geometry and duty, then calculate. Open the other study examples in their matching workspaces using **Open study…** or **Open…**.
 
-For company installation, native archives and backup/restore, use the [deployment guide](docs/INTERNAL_DEPLOYMENT.md). The rc12 native builds were checked on Windows x86_64, Linux x86_64 and macOS ARM64. Packages are unsigned; Linux bundles target glibc 2.39 or newer. [Exact build evidence →](VALIDATION.json)
+For company installation and backup/restore, use the [deployment guide](docs/INTERNAL_DEPLOYMENT.md). This release provides a verified Windows x64 installer and portable archive. macOS and Linux source instructions are above; earlier native validation does not qualify a new build. [Exact build evidence →](VALIDATION.json)
 
 ## Supported designs
 
@@ -161,7 +175,7 @@ Exports preserve existing directories. Changed inputs require recalculation. Une
 
 ## Verification and engineering scope
 
-The rc12 implementation passed **351 regression tests on each of Windows, Linux and macOS**, plus native-package checks on all three platforms. [Recorded tests and exact commits](docs/HISTORY_VALIDATION.json) are separate from the live CI badge above.
+The rc13 Windows release passes the source regression suite and actual installed desktop/CAD checks. The installer is tested without Python on the command path, and uninstall preserves user-created files. [Current release evidence](docs/WINDOWS_RELEASE_VALIDATION.json) is separate from the live CI badge above. Historical three-platform evidence remains in [the rc12 record](docs/HISTORY_VALIDATION.json).
 
 Numerical comparisons cover geometry, shaft statics, bearing arithmetic, shaft fatigue, contact, heat balance, generated profiles, elastic fields and rainflow cycles. Reference checks use openly licensed tools or documented public worked examples; original synthetic fixtures are included in the repository. The history study alone has 25,788 independent numerical comparisons. [Methods and reference scope →](docs/OPEN_ENGINEERING.md)
 

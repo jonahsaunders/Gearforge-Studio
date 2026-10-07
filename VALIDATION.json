@@ -1,9 +1,11 @@
 {
   "schema_version": 1,
-  "app_version": "1.0.0rc12",
-  "release_status": "local stress-history release candidate; 351 tests and native checks passed on three platforms; production gearbox ratings remain unqualified",
-  "current_evidence": "docs/HISTORY_VALIDATION.json",
+  "app_version": "1.0.0rc13",
+  "release_status": "Windows installer release candidate; 424 regression tests and installed desktop/CAD checks passed; production gearbox ratings remain unqualified",
+  "current_evidence": "docs/WINDOWS_RELEASE_VALIDATION.json",
   "historical_evidence": [
+    "docs/GUI_VALIDATION.json",
+    "docs/HISTORY_VALIDATION.json",
     "docs/ROOT_VALIDATION.json",
     "docs/TOOTH_VALIDATION.json",
     "docs/THERMAL_VALIDATION.json",

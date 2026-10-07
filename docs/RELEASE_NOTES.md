@@ -1,27 +1,35 @@
-# GearForge Studio 1.0.0rc12
+# GearForge Studio 1.0.0rc13
 
-This release candidate adds an original local signed stress-history study for
-changing loads. All implementation and synthetic fixtures can be published with
-this repository; no paid standards, restricted material tables or private solver
-are required.
+## Download for Windows
 
-- Count exact finite cycles across ordered/repeated blocks without expanding
-  billions of samples or losing block-transition cycles and endpoint halves.
-- Assess explicit uniaxial elastic material curves with bounded interpolation,
-  a selected mean-stress model and linear damage; retain missing/out-of-range
-  conditions and lower bounds without inventing endurance or remaining life.
-- Check duration/start coverage and retain source/revision/sharing declarations,
-  imported CSV fingerprints, strict editable files and complete JSON/CSV exports.
-- Use seven desktop tabs, three plots and cancellable calculation/export workers.
-- Reproduce 25,788 checks with separately installed MIT rainflow and independent
-  high-precision fatigue arithmetic. The reference is not an app dependency.
+Download **GearForge-Studio-1.0.0rc13-Windows-x64-Setup.exe** below. Run it, then
+open **GearForge Studio** from the Start Menu. This single installer includes
+Python, the desktop application and all required CAD libraries. No separate
+Python installation or internet connection is needed to run the app.
 
-See [stress history methods and limits](STRESS_HISTORY.md). `VALIDATION.json`
-identifies current build evidence; previous releases do not qualify a new build.
-Native archives are unsigned and require company workstation acceptance.
+The portable Windows ZIP is also available: extract it completely and run
+`GearForgeStudio.exe`. Keep the `_internal` folder alongside that executable.
+SHA-256 checksums accompany every download.
 
-Production gearbox design and service-load ratings remain unqualified. The
-synthetic history is not a gear solution. Actual full-engagement stress histories,
-material/process evidence, multiaxial effects, manufacturing and physical load/life
-qualification remain. Existing root pressure-patch peaks are not treated as a
-complete cyclic history.
+The installer is per user and includes an uninstaller that preserves projects,
+settings and user-created files. The package is **unsigned**, so Windows may show
+an unknown-publisher prompt. Follow your company’s workstation policy.
+
+## Included improvements
+
+- Nine independent engineering study windows, consistent Save/Save As behavior,
+  keyboard shortcuts, larger text and adaptable layouts.
+- Dark-mode charts/reports, accessible labels, visible keyboard focus and plots
+  that distinguish series by line patterns as well as color.
+- Fixed material-point root stresses, corrected driven-wheel load direction and
+  independently checked building blocks for future full-cycle gear analysis.
+- Gearbox search, CAD, motion playback, calibration, catalog tools and traceable
+  geometry, shaft, bearing, contact, thermal, root and fatigue studies.
+
+This release publishes verified Windows x64 packages. Current macOS/Linux
+binaries are not included; source remains available for those platforms.
+
+**Production gearbox load and life ratings remain unqualified.** Synthetic
+examples are not material allowables or supplier evidence. Full-cycle loading and
+physical qualification remain incomplete. Earlier driven-wheel root studies need
+recalculation before their signed fields are interpreted.

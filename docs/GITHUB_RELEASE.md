@@ -20,7 +20,7 @@ Only for a new repository created from an extracted source kit, use your configu
 ```sh
 git init -b main
 git add .
-git commit -m "Prepare GearForge Studio 1.0.0rc12"
+git commit -m "Prepare GearForge Studio 1.0.0rc13"
 git remote add origin https://github.com/jonahsaunders/Gearforge-Studio.git
 git push -u origin main
 ```
@@ -31,8 +31,8 @@ Actions enabled and permission to create releases. Create the matching tag when
 ready to build native assets:
 
 ```sh
-git tag -a v1.0.0rc12 -m "GearForge Studio 1.0.0rc12"
-git push origin v1.0.0rc12
+git tag -a v1.0.0rc13 -m "GearForge Studio 1.0.0rc13"
+git push origin v1.0.0rc13
 ```
 
 Tag/version mismatch stops the build. The separate numeric macOS build is `tool.gearforge.release.macos-build` in
@@ -70,3 +70,26 @@ and Windows system paths, preventing unrelated applications on PATH from supplyi
 incompatible native libraries. The Windows package includes GearForgeCLI.exe for
 visible diagnostics. The smoke gate exercises the GUI/CAD process and the windowed
 worker entry point separately, retaining build/frozen-smoke.log on failure.
+
+## Windows installer
+
+After the frozen Windows smoke passes, run:
+
+```sh
+python scripts/build_windows_installer.py
+python scripts/test_windows_installer.py
+python scripts/native_archive.py
+```
+
+The compiler download is NSIS 3.13, pinned by SHA-256 and used from `build/`.
+No installer compiler is installed system-wide. The complete `.exe`, portable ZIP
+and their checksums are produced under `release-assets/`. The installer test must
+run on a clean build account: it refuses to replace existing GearForge registration
+or Start Menu entries, verifies every installed file, runs the installed GUI/CAD
+without Python on PATH, then checks uninstall and user-file preservation.
+
+The release workflow builds and tests this installer on its Windows runner.
+All-target tag builds still require all platform jobs before creating a draft.
+A maintainer may separately publish a verified Windows-only prerelease; the draft
+job then retains its artifacts without replacing the already published files.
+Never label that Windows-only download as a verified current Mac/Linux bundle.

@@ -1,9 +1,18 @@
-# Release status — 1.0.0rc12
+# Release status — 1.0.0rc13
 
 This is a desktop **release candidate**; current validation status is recorded
 in `VALIDATION.json` and its linked version-specific evidence. It is not a finished
 commercially validated gearbox design product. The remaining work below is concrete
 and material; no installer, model or calculation should imply it is already complete.
+
+## Windows download
+
+The rc13 release includes a complete Windows x64 installer executable and a
+portable ZIP. Both include Python, Qt, CAD libraries and dependency notices.
+Installation is per user; uninstall keeps projects/settings and removes only
+shipped program files. See [installation](WINDOWS_INSTALL.md) and
+[Windows release evidence](WINDOWS_RELEASE_VALIDATION.json). This package is
+unsigned. Current macOS and Linux binaries are not claimed by this Windows release.
 
 ## Company-use hardening
 

@@ -43,6 +43,12 @@ jobs:
       - run: python -m pip_audit --no-deps --disable-pip -r release-licenses/requirements-runtime.txt --format cyclonedx-json --output release-licenses/sbom.cdx.json
       - run: python scripts/build_native.py
       - run: python scripts/native_archive.py --smoke
+      - if: runner.os == 'Windows'
+        run: python scripts/build_windows_installer.py
+      - if: runner.os == 'Windows'
+        run: python scripts/test_windows_installer.py
+      - if: runner.os == 'Windows'
+        run: python scripts/native_archive.py
       - if: runner.os == 'Linux'
         run: python scripts/build_release.py
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -62,6 +68,7 @@ jobs:
             build/frozen-smoke/*.png
             build/frozen-smoke.log
             build/desktop-worker-result.json
+            build/windows-installer-test.json
             release-licenses/DEPENDENCIES.json
             release-licenses/requirements-runtime.txt
             release-licenses/vulnerability-audit.json
@@ -89,4 +96,10 @@ jobs:
           cd assets
           for checksum in *.sha256; do sha256sum --check "$checksum"; done
           cd ..
+          # A maintainer may already have published a separately verified
+          # Windows release. Do not replace its binaries or change its visibility.
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            echo "Release already exists; verified build assets are retained as workflow artifacts."
+            exit 0
+          fi
           gh release create "$RELEASE_TAG" assets/* --verify-tag --draft --prerelease --title "GearForge Studio $RELEASE_TAG" --notes-file docs/RELEASE_NOTES.md

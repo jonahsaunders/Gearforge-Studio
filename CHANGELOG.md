@@ -1,4 +1,8 @@
-# Unreleased
+# 1.0.0rc13 — 2026-10-07
+
+- Publish a complete Windows x64 installer executable and portable archive.
+- Include the desktop/CAD runtime, Start Menu entry, per-user uninstall, checksums
+  and installation verification without a separately installed Python.
 
 - Audit all main pages and nine study editors against Apple’s desktop interface guidance.
 - Add independent study windows, native document menus, Save/Save As behavior,

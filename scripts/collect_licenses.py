@@ -6,6 +6,7 @@ their modules: a conservative inventory, not a legal opinion.
 from __future__ import annotations
 
 import importlib.metadata as metadata
+import hashlib
 import json
 import shutil
 import tomllib
@@ -58,7 +59,12 @@ def collect():
                 continue
             source = Path(distribution.locate_file(entry))
             if source.is_file():
-                target = folder / lower.replace("/", "__").replace("..", "_")
+                filename = lower.replace("/", "__").replace("..", "_")
+                # Deep vendor trees can exceed Windows installer path limits.
+                # Retain every notice with a deterministic, collision-resistant name.
+                if len(filename) > 72:
+                    filename = Path(lower).name[:40] + "__" + hashlib.sha256(lower.encode()).hexdigest()[:16]
+                target = folder / filename
                 shutil.copyfile(source, target)
         for supplemental in (ROOT / "packaging/licenses").iterdir():
             if canonicalize_name(supplemental.name) == name:
