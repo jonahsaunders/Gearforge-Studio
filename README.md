@@ -57,7 +57,7 @@ Open these workspaces from the **Design** menu. Each has editable inputs, explic
 | **[Tooth contact and surface fatigue](docs/CONTACT_ANALYSIS.md)** | Spur Hertz pressure and sliding diagrams, declared load sharing, opposite-flank exposure, each gear's tooth cycles and bounded pressure-life curves. | [Synthetic contact study](examples/synthetic-contact.gearforge-contact) |
 | **[Thermal network](docs/THERMAL_ANALYSIS.md)** | Thermal bodies and heat-transfer paths, ordered heating/cooling phases, continuous temperature extrema, energy balance, settled repeated duty and warm-up bounds. | [Synthetic thermal study](examples/synthetic-thermal.gearforge-thermal) |
 | **[Rack-generated tooth profiles](docs/TOOTH_PROFILES.md)** | Explicit spur cutter geometry, generated root/involute joins, undercut/fold rejection, active-path checks, whole-gear/tooth views and sampled DXF/SVG/CSV profiles. | [Synthetic cutter study](examples/synthetic-tooth.gearforge-tooth) |
-| **[Elastic tooth-root stress](docs/ROOT_STRESS.md)** | 2D finite-element stress on the generated spur profile, explicit supports and pressure patches, three mesh levels, a wider-sector comparison, stress maps and CSV/VTK fields. | [Synthetic root study](examples/synthetic-root.gearforge-root) |
+| **[Elastic tooth-root stress](docs/ROOT_STRESS.md)** | 2D finite-element stress on the generated spur profile, explicit supports and pressure patches, three mesh levels, a wider-sector comparison, signed stress at fixed material points, stress maps and CSV/VTK fields. | [Root study](examples/synthetic-root.gearforge-root) · [Fixed points](examples/synthetic-root-probes.gearforge-root) |
 | **[Cyclic stress histories](docs/STRESS_HISTORY.md)** | Signed local stress samples, finite rainflow counts across repeated blocks, bounded uniaxial fatigue damage, duration/start coverage, CSV fingerprints and history/cycle/S–N plots. | [Synthetic history](examples/synthetic-history.gearforge-history) |
 
 <table>
@@ -75,7 +75,7 @@ Open these workspaces from the **Design** menu. Each has editable inputs, explic
   </tr>
 </table>
 
-These are **actual app captures** using repository examples. [View all 18 images, example files and captions →](docs/GALLERY.md)
+These are **actual app captures** using repository examples. [View all 19 images, example files and captions →](docs/GALLERY.md)
 
 The prototype CAD pipeline and the rack-generated profile study are separate. Root stress evaluates sampled pressure-patch positions; it does not automatically produce a complete rolling-load fatigue history. See each method guide for its supported conditions and evidence requirements.
 
@@ -172,7 +172,7 @@ Software verification does not qualify a physical gearbox. Actual material/proce
 | I want to… | Start here |
 | --- | --- |
 | Use the app, understand controls or troubleshoot | [User guide](docs/USER_GUIDE.md) |
-| See every workspace before installing | [18-image gallery](docs/GALLERY.md) |
+| See every workspace before installing | [19-image gallery](docs/GALLERY.md) |
 | Understand a calculation and its limits | [Engineering workspaces](#engineering-workspaces) · [Simulation methods](docs/SIMULATION.md) |
 | Install for employees, manage data or restore a backup | [Internal deployment](docs/INTERNAL_DEPLOYMENT.md) |
 | Review current readiness and remaining work | [Release status](docs/RELEASE_STATUS.md) · [Qualification](docs/PRODUCTION_QUALIFICATION.md) · [Changelog](CHANGELOG.md) |

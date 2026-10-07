@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-07",
+  "app_version": "1.0.0rc12",
+  "development_method": "generated-spur-q9-elastic-2",
+  "status": "Unreleased development addition: local Windows source tests, independent comparisons, GUI/CLI exports and source/wheel packaging passed. New native packages have not been qualified.",
+  "production_qualified": false,
+  "baseline_commit": "0e7375b1f92fc2b057f7b95291a690a4f60d7616",
+  "local_windows_source_tests": {
+    "tests": 367,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "independent_fixed_point_comparison": {
+    "passed": true,
+    "comparisons": 6400,
+    "reference": "https://github.com/kinnala/scikit-fem",
+    "reference_version": "12.0.2",
+    "reference_license": "BSD-3-Clause",
+    "scope": "Signed tensors at fixed interior, edge and vertex points in six original elastic fixtures. No fatigue or physical strength qualification.",
+    "relative_tolerance": 2e-08,
+    "absolute_tolerance_mpa": 2e-07,
+    "maximum_absolute_error_mpa": 4.27607261140015e-12
+  },
+  "existing_elastic_comparison": {
+    "passed": true,
+    "comparisons": 4582
+  },
+  "synthetic_example": {
+    "path": "examples/synthetic-root-probes.gearforge-root",
+    "study_sha256": "b30bfc5575dc5cdb524d09276892b5281d03ec4db4132282bd6e84ede13c3011",
+    "probe_checks": [
+      {
+        "name": "Left subsurface root",
+        "mesh_changes_percent": [
+          7.993521733676986,
+          1.9921398474495915
+        ],
+        "domain_change_percent": 0.5335001658355977,
+        "mesh_convergence_passed": true,
+        "domain_sensitivity_passed": true,
+        "basis_entered": true
+      },
+      {
+        "name": "Right subsurface root",
+        "mesh_changes_percent": [
+          7.993521733692349,
+          1.9921398474519731
+        ],
+        "domain_change_percent": 0.5335001658333691,
+        "mesh_convergence_passed": true,
+        "domain_sensitivity_passed": true,
+        "basis_entered": true
+      }
+    ],
+    "verified_data_files": 7,
+    "production_approved": false
+  },
+  "source_sha256_lf_normalized": {
+    "src/gearforge/stress_probes.py": "6b7cf1d71f2df3d9567bd67f769af07ed595ea6a2a68636a6469f4777d04aff5",
+    "src/gearforge/root_stress.py": "b0960ea96a7cf8af86ee3f49974f0d89550c4a9f3f5c6eff4454ef6ea0897dec",
+    "src/gearforge/root_ui.py": "700d24ddd2b61d6697903e251ec17a40a8237703c9b9099842c522b62d013400",
+    "scripts/verify_elastic_reference.py": "6a142b5dfa128bac1ecebe90705ed7b93195dd01b0ed22a2e4d7a9e178cfa13c",
+    "scripts/verify_stress_probe_reference.py": "442ba72025f714801fd5d6c229e0be1b4bb9a50c01c19463b3c1adc7897fd8af",
+    "tests/test_stress_probes.py": "8b02a297722806569496a0737b69341757fd6bd4df56e8d5e92026d947b40515",
+    "tests/test_root_stress.py": "1e8c2cb282cdd231f316e167d5c9ee9184bcb03a4f7d5ecc2fbb753dffe92376",
+    "tests/data/open_stress_probe_reference.json": "389562c1156637d3b65e64d153b13752b4f7ab0d1a9748b43b7629c4fdef7be0",
+    "examples/synthetic-root-probes.gearforge-root": "3169a6eaa6060ef2fbb0710c70e4e3d9eb70eb1192948a197c52fdedcd279a4e"
+  },
+  "package_checks": {
+    "wheel_built": true,
+    "new_module_in_wheel_verified": true,
+    "sdist_built": true,
+    "github_source_zip_checksums_verified": true
+  },
+  "desktop_preview": "screenshots/captures-probes.json",
+  "methods": "docs/ROOT_STRESS.md",
+  "remaining_scope": "No chronology, unloaded phases, solved contact sharing, qualified material fatigue inputs, physical gearbox validation or production load/life ratings."
+}

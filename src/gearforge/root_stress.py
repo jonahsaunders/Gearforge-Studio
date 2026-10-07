@@ -24,8 +24,9 @@ from .elasticity import PlaneElasticSystem, MAX_ELEMENTS, shape, stress_measures
 from .engineering import _integer, _model, _text, pair_geometry
 from .models import atomic_text, finite, read_text_limited, strict_json
 from .tooth_profile import ToothProfileStudy, RackProfile, calculate_profile_study, synthetic_profile_example
+from .stress_probes import StressProbe, locate_probes, probe_response, probe_changes, probe_report_html, probe_csv
 
-METHOD='generated-spur-q9-elastic-1'
+METHOD='generated-spur-q9-elastic-2'
 MAX_BYTES=3_000_000
 
 
@@ -66,6 +67,7 @@ class RootStressStudy:
     radial_layers: int = 8
     convergence_tolerance_percent: float = 5.0
     cases: list[RootLoadCase] = field(default_factory=lambda:[RootLoadCase()])
+    probes: list[StressProbe] = field(default_factory=list)
     notes: str = ''
     schema_version: int = 1
 
@@ -96,12 +98,20 @@ class RootStressStudy:
             if not isinstance(case,RootLoadCase):raise ValueError('Invalid root load case')
             case.validate()
         if {c.case_name for c in self.cases}!={d.name for d in self.source.source.duty}:raise ValueError('Root cases must match source duty names')
+        if not isinstance(self.probes,list) or len(self.probes)>16:raise ValueError('Use at most 16 fixed material points')
+        for probe in self.probes:
+            if not isinstance(probe,StressProbe):raise ValueError('Invalid fixed material point')
+            probe.validate()
+        if len({p.name for p in self.probes})!=len(self.probes):raise ValueError('Material-point names must be unique')
 
     @classmethod
     def from_dict(cls,data):
         if not isinstance(data,dict) or not isinstance(data.get('cases'),list) or len(data['cases'])>200:raise ValueError('Invalid root study')
         data=dict(data);data['source']=ToothProfileStudy.from_dict(data.get('source'))
         data['cases']=[_model(RootLoadCase,c) for c in data['cases']]
+        probes=data.get('probes',[])
+        if not isinstance(probes,list) or len(probes)>16:raise ValueError('Use at most 16 fixed material points')
+        data['probes']=[_model(StressProbe,p) for p in probes]
         result=_model(cls,data);result.validate();return result
 
     @classmethod
@@ -232,6 +242,7 @@ def solve_root_mesh(study,profile,patches,refinement,sector_teeth=None,keep_fiel
     if keep_fields and len(mesh['nodes'])*len(patches)*2>750000:raise ValueError('Mesh/load field output exceeds the bounded study size')
     system=PlaneElasticSystem(mesh['nodes'],mesh['elements'],study.youngs_modulus_mpa,study.poisson_ratio,
         study.effective_face_width_mm,study.plane_mode)
+    probe_locations=locate_probes(system,study.probes)
     requests=[(patch,flank) for patch in patches for flank in ('left','right')]
     forces=np.column_stack([patch_forces(study,profile,mesh,patch,flank) for patch,flank in requests])
     solved=system.solve(forces,mesh['fixed_dofs']);responses=[]
@@ -258,10 +269,12 @@ def solve_root_mesh(study,profile,patches,refinement,sector_teeth=None,keep_fiel
             force_resultant_n_per_n_mm=force.sum(axis=0).tolist(),
             relative_equation_residual=float(solved['relative_equation_residual'][column]),
             force_balance_n=solved['force_balance_n'][:,column].tolist(),moment_balance_n_mm=float(solved['moment_balance_n_mm'][column]))
+        response['point_probes']=probe_response(system,u,study.probes,probe_locations)
         if keep_fields:response.update(root_curve=rows,displacement_mm_per_n_mm=u.reshape(-1,2).tolist(),element_von_mises_mpa_per_n_mm=domain_vm.tolist())
         responses.append(response)
     result=dict(refinement=refinement,sector_teeth=mesh['sector_teeth'],nodes=len(mesh['nodes']),elements=len(mesh['elements']),
         minimum_scaled_jacobian=system.minimum_scaled_jacobian,maximum_jacobian_condition=system.maximum_jacobian_condition,responses=responses)
+    result['probe_locations']=probe_locations
     if keep_fields:result['mesh']=dict(nodes_mm=mesh['nodes'].tolist(),elements=mesh['elements'].tolist(),fixed_node_indices=np.unique(mesh['fixed_dofs']//2).tolist())
     return result
 
@@ -299,7 +312,7 @@ def root_report_html(result):
         '<p>Stresses cover the sampled load positions only. Numerical comparisons do not qualify the physical support, material, loading or manufacturing process.</p>'
         f'<ul>{findings}</ul><h2>Operating-case results</h2>{cases}<h2>Mesh checks</h2><table><tr><th>Refinement</th><th>Teeth</th><th>Nodes</th><th>Q9 elements</th><th>Minimum scaled Jacobian</th><th>Equation residual</th></tr>{meshes}</table>'
         f'<p>The final refinement must meet the entered percentage threshold and improve on the earlier change, for both root measures and compliance at every sampled position/flank.</p><table><tr><th>Levels</th><th>Position and flank</th><th>Root von Mises change %</th><th>Tensile change %</th><th>Compliance change %</th></tr>{changes}</table>'
-        f'<h2>Cut-face sensitivity</h2>{domain}<h2>Method limits</h2><ul>{limits}</ul>'
+        f'<h2>Cut-face sensitivity</h2>{domain}{probe_report_html(result)}<h2>Method limits</h2><ul>{limits}</ul>'
         '<h2>Exported fields</h2><p>Calculation JSON retains all unit-torque field bases and operating-case scales. Root-curve CSV values are explicitly per N mm of torque. Case-stress CSV values are actual calculated operating-case stresses. VTK contains the fine mesh; when an operating case is calculable, it shows the first such case at its first sampled position. The calculation records that selection.</p>'
         f"<h2>Complete inputs</h2><pre>{esc(json.dumps(result['inputs'],indent=2,allow_nan=False))}</pre><p>Input fingerprint: {result['study_sha256']}</p></body></html>")
 
@@ -356,6 +369,7 @@ def export_root_study(study,destination):
         if result['calculation_available']:
             cases,curves=root_csv_files(result);atomic_text(stage/'case-stresses.csv',cases)
             atomic_text(stage/'root-curves-per-unit-torque.csv',curves);atomic_text(stage/'mesh.vtk',root_mesh_vtk(result))
+            if study.probes:atomic_text(stage/'fixed-point-stresses.csv',probe_csv(result))
         manifest=write_manifest(stage,kind='gearforge-root-stress',method=METHOD,study_sha256=result['study_sha256'],production_approved=False)
         if dest.exists() or dest.is_symlink():raise FileExistsError('Root-stress output already exists')
         stage.rename(dest)
@@ -375,7 +389,7 @@ def calculate_root_study(study):
     source=calculate_profile_study(study.source)
     result=dict(schema_version=1,app_version=__version__,method=METHOD,inputs=inputs,study_sha256=digest,
         source_profile_sha256=source['study_sha256'],calculation_available=False,mesh_levels=[],domain_check=None,
-        mesh_convergence_passed=None,domain_sensitivity_passed=None,cases=[],findings=list(source['findings']),
+        mesh_convergence_passed=None,domain_sensitivity_passed=None,cases=[],probe_checks=[],findings=list(source['findings']),
         production_approved=False,rated_output_torque_nm=None,rated_gearbox_life_hours=None,
         limitations=[
             'Homogeneous isotropic small-strain linear elasticity of a uniform-width 2D sector; plane stress or plane strain is explicit. No 3D face-edge effects, plasticity, residual stress, anisotropy or fatigue life.',
@@ -385,6 +399,7 @@ def calculate_root_study(study):
             'Q9 displacement elements use full 3x3 integration on bilinear piecewise-straight geometry. Root stress is recovered separately on each adjacent element edge at five positions, without nodal averaging; it is not a mathematically certified continuous peak.',
             'Mesh and wider-sector comparisons indicate sensitivity only. Localized load/support stresses may be singular or unresolved; a stable comparison does not establish physical validity or manufacturing strength.',
             'Material temperature range and elastic limit are declared inputs. Missing factors/temperatures remain incomplete. No production rating or life is approved by a stress result.'])
+    result['limitations'].append('Fixed material points retain signed body-frame tensors and all containing element-side values without averaging. Load-position traces have no chronology, unloaded phases or solved contact sharing; they are not time histories and cannot establish uniaxial fatigue applicability.')
     for field in ('youngs_modulus_mpa','poisson_ratio','effective_face_width_mm','support_radius_mm','patch_half_width_mm'):
         if getattr(study,field) is None:result['findings'].append('Missing '+field.replace('_',' '))
     if not source['profile_available'] or any(getattr(study,f) is None for f in ('youngs_modulus_mpa','poisson_ratio','effective_face_width_mm','support_radius_mm','patch_half_width_mm')):return result
@@ -417,6 +432,18 @@ def calculate_root_study(study):
         result.update(calculation_available=False,mesh_levels=[],domain_check=None,mesh_convergence_passed=None,domain_sensitivity_passed=None)
         result['findings'].append(str(exc));return result
     fine=result['mesh_levels'][-1]
+    for index,probe in enumerate(study.probes):
+        changes=[probe_changes(a,b,index) for a,b in zip(result['mesh_levels'],result['mesh_levels'][1:])]
+        domain_change=probe_changes(fine,result['domain_check'],index) if result['domain_check'] else None
+        check=dict(name=probe.name,mesh_changes_percent=changes,domain_change_percent=domain_change,
+            mesh_convergence_passed=None if any(v is None for v in changes) else
+                changes[-1]<=study.convergence_tolerance_percent and changes[-1]<=max(changes[0],1e-8),
+            domain_sensitivity_passed=None if domain_change is None else domain_change<=study.convergence_tolerance_percent,
+            basis_entered=bool(probe.basis.strip()))
+        result['probe_checks'].append(check)
+        if check['mesh_convergence_passed'] is not True or check['domain_sensitivity_passed'] is not True:
+            result['findings'].append('Fixed point '+probe.name+': mesh/sector sensitivity is unresolved or the point is outside a compared mesh.')
+        if not check['basis_entered']:result['findings'].append('Fixed point '+probe.name+': physical location/direction basis is missing.')
     role=study.source.role;ratio=study.source.source.pair.wheel_teeth/study.source.source.pair.pinion_teeth
     loads={c.case_name:c for c in study.cases}
     for duty in study.source.source.duty:
@@ -443,13 +470,18 @@ def calculate_root_study(study):
                     strain_energy_n_mm=.5*response['compliance_per_n_mm']*torque*torque,
                     domain_gauss_von_mises_mpa=domain_vm,
                     root_within_entered_elastic_limit=None if study.maximum_elastic_stress_mpa is None else peak<=study.maximum_elastic_stress_mpa,
-                    domain_gauss_within_entered_elastic_limit=None if study.maximum_elastic_stress_mpa is None else domain_vm<=study.maximum_elastic_stress_mpa))
+                    domain_gauss_within_entered_elastic_limit=None if study.maximum_elastic_stress_mpa is None else domain_vm<=study.maximum_elastic_stress_mpa,
+                    point_probes=[dict(name=p['name'],values=[dict(element_index=v['element_index'],
+                        stress_mpa=[s*torque for s in v['stress_mpa_per_n_mm']],
+                        resolved_mpa={k:s*torque for k,s in v['resolved_mpa_per_n_mm'].items()}) for v in p['values']])
+                        for p in response['point_probes']]))
         result['cases'].append(dict(name=duty.name,flank=flank,ideal_applied_member_torque_n_mm=torque,
             material_temperature_supported=temperature_supported,positions=positions,findings=reason,
             declared_input_evidence_complete=bool(study.material_status=='declared' and study.material_reference.strip()
                 and study.redistribution_basis.strip() and study.support_basis.strip()
                 and study.maximum_elastic_stress_mpa is not None and not reason
                 and study.source.data_status=='declared' and study.source.cutter_reference.strip()
-                and study.source.redistribution_basis.strip()),
-            numerical_checks_passed=result['mesh_convergence_passed'] is True and result['domain_sensitivity_passed'] is True))
+                and study.source.redistribution_basis.strip() and all(p.basis.strip() for p in study.probes)),
+            numerical_checks_passed=result['mesh_convergence_passed'] is True and result['domain_sensitivity_passed'] is True
+                and all(c['mesh_convergence_passed'] is True and c['domain_sensitivity_passed'] is True for c in result['probe_checks'])))
     return result

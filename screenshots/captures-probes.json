@@ -1,0 +1,16 @@
+{
+  "application_version": "1.0.0rc12",
+  "platform": "Windows",
+  "qt_platform": "offscreen",
+  "font_family": "Segoe UI",
+  "description": "Unmodified captures of the running application using repository examples. Synthetic data are illustrative, not component allowables.",
+  "captures": [
+    {
+      "file": "root-probes.png",
+      "example": "examples/synthetic-root-probes.gearforge-root",
+      "width": 1320,
+      "height": 900,
+      "sha256": "a7eb2f018e049e85fa5fed575673bf7ee50e410fa4b703f10b71c3964f36521a"
+    }
+  ]
+}

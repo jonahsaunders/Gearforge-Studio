@@ -154,12 +154,12 @@ def test_editor_worker_roundtrip_cancel_invalidation_and_failed_save(tmp_path,mo
     from gearforge.root_ui import RootStressDialog
     app=QApplication.instance() or QApplication([]);s=small_study();dialog=RootStressDialog(study=s);errors=[]
     dialog.show_error=lambda e:errors.append(str(e));dialog.show();app.processEvents()
-    assert asdict(dialog.read_study())==asdict(s) and dialog.tabs.count()==7
+    assert asdict(dialog.read_study())==asdict(s) and dialog.tabs.count()==8
     assert dialog.calculate();assert dialog.process is not None and dialog.cancel.isEnabled()
     deadline=time.monotonic()+60
     while dialog.process is not None and time.monotonic()<deadline:app.processEvents();time.sleep(.01)
     assert dialog.process is None and not errors and dialog.result['calculation_available']
-    for index in range(7):dialog.tabs.setCurrentIndex(index);app.processEvents();assert not dialog.grab().isNull()
+    for index in range(dialog.tabs.count()):dialog.tabs.setCurrentIndex(index);app.processEvents();assert not dialog.grab().isNull()
     dialog.tabs.setCurrentIndex(3);app.processEvents();assert dialog.plot.rendered_items>0
     dialog.view.setCurrentIndex(1);dialog.deformation.setCurrentIndex(2);app.processEvents();assert dialog.plot.rendered_items>0
     dialog.tabs.setCurrentIndex(4);app.processEvents();assert dialog.curves.rendered_items>0

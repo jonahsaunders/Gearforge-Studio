@@ -16,5 +16,6 @@
     "docs/VALIDATION_RC2.json"
   ],
   "production_qualified": false,
-  "engineering_requirements": "docs/PRODUCTION_QUALIFICATION.md"
+  "engineering_requirements": "docs/PRODUCTION_QUALIFICATION.md",
+  "development_evidence": "docs/STRESS_PROBE_VALIDATION.json"
 }

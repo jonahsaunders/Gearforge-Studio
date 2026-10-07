@@ -1,0 +1,98 @@
+{
+  "name": "Synthetic fixed material-point study",
+  "source": {
+    "name": "Rack-generated tooth profile",
+    "source": {
+      "name": "250 W steel spur qualification target",
+      "pair": {
+        "normal_module_mm": 2.0,
+        "pinion_teeth": 20,
+        "wheel_teeth": 100,
+        "normal_pressure_angle_deg": 20.0,
+        "pinion_helix_angle_deg": 0.0,
+        "pinion_profile_shift": 0.0,
+        "wheel_profile_shift": 0.0,
+        "face_width_mm": 20.0
+      },
+      "duty": [
+        {
+          "name": "Continuous rated-input target",
+          "input_rpm": 1500.0,
+          "input_torque_nm": 1.5915494309189535,
+          "duration_hours": 10000.0,
+          "ambient_c": 25.0,
+          "starts": 0
+        }
+      ],
+      "target_life_hours": 10000.0,
+      "ambient_min_c": 20.0,
+      "ambient_max_c": 40.0,
+      "assumed_efficiency": 0.95,
+      "material_process": "Catalog steel gears; supplier grade and heat treatment to be selected",
+      "lubrication": "Enclosed lubricated housing; lubricant and quantity to be specified",
+      "standard_basis": "Open analytical involute geometry and quasi-static statics; method external-involute-1. No standards-compliance claim.",
+      "evidence_references": "",
+      "notes": "Development and qualification target, not an approved operating rating.",
+      "schema_version": 1
+    },
+    "role": "pinion",
+    "cutter_depth_coefficient": 1.25,
+    "cutter_tip_radius_coefficient": 0.38,
+    "tooth_thickness_reduction_mm": 0.0,
+    "sampling_tolerance_mm": 0.005,
+    "data_status": "synthetic",
+    "cutter_reference": "Original numerical fixture: rounded symmetric rack, not a selected cutting tool.",
+    "redistribution_basis": "Original GearForge fixture under Apache-2.0.",
+    "notes": "Geometry verification example only. Actual cutter, finishing, tolerances and inspection remain to be selected.",
+    "schema_version": 1
+  },
+  "youngs_modulus_mpa": 210000.0,
+  "poisson_ratio": 0.3,
+  "effective_face_width_mm": 20.0,
+  "maximum_elastic_stress_mpa": 200.0,
+  "minimum_temperature_c": 20.0,
+  "maximum_temperature_c": 80.0,
+  "material_status": "synthetic",
+  "material_reference": "Invented isotropic elastic fixture, not supplier/material qualification.",
+  "redistribution_basis": "Original GearForge numerical fixture, Apache-2.0.",
+  "plane_mode": "plane_stress",
+  "support_radius_mm": 10.0,
+  "sector_teeth": 7,
+  "support_basis": "Invented plane-stress sector clamped on the 10 mm inner arc; cut sides traction-free. Numerical verification only.",
+  "patch_half_width_mm": 0.15,
+  "load_positions": [
+    0.2,
+    0.5,
+    0.8
+  ],
+  "angular_divisions_per_tooth": 16,
+  "radial_layers": 8,
+  "convergence_tolerance_percent": 5.0,
+  "cases": [
+    {
+      "case_name": "Continuous rated-input target",
+      "normal_load_multiplier": 1.0,
+      "load_share": 1.0,
+      "temperature_c": 40.0,
+      "factor_basis": "Synthetic full-mesh torque, uniform face width, smooth pressure patch; no measured dynamic or alignment factor."
+    }
+  ],
+  "probes": [
+    {
+      "name": "Left subsurface root",
+      "x_mm": -2.1252425667162727,
+      "y_mm": 17.330703743300315,
+      "normal_direction_deg": 90.0,
+      "basis": "Invented point 0.1 module radially beneath the midpoint of the rounded root angle. Fixed +Y normal; numerical demonstration only."
+    },
+    {
+      "name": "Right subsurface root",
+      "x_mm": 2.1252425667162727,
+      "y_mm": 17.330703743300315,
+      "normal_direction_deg": 90.0,
+      "basis": "Mirror of the invented left subsurface point. Fixed +Y normal; not material or fatigue qualification."
+    }
+  ],
+  "notes": "",
+  "schema_version": 1
+}

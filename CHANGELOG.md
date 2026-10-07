@@ -1,5 +1,14 @@
 # Unreleased
 
+- Add fixed body-frame material points to tooth-root elastic studies, retaining
+  signed tensors and every containing element-side value across load positions.
+- Add normal/shear plots, per-point mesh/sector checks, explicit unavailable
+  states and manifest-protected CSV exports. Older studies open without probes.
+- Independently compare 6,400 point-stress components with BSD scikit-fem;
+  no new runtime dependency, restricted data or proprietary standard is needed.
+- Full rolling-load histories, root fatigue qualification and production ratings
+  remain incomplete. Fixed-point traces do not imply a complete loading cycle.
+
 # 1.0.0rc12 — 2026-10-06
 
 - Add original finite signed-stress rainflow counting with exact repeated-block

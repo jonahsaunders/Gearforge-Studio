@@ -17,6 +17,43 @@ from .root_stress import RootStressStudy,root_from_profile,synthetic_root_exampl
 from .tooth_profile import ToothProfileStudy
 
 
+class ProbePlot(QWidget):
+    def __init__(self,parent=None):
+        super().__init__(parent);self.setMinimumSize(520,260)
+        self.result=None;self.case_index=0;self.probe_index=0;self.rendered_items=0
+        self.setAccessibleName('Signed normal and shear stress at one fixed material point')
+
+    def paintEvent(self,event):
+        p=QPainter(self);p.setRenderHint(QPainter.Antialiasing);p.fillRect(self.rect(),QColor('#f8fafc'))
+        p.setPen(QColor('#263449'));self.rendered_items=0
+        if not self.result or not 0<=self.case_index<len(self.result['cases']) or not 0<=self.probe_index<len(self.result['inputs']['probes']):
+            p.drawText(self.rect(),Qt.AlignCenter,'Define fixed points and calculate to view signed stress.');return
+        case=self.result['cases'][self.case_index];probe=self.result['inputs']['probes'][self.probe_index];groups={}
+        for position in case['positions']:
+            for value in position['point_probes'][self.probe_index]['values']:
+                groups.setdefault(value['element_index'],[]).append((position['position_fraction'],value['resolved_mpa']['normal_mpa'],value['resolved_mpa']['shear_mpa']))
+        if not groups:
+            p.drawText(self.rect(),Qt.AlignCenter,'Point outside the fine mesh, or operating case unassessed. No substituted stress.');return
+        values=[value for group in groups.values() for value in group]
+        low=min(0.,min(min(v[1:]) for v in values));high=max(0.,max(max(v[1:]) for v in values))
+        margin=max(1e-10,(high-low)*.08);low-=margin;high+=margin
+        def point(value,index):
+            return QPointF(82+value[0]*(self.width()-120),self.height()-65-(value[index]-low)/(high-low)*(self.height()-140))
+        p.drawText(20,24,f"{probe['name'][:50]} · {case['name'][:45]} · {case['flank']} flank")
+        p.drawText(20,46,f"Fixed X {probe['x_mm']:.6g}, Y {probe['y_mm']:.6g} mm · normal {probe['normal_direction_deg']:g}° from +X")
+        p.drawLine(82,75,82,self.height()-65);p.drawLine(82,self.height()-65,self.width()-38,self.height()-65)
+        p.drawText(5,80,f'{high:.4g}');p.drawText(5,self.height()-64,f'{low:.4g}')
+        p.setPen(QPen(QColor('#94a3b8'),1,Qt.DashLine));p.drawLine(point((0,0),1),point((1,0),1))
+        for values in groups.values():
+            for index,color in ((1,'#2563eb'),(2,'#b44418')):
+                p.setPen(QPen(QColor(color),1.5));p.setBrush(QColor(color))
+                p.drawPolyline(QPolygonF([point(value,index) for value in values]))
+                for value in values:p.drawEllipse(point(value,index),2.5,2.5);self.rendered_items+=1
+        p.setPen(QColor('#263449'));p.drawText(82,self.height()-44,'0');p.drawText(self.width()-42,self.height()-44,'1')
+        p.drawText(20,self.height()-25,'Path fraction · Blue: normal MPa · Orange: shear MPa · separate element sides')
+        p.drawText(20,self.height()-7,'Sampled positions only; no chronology or full loading cycle. Not a fatigue history.')
+
+
 class RootPlot(QWidget):
     def __init__(self,curves=False,parent=None):
         super().__init__(parent);self.setMinimumSize(520,360);self.result=None;self.case_index=0;self.position_index=0
@@ -125,6 +162,17 @@ class RootStressDialog(QDialog):
         self.curves=RootPlot(curves=True);column.addWidget(self.curves,1);self.tabs.addTab(page,'Root stress curves')
         self.report=QTextBrowser();self.report.setOpenExternalLinks(False);self.tabs.addTab(self.report,'Assessment')
         self.source_view=QTextBrowser();self.source_view.setOpenExternalLinks(False);self.tabs.addTab(self.source_view,'Retained cutter and duty')
+        page=QWidget();column=QVBoxLayout(page)
+        hint=QLabel('Track up to 16 fixed material points. X/Y are millimetres from the gear center in the undeformed body frame; the central tooth points along +Y. The normal direction is counterclockwise from +X. Points outside any mesh remain unavailable.');hint.setWordWrap(True);column.addWidget(hint)
+        self.probe_table=QTableWidget(0,5);self.probe_table.setHorizontalHeaderLabels(['Point name','X mm','Y mm','Normal direction °','Location / direction basis'])
+        self.probe_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents);self.probe_table.horizontalHeader().setSectionResizeMode(4,QHeaderView.Stretch)
+        self.probe_table.itemChanged.connect(self.changed);column.addWidget(self.probe_table)
+        row=QHBoxLayout();self.add_probe_button=QPushButton('Add point');self.remove_probe_button=QPushButton('Remove selected point')
+        self.add_probe_button.clicked.connect(self.add_probe);self.remove_probe_button.clicked.connect(self.remove_probe)
+        row.addWidget(self.add_probe_button);row.addWidget(self.remove_probe_button);row.addStretch();column.addLayout(row)
+        row=QHBoxLayout();self.probe_case_selector=QComboBox();self.probe_selector=QComboBox()
+        for label,widget in [('Case',self.probe_case_selector),('Point',self.probe_selector)]:row.addWidget(QLabel(label));row.addWidget(widget);widget.currentIndexChanged.connect(self.refresh_plots)
+        column.addLayout(row);self.probe_plot=ProbePlot();column.addWidget(self.probe_plot,1);self.tabs.addTab(page,'Fixed material points')
         self.status=QLabel();self.status.setWordWrap(True);layout.addWidget(self.status)
         for actions in [[('Open…',self.open_study),('Save…',self.save_study),('From tooth profile…',self.from_source),('Synthetic example',self.example)],
             [('Calculate',self.calculate),('Export assessment…',self.export)]]:
@@ -155,6 +203,10 @@ class RootStressDialog(QDialog):
                 value=getattr(case,key);item=QTableWidgetItem('' if value is None else value if isinstance(value,str) else repr(value))
                 if col==0:item.setFlags(item.flags() & ~Qt.ItemIsEditable)
                 self.table.setItem(row,col,item)
+        self.probe_table.setRowCount(len(study.probes))
+        for row,probe in enumerate(study.probes):
+            for col,key in enumerate(('name','x_mm','y_mm','normal_direction_deg','basis')):
+                value=getattr(probe,key);self.probe_table.setItem(row,col,QTableWidgetItem(value if isinstance(value,str) else repr(value)))
         self.source_view.setPlainText(json.dumps(asdict(study.source),indent=2));self.path=None;self.dirty=False;self._loading=False;self.clear_result()
         self.status.setText('Inputs loaded; calculate to assess the model.')
 
@@ -170,11 +222,30 @@ class RootStressDialog(QDialog):
             for col,key in enumerate(('case_name','normal_load_multiplier','load_share','temperature_c','factor_basis')):
                 value=self.table.item(row,col).text()
                 case[key]=value if col in (0,4) else float(value.strip()) if value.strip() else None
+        data['probes']=[]
+        for row in range(self.probe_table.rowCount()):
+            probe={}
+            for col,key in enumerate(('name','x_mm','y_mm','normal_direction_deg','basis')):
+                value=self.probe_table.item(row,col).text();probe[key]=value if col in (0,4) else float(value)
+            data['probes'].append(probe)
         return RootStressStudy.from_dict(data)
+
+    def add_probe(self):
+        if self.probe_table.rowCount()>=16:return
+        self._loading=True;row=self.probe_table.rowCount();self.probe_table.insertRow(row)
+        names={self.probe_table.item(i,0).text() for i in range(row)};number=1
+        while f'Material point {number}' in names:number+=1
+        for col,value in enumerate((f'Material point {number}','0','0','0','')):self.probe_table.setItem(row,col,QTableWidgetItem(value))
+        self.probe_table.setCurrentCell(row,0);self._loading=False;self.changed()
+
+    def remove_probe(self):
+        row=self.probe_table.currentRow()
+        if row>=0:self.probe_table.removeRow(row);self.changed()
 
     def clear_result(self):
         self.result=None;self.report.clear();self.case_selector.clear();self.position_selector.clear()
-        for plot in (self.plot,self.curves):plot.result=None;plot.update()
+        self.probe_case_selector.clear();self.probe_selector.clear()
+        for plot in (self.plot,self.curves,self.probe_plot):plot.result=None;plot.update()
 
     def changed(self,*args):
         if self._loading:return
@@ -190,9 +261,11 @@ class RootStressDialog(QDialog):
         for plot in (self.plot,self.curves):
             plot.case_index=max(0,self.case_selector.currentIndex());plot.position_index=max(0,self.position_selector.currentIndex())
             plot.zoom=self.view.currentIndex()==1;plot.deformation=(0.,1.,1000.,10000.)[self.deformation.currentIndex()];plot.update()
+        self.probe_plot.case_index=self.probe_case_selector.currentIndex();self.probe_plot.probe_index=self.probe_selector.currentIndex();self.probe_plot.update()
 
     def set_busy(self,busy):
         for index in range(3):self.tabs.widget(index).setEnabled(not busy)
+        self.probe_table.setEnabled(not busy);self.add_probe_button.setEnabled(not busy);self.remove_probe_button.setEnabled(not busy)
         for button in self.actions:button.setEnabled(not busy)
         self.cancel.setEnabled(busy)
 
@@ -229,10 +302,12 @@ class RootStressDialog(QDialog):
         if task=='root-export':
             self.status.setText(f"Exported {result['files']} files to {result['destination']}; production rating remains unavailable.");return
         self.result=result;self.report.setHtml(root_report_html(result))
-        for plot in (self.plot,self.curves):plot.result=result
+        for plot in (self.plot,self.curves,self.probe_plot):plot.result=result
+        self.probe_case_selector.addItems([c['name'] for c in result['cases']]);self.probe_selector.addItems([p['name'] for p in result['inputs']['probes']])
         self.case_selector.addItems([c['name'] for c in result['cases']]);self.select_case()
         self.tabs.setCurrentIndex(3 if result['calculation_available'] else 5)
         checks=result['mesh_convergence_passed'] is True and result['domain_sensitivity_passed'] is True
+        checks=checks and all(c['mesh_convergence_passed'] is True and c['domain_sensitivity_passed'] is True for c in result['probe_checks'])
         self.status.setText(('Elastic fields available; numerical comparisons '+('meet the entered threshold.' if checks else 'remain unresolved.')+' Review material evidence and assumptions in Assessment.')
             if result['calculation_available'] else 'Calculation unavailable: '+'; '.join(result['findings']))
 

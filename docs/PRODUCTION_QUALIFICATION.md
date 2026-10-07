@@ -14,6 +14,9 @@ joins, with analytic regularity checks and sampled manufacturing-study exports.
 Local signed stress histories now support exact finite cycle counting and bounded
 uniaxial cyclic arithmetic. Actual gear stress histories and material data remain
 to be qualified; no life is inferred from sampled root peaks.
+The current development tree adds fixed material-point signed stress traces and
+per-point mesh/sector sensitivity. These traces still lack chronology, unloaded
+phases, contact-sharing solutions and qualified fatigue applicability.
 These do not establish gearbox fatigue
 strength, adjusted bearing service life or production service-load ratings.
 

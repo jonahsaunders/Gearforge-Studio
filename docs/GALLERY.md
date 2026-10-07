@@ -4,6 +4,8 @@
 
 These are unmodified captures of **GearForge Studio 1.0.0rc12**, running on Windows with Qt’s offscreen platform, light appearance and Segoe UI. All views use the repository’s example files. Native controls and fonts vary by platform. Click an image to inspect it at full resolution.
 
+The fixed material-point view shows the current development addition documented in the changelog. Its separate capture record is [captures-probes.json](../screenshots/captures-probes.json).
+
 **Example scope:** Synthetic inputs demonstrate calculations; they are not measured material, manufacturing or component allowables. The app does not provide qualified production gearbox ratings.
 
 - [Design workspace](#design-workspace)
@@ -22,6 +24,7 @@ These are unmodified captures of **GearForge Studio 1.0.0rc12**, running on Wind
 - [Thermal network](#thermal-network)
 - [Rack-generated tooth profile](#rack-generated-tooth-profile)
 - [Elastic tooth-root stress](#elastic-tooth-root-stress)
+- [Fixed material-point stresses](#fixed-material-point-stresses)
 - [Signed stress history](#signed-stress-history)
 - [Rainflow cycle distribution](#rainflow-cycle-distribution)
 
@@ -152,6 +155,17 @@ Inspect a finite-element stress map at a sampled pressure-patch position. Three 
 [Open example](../examples/synthetic-root.gearforge-root) · [Read the guide](ROOT_STRESS.md)
 
 ![Inspect a finite-element stress map at a sampled pressure-patch position. Three mesh levels and a wider sector support numerical comparisons; this is not a full rolling-load fatigue history.](../screenshots/root.png)
+
+## Fixed material-point stresses
+
+Track signed normal and shear stress at the same physical point as the sampled
+pressure patch moves. Adjacent element values stay separate. The synthetic
+example illustrates coordinates and directions; the trace has no time axis or
+complete loading cycle.
+
+[Open example](../examples/synthetic-root-probes.gearforge-root) · [Read the guide](ROOT_STRESS.md#fixed-material-points-and-signed-stresses)
+
+![Signed normal and shear stresses at a fixed synthetic root point, plotted against sampled load-path fraction.](../screenshots/root-probes.png)
 
 ## Signed stress history
 

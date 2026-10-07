@@ -18,7 +18,7 @@ sys.path.insert(0, str(ROOT / "src"))
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=Path, default=ROOT / "screenshots")
-    parser.add_argument("--section", choices=("all", "desktop", "studies"), default="all")
+    parser.add_argument("--section", choices=("all", "desktop", "studies", "probes"), default="all")
     args = parser.parse_args()
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
     if sys.platform == "win32":
@@ -119,9 +119,12 @@ def main():
                 ("thermal", ThermalStudyDialog, ThermalStudy, "synthetic-thermal.gearforge-thermal", 3),
                 ("tooth", ToothProfileDialog, ToothProfileStudy, "synthetic-tooth.gearforge-tooth", 1),
                 ("root", RootStressDialog, RootStressStudy, "synthetic-root.gearforge-root", 3),
+                ("root-probes", RootStressDialog, RootStressStudy, "synthetic-root-probes.gearforge-root", 7),
                 ("history", HistoryStudyDialog, HistoryStudy, "synthetic-history.gearforge-history", 4),
             )
             for name, dialog_type, study_type, example, tab in studies:
+                if args.section == "probes" and name != "root-probes":
+                    continue
                 dialog = dialog_type(window)
                 dialog.show_error = lambda error: errors.append(str(error))
                 try:
@@ -163,7 +166,7 @@ def main():
                 capture("planetary", example="planetary-example.gearforge")
                 load_design("helical-example.gearforge")
                 capture("helical", example="helical-example.gearforge")
-            if args.section in ("all", "studies"):
+            if args.section in ("all", "studies", "probes"):
                 capture_studies()
             (output / f"captures-{args.section}.json").write_text(json.dumps({
                 "application_version": __version__, "platform": platform.system(),

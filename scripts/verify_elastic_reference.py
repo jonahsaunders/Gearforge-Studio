@@ -47,8 +47,19 @@ for case in json.load(sys.stdin):
     sx=2*mu*gradient[0,0]+lam*trace;sy=2*mu*gradient[1,1]+lam*trace
     shear=mu*(gradient[0,1]+gradient[1,0]);sz=lam*trace if case['mode']=='plane_strain' else np.zeros_like(trace)
     stress=np.stack([sx,sy,shear,sz],axis=1).mean(axis=2)
+    point_stress=[]
+    if case.get('fixed_points'):
+        points=np.array([point['xy_mm'] for point in case['fixed_points']]).T
+        cells=np.array([point['element_index'] for point in case['fixed_points']])
+        local=basis.mapping.invF(points[:,:,None],tind=cells)
+        gradient=sum(basis.elem.gbasis(basis.mapping,local,k,tind=cells)[0].grad *
+                     u[basis.element_dofs[k,cells]][None,None,:,None] for k in range(basis.Nbfun))
+        trace=gradient[0,0]+gradient[1,1]
+        sx=2*mu*gradient[0,0]+lam*trace;sy=2*mu*gradient[1,1]+lam*trace
+        shear=mu*(gradient[0,1]+gradient[1,0]);sz=lam*trace if case['mode']=='plane_strain' else np.zeros_like(trace)
+        point_stress=np.stack([sx,sy,shear,sz],axis=1)[:,:,0].tolist()
     results.append(dict(displacements=u[mapping].tolist(),reactions=(K@u-f)[mapping][case['fixed_dofs']].tolist(),
-        gauss_sample_mean_stress=stress.tolist(),strain_energy_n_mm=float(.5*u@(K@u))))
+        gauss_sample_mean_stress=stress.tolist(),strain_energy_n_mm=float(.5*u@(K@u)),fixed_point_stress=point_stress))
 print(json.dumps(dict(reference_version=skfem.__version__,results=results),allow_nan=False))
 '''
 

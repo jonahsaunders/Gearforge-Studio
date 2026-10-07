@@ -96,7 +96,7 @@ The workflow does not automatically publish its draft. Full instructions are in
 | `src/gearforge/data/` | Source-traceable seed catalog and application icon |
 | `tests/` | Numerical, data, CAD, GUI, worker and release regression tests |
 | `examples/` | Editable projects and separate examples for every engineering study |
-| `screenshots/` | Eighteen actual app captures covering the desktop and all nine engineering workspaces |
+| `screenshots/` | Nineteen actual app captures covering the desktop and all nine engineering workspaces |
 | `docs/` | Architecture, simulation methods, GUI audit and release instructions |
 | `packaging/` | Native build spec, launcher templates and supplemental license texts |
 | `scripts/` | Version checks, license collection, package/archive creation and reproducible app captures |
@@ -112,12 +112,12 @@ python scripts/capture_screenshots.py
 ```
 
 The script runs the real app with the checked-in examples, calculates each study,
-and captures 18 unmodified PNGs into `screenshots/`. It uses temporary application
+and captures 19 unmodified PNGs into `screenshots/`. It uses temporary application
 data and light appearance; saved user projects, catalogs and preferences are
 untouched. Windows offscreen captures use the installed Segoe UI font. Other
 platforms use an available standard font and may render differently.
 
-Use `--section desktop` or `--section studies` to refresh a subset, and `--out`
+Use `--section desktop`, `--section studies` or `--section probes` to refresh a subset, and `--out`
 to select another directory. `captures-all.json` (or the selected section name)
 records the app version, platform, font, example paths, dimensions and hashes.
 Review the images and the [gallery captions](GALLERY.md) before committing them.
