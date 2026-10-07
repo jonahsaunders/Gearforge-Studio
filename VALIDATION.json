@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "app_version": "1.0.0rc12",
-  "release_status": "local stress-history release candidate; current-build platform/native evidence pending; production ratings unqualified",
+  "release_status": "local stress-history release candidate; 351 tests and native checks passed on three platforms; production gearbox ratings remain unqualified",
   "current_evidence": "docs/HISTORY_VALIDATION.json",
   "historical_evidence": [
     "docs/ROOT_VALIDATION.json",
