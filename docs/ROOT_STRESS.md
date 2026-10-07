@@ -1,6 +1,6 @@
 # Generated tooth-root elastic stress
 
-Method `generated-spur-q9-elastic-2` applies an original two-dimensional linear
+Method `generated-spur-q9-elastic-3` applies an original two-dimensional linear
 elastic finite-element solver to a retained [rack-generated spur profile](TOOTH_PROFILES.md).
 It calculates stresses and deflections for explicit support, material and loading
 assumptions. **It does not calculate tooth-root fatigue life or approve production
@@ -84,9 +84,12 @@ Patches crossing the involute start or tooth tip are rejected.
 
 The applied member torque magnitude is the retained input torque times the ideal
 gear ratio for a wheel, times the entered load multiplier and share. Each factor
-needs a basis. Both flanks are solved: positive driving pinion torque selects the
-left flank, a positive driven-wheel torque selects the right, and torque reversal
-selects the opposite flank. This does not solve load sharing, gear contact,
+needs a basis. Both members use a right-handed X/Y body frame, with positive
+torque counterclockwise. Positive retained pinion input torque selects the **left
+flank on both members**; negative input selects the right. Mesh torque opposes
+the pinion drive and drives the oppositely rotating wheel, so both mesh torques
+have the opposite sign to the pinion input. Reports and case CSVs retain the
+signed mesh torque and member speed as well as the torque magnitude. This does not solve load sharing, gear contact,
 dynamics, face misalignment or an elastic mating gear. The pressure patch is an
 assumption, not a Hertz/contact solution. Width is the entered effective face
 width, bounded by the retained member's physical face width.
@@ -178,6 +181,14 @@ real loading cycles and qualified fatigue evidence still require further work.
 Existing `.gearforge-root` files without points open with an empty point list.
 Method revision 2 adds the optional inputs and outputs; revision 1 validation
 records remain historical evidence for that earlier implementation.
+
+Revision 3 corrects the driven-wheel sign convention: earlier revisions selected
+the opposite wheel flank despite retaining a negative external-wheel speed.
+Symmetric peak magnitudes were unchanged, but the loaded side and fixed-point
+signed stresses could differ. **Recalculate wheel studies created with revisions
+1 or 2 before interpreting their stress fields.** A mating-surface kinematics
+check verifies coincident contact points, opposite normals, and signed moments
+for both directions through complete pinion/wheel revolutions.
 
 ## Material evidence and scope
 

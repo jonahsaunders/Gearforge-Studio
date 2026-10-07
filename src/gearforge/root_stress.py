@@ -26,7 +26,7 @@ from .models import atomic_text, finite, read_text_limited, strict_json
 from .tooth_profile import ToothProfileStudy, RackProfile, calculate_profile_study, synthetic_profile_example
 from .stress_probes import StressProbe, locate_probes, probe_response, probe_changes, probe_report_html, probe_csv
 
-METHOD='generated-spur-q9-elastic-2'
+METHOD='generated-spur-q9-elastic-3'
 MAX_BYTES=3_000_000
 
 
@@ -214,13 +214,17 @@ def root_mesh(study,profile,patches,refinement=1,sector_teeth=None):
         root_tooth_indices=tooth_indices[root_columns],sector_teeth=teeth,radial_layers=nrad)
 
 
-def patch_forces(study,profile,mesh,patch,flank):
+def patch_forces(study,profile,mesh,patch,flank,tooth_index=0):
     """Consistent boundary tractions normalized to exactly +/-1 N mm torque."""
     if flank not in ('left','right'):raise ValueError('Choose left or right flank')
+    tooth_index=_integer(tooth_index,'Loaded tooth index',-profile.z,profile.z-1)
+    if mesh.get('periodic'):tooth_index%=profile.z
+    rotation=tooth_index*2*math.pi/profile.z
+    transform=np.array([[math.cos(rotation),math.sin(rotation)],[-math.sin(rotation),math.cos(rotation)]])
     force=np.zeros(2*len(mesh['nodes']));sign=1 if flank=='right' else -1
     abscissae,weights=np.polynomial.legendre.leggauss(4)
     for i,(a,b) in enumerate(zip(mesh['angles'],mesh['angles'][1:])):
-        mid=sign*(a+b)/2
+        mid=sign*((a+b)/2-rotation)
         if not patch['minimum_angle_rad']-1e-12<=mid<=patch['maximum_angle_rad']+1e-12:continue
         indices=np.array([mesh['outer_nodes'][i],mesh['outer_midpoints'][i],mesh['outer_nodes'][i+1]])
         points=mesh['nodes'][indices];length=math.dist(points[0],points[2])
@@ -228,8 +232,10 @@ def patch_forces(study,profile,mesh,patch,flank):
             n=np.array([xi*(xi-1)/2,1-xi*xi,xi*(xi+1)/2]);point=n@points;radius=float(np.linalg.norm(point))
             arc=(radius*radius-profile.rb**2)/(2*profile.rb)
             magnitude=max(0.,1-((arc-patch['arc_center_mm'])/study.patch_half_width_mm)**2)
-            phi=math.atan2(sign*point[0],point[1]);alpha=math.acos(min(1.,profile.rb/radius))
+            local=transform.T@point if tooth_index else point
+            phi=math.atan2(sign*local[0],local[1]);alpha=math.acos(min(1.,profile.rb/radius))
             normal=np.array([-sign*math.cos(phi-alpha),math.sin(phi-alpha)])
+            if tooth_index:normal=transform@normal
             for node,fraction in zip(indices,n):force[2*node:2*node+2]+=normal*magnitude*weight*length/2*fraction
     nodal=force.reshape(-1,2)
     moment=float(np.sum(mesh['nodes'][:,0]*nodal[:,1]-mesh['nodes'][:,1]*nodal[:,0]))
@@ -287,7 +293,7 @@ def root_report_html(result):
     cases=''
     for case in result['cases']:
         rows=''.join(f"<tr><td>{fmt(p['position_fraction'])}</td><td>{fmt(p['root_von_mises_mpa'])}</td><td>{fmt(p['root_tensile_mpa'])}</td><td>{fmt(p['maximum_displacement_mm'])}</td><td>{fmt(p['domain_gauss_von_mises_mpa'])}</td><td>{limit(p['root_within_entered_elastic_limit'])}</td><td>{limit(p['domain_gauss_within_entered_elastic_limit'])}</td></tr>" for p in case['positions'])
-        cases+=f"<h3>{esc(case['name'])} — {esc(case['flank'])} flank</h3><p>Ideal applied member torque: {fmt(case['ideal_applied_member_torque_n_mm'])} N mm.</p>"
+        cases+=f"<h3>{esc(case['name'])} — {esc(case['flank'])} flank</h3><p>Ideal applied member torque magnitude: {fmt(case['ideal_applied_member_torque_n_mm'])} N mm. Signed mesh torque: {fmt(case.get('signed_mesh_torque_n_mm'))} N mm; member speed: {fmt(case.get('member_speed_rpm'))} rpm. Positive is counterclockwise in the common right-handed frame.</p>"
         cases+='<p>Declared input evidence: '+('complete as entered; independent review remains required.' if case['declared_input_evidence_complete'] else 'incomplete or synthetic.')+'</p>'
         cases+='<ul>'+''.join(f'<li>{esc(f)}</li>' for f in case['findings'])+'</ul>'
         if rows:cases+='<table><tr><th>Path fraction</th><th>Root von Mises MPa</th><th>Root tensile principal MPa</th><th>Maximum displacement mm</th><th>Domain Gauss maximum MPa</th><th>Root elastic limit</th><th>Domain elastic limit</th></tr>'+rows+'</table>'
@@ -338,12 +344,12 @@ def root_mesh_vtk(result):
 
 def root_csv_files(result):
     case_stream=io.StringIO(newline='');writer=csv.writer(case_stream)
-    writer.writerow(['case','path_fraction','flank','torque_magnitude_n_mm','root_von_mises_mpa','root_tensile_mpa','maximum_displacement_mm','domain_gauss_von_mises_mpa'])
+    writer.writerow(['case','path_fraction','flank','torque_magnitude_n_mm','root_von_mises_mpa','root_tensile_mpa','maximum_displacement_mm','domain_gauss_von_mises_mpa','signed_mesh_torque_n_mm','member_speed_rpm'])
     for case in result['cases']:
         name=case['name']
         if name.lstrip().startswith(('=','+','-','@')) or name.startswith(('\t','\r','\n')):name="'"+name
         for p in case['positions']:
-            writer.writerow([name,p['position_fraction'],case['flank'],case['ideal_applied_member_torque_n_mm'],p['root_von_mises_mpa'],p['root_tensile_mpa'],p['maximum_displacement_mm'],p['domain_gauss_von_mises_mpa']])
+            writer.writerow([name,p['position_fraction'],case['flank'],case['ideal_applied_member_torque_n_mm'],p['root_von_mises_mpa'],p['root_tensile_mpa'],p['maximum_displacement_mm'],p['domain_gauss_von_mises_mpa'],case.get('signed_mesh_torque_n_mm'),case.get('member_speed_rpm')])
     curve_stream=io.StringIO(newline='');writer=csv.writer(curve_stream)
     writer.writerow(['unit_response_index','path_fraction','flank','unit_torque_n_mm','tooth_index','x_mm','y_mm','sigma_x_mpa_per_n_mm','sigma_y_mpa_per_n_mm','tau_xy_mpa_per_n_mm','sigma_z_mpa_per_n_mm','von_mises_mpa_per_n_mm','tensile_mpa_per_n_mm'])
     for index,response in enumerate(result['mesh_levels'][-1]['responses']):
@@ -456,10 +462,10 @@ def calculate_root_study(study):
         else:reason.append('Material temperature coverage is unassessed')
         if not case.factor_basis.strip():reason.append('Load distribution/factor basis is missing')
         torque=None if case.normal_load_multiplier is None or case.load_share is None else abs(duty.input_torque_nm)*1000*(ratio if role=='wheel' else 1)*case.normal_load_multiplier*case.load_share
-        # Positive pinion driving torque has an opposing mesh torque. The
-        # driven wheel's ideal mesh torque is positive in its local frame.
-        direction=duty.input_torque_nm*(1 if role=='wheel' else -1)
-        flank='right' if direction>=0 else 'left';positions=[]
+        # Common right-handed body frames: the mesh opposes the pinion drive
+        # and drives the oppositely rotating wheel. Both mesh torques therefore
+        # have the opposite sign to the retained pinion input torque.
+        flank='left' if duty.input_torque_nm>=0 else 'right';positions=[]
         if torque is not None and temperature_supported is not False:
             for index,response in enumerate(fine['responses']):
                 if response['flank']!=flank:continue
@@ -476,6 +482,8 @@ def calculate_root_study(study):
                         resolved_mpa={k:s*torque for k,s in v['resolved_mpa_per_n_mm'].items()}) for v in p['values']])
                         for p in response['point_probes']]))
         result['cases'].append(dict(name=duty.name,flank=flank,ideal_applied_member_torque_n_mm=torque,
+            signed_mesh_torque_n_mm=None if torque is None else (-torque if flank=='left' else torque),
+            member_speed_rpm=duty.input_rpm*(-1/ratio if role=='wheel' else 1),
             material_temperature_supported=temperature_supported,positions=positions,findings=reason,
             declared_input_evidence_complete=bool(study.material_status=='declared' and study.material_reference.strip()
                 and study.redistribution_basis.strip() and study.support_basis.strip()

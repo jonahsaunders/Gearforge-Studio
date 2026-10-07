@@ -147,7 +147,7 @@ class RootStressDialog(QDialog):
         for key,label in [('support_basis','Physical support and plane-model basis'),('notes','Study notes')]:self.add_field(form,key,label,True)
         hint=QLabel('The inner arc is clamped and cut faces are free. Three mesh levels (1×, 2×, 4×) and a wider sector assess numerical sensitivity. Each pressure patch must lie wholly on the involute.');hint.setWordWrap(True);form.addRow(hint)
         self.tabs.addTab(domain,'Support and numerical model')
-        loads=QWidget();column=QVBoxLayout(loads);hint=QLabel('Every retained duty case needs explicit factors and temperature. Positive pinion input loads the left flank; reversals use the opposite flank. Factors scale the retained ideal member torque.');hint.setWordWrap(True);column.addWidget(hint)
+        loads=QWidget();column=QVBoxLayout(loads);hint=QLabel('Every retained duty case needs explicit factors and temperature. Positive pinion input loads the left flank on both members; reversals use the right. Mesh torque opposes the pinion drive and drives the oppositely rotating wheel.');hint.setWordWrap(True);column.addWidget(hint)
         self.table=QTableWidget(0,5);self.table.setHorizontalHeaderLabels(['Retained case','Load multiplier','Load share','Temperature °C','Factor / distribution basis'])
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents);self.table.horizontalHeader().setSectionResizeMode(4,QHeaderView.Stretch)
         self.table.itemChanged.connect(self.changed);column.addWidget(self.table);self.tabs.addTab(loads,'Load cases')

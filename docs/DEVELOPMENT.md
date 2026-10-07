@@ -31,6 +31,8 @@ Version-specific regression and native package evidence is indexed in
 [VALIDATION.json](../VALIDATION.json). The rc12 implementation passed 351 tests on each of Windows, Linux and macOS,
 plus native-package smoke checks and open-reference comparisons. Older release
 records describe their own implementation and do not validate a newer build.
+The index's `development_evidence` entry tracks unreleased numerical additions
+separately from the recorded rc12 native-package baseline.
 Coverage includes numerical constraints, catalogs/projects, CLI/worker flows,
 real CAD solids/interference/STEP round-trips, export manifests, timed motion,
 planetary relations, power balance, stale results and reduced-motion behavior.

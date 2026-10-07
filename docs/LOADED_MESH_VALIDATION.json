@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-07",
+  "app_version": "1.0.0rc12",
+  "status": "Unreleased development: local regression suite, independent numerical references and package builds passed. Full contact-pressure/cycle integration and production qualification remain incomplete.",
+  "root_method": "generated-spur-q9-elastic-3",
+  "contact_method": "elastic-unilateral-torque-1",
+  "baseline_commit": "e65e8cd9c493fac98a19ed848b2c178e911b14ea",
+  "production_qualified": false,
+  "local_windows_source_tests": {
+    "tests": 400,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "followup_targeted_tests": {
+    "tests": 33,
+    "passed": 33,
+    "note": "Additional 64-contact limit check and cleanup; five kinematics tests subsequently rerun with signed CSV/report assertions."
+  },
+  "independent_comparison": {
+    "passed": true,
+    "elastic_comparisons": 159456,
+    "contact_comparisons": 1760,
+    "elastic_reference": "https://github.com/kinnala/scikit-fem",
+    "elastic_reference_version": "12.0.2",
+    "contact_reference": "https://scipy.org/",
+    "contact_reference_version": "1.18.1",
+    "reference_license": "BSD-3-Clause",
+    "maximum_absolute_error": {
+      "compliance": 6.551799847012013e-19,
+      "point_stress": 5.388051116383963e-15,
+      "strain_energy": 1.7279472123987727e-19,
+      "forces": 1.6056600493641326e-14,
+      "rotation": 4.055783486833775e-15,
+      "residual": 1.5898393712632242e-13,
+      "energy": 2.842170943040401e-14
+    },
+    "scope": "Original whole-gear elastic and convex contact-load benchmarks. No completed moving-contact cycle, pressure solution or physical gearbox qualification."
+  },
+  "package_checks": {
+    "sdist_built": true,
+    "wheel_built": true,
+    "native_package_tested": false
+  },
+  "source_sha256_lf_normalized": {
+    "src/gearforge/annular_mesh.py": "aff4caa5f85dc1b7d4424e00a366dc4ec65311365cde74ea10c403c8d7ac6f11",
+    "src/gearforge/elastic_contact.py": "0a40ad639cfe041f5888166f03fc74d1f6584ff96616d26657b93eff87e63268",
+    "src/gearforge/mesh_kinematics.py": "cc539a7732c7bf74b778486ead6f47a7259a5617cd285761191a60a3475809fb",
+    "src/gearforge/root_stress.py": "d7745c96d6a8aabb02e8850d5def82546e7959d5be680e92835ebb727b070883",
+    "src/gearforge/root_ui.py": "4182fa760f5f78708f2729bf50ff14674edad6e32b1a7c85afda0db3e9736eea",
+    "scripts/verify_loaded_mesh_reference.py": "c07d086b0a2d205a5220b9523a4ee826fd1df0fed0492f818b25d3df956c081d",
+    "tests/test_annular_mesh.py": "037940aed71e4bd1fb196e6a2d678006f2a4795a76b721f9034dc7f8ffde9ea8",
+    "tests/test_elastic_contact.py": "0254d90a5ea80fb5f43d5d63cdf2f2f0539f13afa914a56fab9d095492a1e968",
+    "tests/test_mesh_kinematics.py": "e1ae4db3a04d803bc51291dcd23c274af5f9e66ee03cea059bccf6b46e3de14d",
+    "tests/test_loaded_mesh_reference.py": "021fb6c83da0c6b5f9fb6d97f9d772fe3e0a484e370e229817d7bc59527950f9",
+    "tests/data/open_loaded_mesh_reference.json": "b73f212bb7894d4d38e3c0fa6647448bf722a31cab4e1f9a0c03acc22adc2502"
+  },
+  "methods": "docs/LOADED_MESH_DEVELOPMENT.md",
+  "wheel_migration": "Recalculate wheel root studies from methods 1 or 2: the driven-wheel flank was selected with the wrong sign in the common right-handed frame."
+}

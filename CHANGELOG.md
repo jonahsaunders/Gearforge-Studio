@@ -1,5 +1,11 @@
 # Unreleased
 
+- Correct the driven-wheel flank/sign convention in root method revision 3;
+  report signed mesh torque and member speed. Earlier wheel studies need
+  recalculation before their signed fields are interpreted.
+- Add and independently verify whole-gear annular meshes, coupled elastic
+  influence matrices, unilateral torque sharing and nominal mating kinematics
+  as numerical building blocks for the forthcoming full-cycle study.
 - Add fixed body-frame material points to tooth-root elastic studies, retaining
   signed tensors and every containing element-side value across load positions.
 - Add normal/shear plots, per-point mesh/sector checks, explicit unavailable

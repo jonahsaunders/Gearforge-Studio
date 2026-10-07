@@ -17,5 +17,8 @@
   ],
   "production_qualified": false,
   "engineering_requirements": "docs/PRODUCTION_QUALIFICATION.md",
-  "development_evidence": "docs/STRESS_PROBE_VALIDATION.json"
+  "development_evidence": "docs/LOADED_MESH_VALIDATION.json",
+  "development_history": [
+    "docs/STRESS_PROBE_VALIDATION.json"
+  ]
 }

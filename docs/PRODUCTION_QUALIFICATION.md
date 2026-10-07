@@ -17,6 +17,11 @@ to be qualified; no life is inferred from sampled root peaks.
 The current development tree adds fixed material-point signed stress traces and
 per-point mesh/sector sensitivity. These traces still lack chronology, unloaded
 phases, contact-sharing solutions and qualified fatigue applicability.
+The [loaded-mesh development backend](LOADED_MESH_DEVELOPMENT.md) now includes
+closed whole-gear elasticity, reciprocal contact influence, a unilateral load
+solver and nominal mating geometry. Contact-interface assembly and an integrated
+full-cycle calculation are still incomplete; these primitives do not constitute
+a gearbox load-sharing or fatigue-life result.
 These do not establish gearbox fatigue
 strength, adjusted bearing service life or production service-load ratings.
 

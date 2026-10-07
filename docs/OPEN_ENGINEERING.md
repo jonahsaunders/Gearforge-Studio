@@ -30,6 +30,12 @@ kinematics and a rounded cutter. Independent ray/cutter intersections verify
 266 radii using BSD SciPy numerical minimization; no cutter table or restricted
 manufacturing data is bundled.
 
+The [loaded-mesh development backend](LOADED_MESH_DEVELOPMENT.md) adds original
+whole-gear meshes, coupled elastic influence, unilateral force sharing and
+nominal mating kinematics. Separate BSD scikit-fem and SciPy processes verify
+the numerical primitives. A complete contact-pressure and full-cycle workflow
+remains under development; no actual gearbox rating follows from those comparisons.
+
 ## Accepted development target
 
 Start with an enclosed, single-stage steel spur gearbox at 250 W input,

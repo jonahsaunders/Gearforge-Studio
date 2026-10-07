@@ -76,5 +76,30 @@
   },
   "desktop_preview": "screenshots/captures-probes.json",
   "methods": "docs/ROOT_STRESS.md",
-  "remaining_scope": "No chronology, unloaded phases, solved contact sharing, qualified material fatigue inputs, physical gearbox validation or production load/life ratings."
+  "remaining_scope": "No chronology, unloaded phases, solved contact sharing, qualified material fatigue inputs, physical gearbox validation or production load/life ratings.",
+  "github_source_ci": {
+    "commit": "e65e8cd9c493fac98a19ed848b2c178e911b14ea",
+    "url": "https://github.com/jonahsaunders/Gearforge-Studio/actions/runs/37619001185",
+    "conclusion": "success",
+    "platform_test_artifacts": {
+      "Linux": {
+        "tests": 367,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "macOS": {
+        "tests": 367,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      },
+      "Windows": {
+        "tests": 367,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  }
 }
