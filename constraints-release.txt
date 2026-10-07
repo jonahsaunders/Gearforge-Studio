@@ -12,7 +12,7 @@ numba==0.68.0
 llvmlite==0.50.0
 reportlab==4.4.9
 ezdxf==1.4.4
-casadi==3.7.2
+casadi==3.8.1
 nlopt==2.11.0
 multimethod==1.12
 pillow==12.3.0
