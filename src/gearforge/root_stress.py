@@ -275,6 +275,7 @@ def root_report_html(result):
     for case in result['cases']:
         rows=''.join(f"<tr><td>{fmt(p['position_fraction'])}</td><td>{fmt(p['root_von_mises_mpa'])}</td><td>{fmt(p['root_tensile_mpa'])}</td><td>{fmt(p['maximum_displacement_mm'])}</td><td>{fmt(p['domain_gauss_von_mises_mpa'])}</td><td>{limit(p['root_within_entered_elastic_limit'])}</td><td>{limit(p['domain_gauss_within_entered_elastic_limit'])}</td></tr>" for p in case['positions'])
         cases+=f"<h3>{esc(case['name'])} — {esc(case['flank'])} flank</h3><p>Ideal applied member torque: {fmt(case['ideal_applied_member_torque_n_mm'])} N mm.</p>"
+        cases+='<p>Declared input evidence: '+('complete as entered; independent review remains required.' if case['declared_input_evidence_complete'] else 'incomplete or synthetic.')+'</p>'
         cases+='<ul>'+''.join(f'<li>{esc(f)}</li>' for f in case['findings'])+'</ul>'
         if rows:cases+='<table><tr><th>Path fraction</th><th>Root von Mises MPa</th><th>Root tensile principal MPa</th><th>Maximum displacement mm</th><th>Domain Gauss maximum MPa</th><th>Root elastic limit</th><th>Domain elastic limit</th></tr>'+rows+'</table>'
         else:cases+='<p>No assessed operating-case stress result.</p>'
@@ -445,8 +446,10 @@ def calculate_root_study(study):
                     domain_gauss_within_entered_elastic_limit=None if study.maximum_elastic_stress_mpa is None else domain_vm<=study.maximum_elastic_stress_mpa))
         result['cases'].append(dict(name=duty.name,flank=flank,ideal_applied_member_torque_n_mm=torque,
             material_temperature_supported=temperature_supported,positions=positions,findings=reason,
-            evidence_complete=bool(study.material_status=='declared' and study.material_reference.strip()
+            declared_input_evidence_complete=bool(study.material_status=='declared' and study.material_reference.strip()
                 and study.redistribution_basis.strip() and study.support_basis.strip()
-                and study.maximum_elastic_stress_mpa is not None and not reason),
+                and study.maximum_elastic_stress_mpa is not None and not reason
+                and study.source.data_status=='declared' and study.source.cutter_reference.strip()
+                and study.source.redistribution_basis.strip()),
             numerical_checks_passed=result['mesh_convergence_passed'] is True and result['domain_sensitivity_passed'] is True))
     return result

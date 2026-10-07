@@ -140,5 +140,12 @@
     "Numerical elasticity checks do not qualify physical material, support, loading, manufacturing process or fatigue life.",
     "Source/native workstations require company acceptance; native archives are unsigned.",
     "No independent engineering release or physical gearbox qualification is supplied."
-  ]
+  ],
+  "local_post_review_root_tests": {
+    "tests": 34,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "local_test_scope": "Full 314-test source suite passed before the declared-cutter evidence refinement; all 34 elastic/root tests passed after it. Final cross-platform and native checks are pending."
 }

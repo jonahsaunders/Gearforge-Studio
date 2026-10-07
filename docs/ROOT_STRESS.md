@@ -133,6 +133,8 @@ operating-case stresses. A temperature outside the declared range prevents that
 case's stress assessment. Missing temperature coverage is explicitly unassessed;
 numeric stress can still be shown with incomplete evidence. A synthetic example
 never becomes material evidence because its numerical checks pass.
+The declared-input completeness flag also requires declared cutter data and its
+source/redistribution basis. It records entered evidence, not independent review.
 
 Comparisons with an entered elastic limit are arithmetic only. The model has no
 plasticity, residual stress, heat-treatment gradient, anisotropy, 3D face effects,

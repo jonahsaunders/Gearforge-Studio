@@ -27,7 +27,7 @@ def test_full_synthetic_refinement_and_sector_sensitivity(full_result):
     assert r['domain_check']['sector_teeth']==9
     assert [p['root_von_mises_mpa'] for p in r['cases'][0]['positions']]==pytest.approx([5.110810765426473,5.912949449496781,8.183902564948463],rel=1e-7)
     assert not r['production_approved'] and r['rated_output_torque_nm'] is None and r['rated_gearbox_life_hours'] is None
-    assert not r['cases'][0]['evidence_complete'] and r['cases'][0]['numerical_checks_passed']
+    assert not r['cases'][0]['declared_input_evidence_complete'] and r['cases'][0]['numerical_checks_passed']
     for response in r['mesh_levels'][-1]['responses']:
         assert response['relative_equation_residual']<1e-7
         assert max(abs(v) for v in response['force_balance_n'])<1e-9
@@ -78,14 +78,18 @@ def cached_meshes(monkeypatch,result):
 def test_evidence_unknowns_reversals_zero_torque_and_temperature(full_result,monkeypatch):
     cached_meshes(monkeypatch,full_result)
     s=synthetic_root_example();s.material_status='declared';s.cases[0].temperature_c=None
-    r=calculate_root_study(s);assert r['cases'][0]['positions'] and not r['cases'][0]['evidence_complete']
+    r=calculate_root_study(s);assert r['cases'][0]['positions'] and not r['cases'][0]['declared_input_evidence_complete']
     s.cases[0].temperature_c=100
     assert not calculate_root_study(s)['cases'][0]['positions']
     s.cases[0].temperature_c=40;s.cases[0].load_share=None
     assert not calculate_root_study(s)['cases'][0]['positions']
     s.cases[0].load_share=1;s.source.source.duty[0].input_torque_nm*=-1;s.source.source.duty[0].input_rpm*=-1
-    r=calculate_root_study(s);assert r['cases'][0]['flank']=='right' and r['cases'][0]['evidence_complete']
+    r=calculate_root_study(s);assert r['cases'][0]['flank']=='right' and not r['cases'][0]['declared_input_evidence_complete']
     assert r['cases'][0]['positions'][1]['root_von_mises_mpa']==pytest.approx(full_result['cases'][0]['positions'][1]['root_von_mises_mpa'],rel=1e-7)
+    s.source.data_status='declared'
+    assert calculate_root_study(s)['cases'][0]['declared_input_evidence_complete']
+    s.source.cutter_reference=''
+    assert not calculate_root_study(s)['cases'][0]['declared_input_evidence_complete']
     s.source.source.duty[0].input_torque_nm=0
     assert all(p['root_von_mises_mpa']==0 for p in calculate_root_study(s)['cases'][0]['positions'])
 
