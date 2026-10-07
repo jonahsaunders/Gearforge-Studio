@@ -128,3 +128,15 @@ with this project. NumPy/SciPy retain their existing release notices; SciPy is
 now an explicit direct dependency rather than only a transitive CAD dependency.
 No restricted material properties, standard factors or private results are used.
 See [methods and reproduction](docs/ROOT_STRESS.md).
+
+## Open stress-history comparison
+
+The finite-history counter, bounded fatigue arithmetic, editor, adapter and
+synthetic fixtures are original Apache-2.0 work. A separate verification process
+uses [rainflow 3.2.0](https://pypi.org/project/rainflow/3.2.0/), MIT License,
+Copyright (c) 2018 Piotr Janiszewski. Its installation retains
+[the license](https://github.com/iamlikeme/rainflow/blob/main/LICENSE.txt).
+No rainflow source/documentation, paid standard or restricted material data is
+bundled; no new runtime dependency is introduced. Original numerical fixtures
+and independent Decimal arithmetic can be redistributed with this repository.
+See [stress history methods and reproduction](docs/STRESS_HISTORY.md).

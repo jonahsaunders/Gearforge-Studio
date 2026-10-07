@@ -1,0 +1,2 @@
+# Separate verification environment only; no new application dependency.
+rainflow==3.2.0

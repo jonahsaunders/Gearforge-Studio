@@ -1,5 +1,17 @@
 # Unreleased
 
+# 1.0.0rc12 — 2026-10-06
+
+- Add original finite signed-stress rainflow counting with exact repeated-block
+  acceleration and retained finite/cross-block half cycles.
+- Add explicit uniaxial elastic S-N/mean-stress/Miner arithmetic, temperature and
+  elastic limits, partial-damage status, duty/start coverage and evidence fields.
+- Add a seven-tab editor, three plots, CSV import fingerprints, ordered sample
+  buffers, cancellable workers, batch commands and manifest-protected exports.
+- Compare 25,788 numerical quantities using separate MIT rainflow and 60-digit
+  arithmetic on original publishable fixtures; no new runtime dependency.
+- Actual gear histories, material durability and production ratings remain unqualified.
+
 # 1.0.0rc11 — 2026-10-06
 
 - Add original generated-profile Q9 plane elasticity with explicit material,

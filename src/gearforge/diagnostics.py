@@ -29,6 +29,7 @@ def desktop_smoke(destination: Path, include_cad=False):
         result["thermal_study"]=state.get("thermal_study")
         result["tooth_profile"]=state.get("tooth_profile")
         result["root_stress"]=state.get("root_stress")
+        result['stress_history']=state.get('stress_history')
         if window.selected:result["selected"]=window.selected.id
         (destination/"desktop-smoke.json").write_text(json.dumps(result,indent=2))
         if not errors:
@@ -321,6 +322,45 @@ def desktop_smoke(destination: Path, include_cad=False):
                 'study_sha256':root_result['study_sha256'],'production_approved':False}
         except Exception as exc:errors.append(f'Root stress: {exc}')
         finally:root_window.dirty=False;root_window.close()
+        from .cyclic_ui import HistoryStudyDialog
+        from .cyclic import HistoryStudy,synthetic_history_example
+        history_window=HistoryStudyDialog(window,synthetic_history_example())
+        history_window.show_error=lambda error:errors.append(str(error))
+        def wait_history_worker():
+            deadline=time.monotonic()+30
+            while history_window.process is not None and time.monotonic()<deadline:
+                app.processEvents();time.sleep(.01)
+            if history_window.process is not None:history_window.cancel_job();raise ValueError('History worker timed out')
+            if errors:raise ValueError('History worker failed')
+        try:
+            history_window.show()
+            if not history_window.calculate():raise ValueError('History worker did not start')
+            wait_history_worker();history_result=history_window.result
+            if not history_result or not history_result['fatigue_damage_available']:raise ValueError('Synthetic history arithmetic unavailable')
+            for index in range(history_window.tabs.count()):
+                history_window.tabs.setCurrentIndex(index);app.processEvents();capture=history_window.grab()
+                if capture.isNull():raise ValueError(f'History study tab {index} did not render')
+                capture.save(str(destination/f'stress-history-{index}.png'))
+            history_window.tabs.setCurrentIndex(4)
+            for mode in range(3):
+                history_window.plot_mode.setCurrentIndex(mode);app.processEvents();capture=history_window.grab()
+                if capture.isNull() or not history_window.plot.rendered_items:raise ValueError('History plot did not render')
+                capture.save(str(destination/f'history-plot-{mode}.png'))
+            history=history_window.read_study();history.save(destination/'example.gearforge-history')
+            loaded=HistoryStudy.load(destination/'example.gearforge-history')
+            if asdict(loaded)!=history_result['inputs']:raise ValueError('History inputs did not round-trip')
+            if not history_window.start_job('history-export',loaded,destination/'history-calculation'):raise ValueError('History export worker did not start')
+            wait_history_worker();manifest=verify_bundle(destination/'history-calculation')
+            exported=json.loads((destination/'history-calculation/calculation.json').read_text())
+            if exported['study_sha256']!=history_result['study_sha256']:raise ValueError('History exported fingerprint changed')
+            if not math.isclose(history_result['damage'],.16310411314380596,rel_tol=1e-10):raise ValueError('Synthetic history damage changed')
+            if history_result['production_approved'] or history_result['rated_gearbox_life_hours'] is not None:raise ValueError('History falsely approves gearbox life')
+            state['stress_history']={'app_version':history_result['application_version'],'tabs_rendered':history_window.tabs.count(),
+                'diagrams_rendered':3,'verified_files':len(manifest['files']),'synthetic_damage':history_result['damage'],
+                'expanded_samples':history_result['counting']['expanded_samples'],'calculation_and_export_workers':True,
+                'study_sha256':history_result['study_sha256'],'production_approved':False}
+        except Exception as exc:errors.append(f'Stress history: {exc}')
+        finally:history_window.dirty=False;history_window.close()
         finish()
     window.generate();timer.timeout.connect(tick);timer.start()
     app.exec()

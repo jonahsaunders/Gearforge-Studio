@@ -1,9 +1,10 @@
 {
   "schema_version": 1,
-  "app_version": "1.0.0rc11",
-  "release_status": "generated-root elastic stress release candidate; production gearbox ratings remain unqualified",
-  "current_evidence": "docs/ROOT_VALIDATION.json",
+  "app_version": "1.0.0rc12",
+  "release_status": "local stress-history release candidate; current-build platform/native evidence pending; production ratings unqualified",
+  "current_evidence": "docs/HISTORY_VALIDATION.json",
   "historical_evidence": [
+    "docs/ROOT_VALIDATION.json",
     "docs/TOOTH_VALIDATION.json",
     "docs/THERMAL_VALIDATION.json",
     "docs/CONTACT_VALIDATION.json",

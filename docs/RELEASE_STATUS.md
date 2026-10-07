@@ -1,6 +1,7 @@
-# Release status — 1.0.0rc11
+# Release status — 1.0.0rc12
 
-This is an implemented and tested desktop **release candidate**. It is not a finished
+This is a desktop **release candidate**; current validation status is recorded
+in `VALIDATION.json` and its linked version-specific evidence. It is not a finished
 commercially validated gearbox design product. The remaining work below is concrete
 and material; no installer, model or calculation should imply it is already complete.
 
@@ -39,6 +40,12 @@ The rc9 [thermal study](THERMAL_ANALYSIS.md) adds declared passive thermal netwo
 continuous extrema, energy balance and settled/repeated-duty warm-up bounds.
 Its 3,539 separate ODE comparisons verify numerical heat balance; measured losses,
 cooling coefficients, lubricant adequacy and physical thermal qualification remain.
+
+The rc12 [stress history study](STRESS_HISTORY.md) adds exact finite cycle counts
+across repeated blocks, bounded uniaxial damage and duty coverage with explicit
+provenance. Its synthetic curve/history is not measured component evidence.
+The rc11 [root elastic study](ROOT_STRESS.md) remains a sampled pressure-patch
+model; it is not automatically converted into a qualified cyclic stress history.
 
 ## Implemented
 

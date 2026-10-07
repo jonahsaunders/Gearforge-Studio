@@ -45,6 +45,10 @@ def worker(input_path=None):
             from .root_stress import RootStressStudy,calculate_root_study,export_root_study
             study=RootStressStudy.from_dict(payload['study'])
             result=calculate_root_study(study) if task=='root-calculate' else export_root_study(study,Path(payload['destination']))
+        elif task in ('history-calculate','history-export'):
+            from .cyclic import HistoryStudy,calculate_history_study,export_history_study
+            study=HistoryStudy.from_dict(payload['study'])
+            result=calculate_history_study(study) if task=='history-calculate' else export_history_study(study,Path(payload['destination']))
         else:
             raise ValueError("Unknown worker task")
         response = {"ok":True,"result":result}
@@ -154,6 +158,17 @@ def main(argv=None):
     root_from.add_argument("path",type=Path);root_from.add_argument("--out",type=Path,required=True)
     root_calculate = root_commands.add_parser("calculate",help="Export 2D elastic fields, mesh checks and evidence gaps; no fatigue rating")
     root_calculate.add_argument("path",type=Path);root_calculate.add_argument("--out",type=Path,required=True)
+    history = subs.add_parser('history',help='Count local stress cycles and assess bounded uniaxial fatigue damage')
+    history_commands = history.add_subparsers(dest='history_command',required=True)
+    history_new = history_commands.add_parser('new',help='Create unknown inputs or an original synthetic example')
+    history_new.add_argument('path',type=Path);history_new.add_argument('--synthetic-example',action='store_true')
+    history_from = history_commands.add_parser('from-study',help='Retain gear duty with fresh local history and material inputs')
+    history_from.add_argument('path',type=Path);history_from.add_argument('--out',type=Path,required=True)
+    history_calculate = history_commands.add_parser('calculate',help='Export cycles, bounded damage and evidence gaps; no production rating')
+    history_calculate.add_argument('path',type=Path);history_calculate.add_argument('--out',type=Path,required=True)
+    history_import = history_commands.add_parser('import-csv',help='Import signed time/stress CSV into a named block and save a new study')
+    history_import.add_argument('path',type=Path);history_import.add_argument('csv',type=Path)
+    history_import.add_argument('--block',required=True);history_import.add_argument('--out',type=Path,required=True)
     search = subs.add_parser("search",help="Search a project and save candidate JSON")
     search.add_argument("project",type=Path)
     search.add_argument("--catalog",type=Path)
@@ -194,6 +209,21 @@ def main(argv=None):
             Project().save(args.path)
             print(args.path)
             return 0
+        if args.command == 'history':
+            from .cyclic import HistoryStudy,history_from_study,synthetic_history_example,export_history_study,import_sample_csv
+            from .engineering import EngineeringStudy
+            if args.history_command == 'calculate':
+                print(json.dumps(export_history_study(HistoryStudy.load(args.path),args.out),indent=2));return 0
+            destination=args.path if args.history_command=='new' else args.out
+            if destination.exists() or destination.is_symlink():raise FileExistsError('History study already exists')
+            if args.history_command=='new':study=synthetic_history_example() if args.synthetic_example else HistoryStudy()
+            elif args.history_command=='from-study':study=history_from_study(EngineeringStudy.load(args.path))
+            else:
+                study=HistoryStudy.load(args.path)
+                blocks=[b for b in study.blocks if b.name==args.block]
+                if not blocks:raise ValueError('No history block has that name')
+                import_sample_csv(args.csv,blocks[0])
+            study.save(destination);print(destination);return 0
         if args.command == "root":
             from .root_stress import RootStressStudy,root_from_profile,synthetic_root_example,export_root_study
             from .tooth_profile import ToothProfileStudy

@@ -9,7 +9,7 @@ with 3D printed parts, catalog gears, or combinations of both. It combines a
 native Qt workspace, discrete design search, engineering screening, a component
 catalog, dimensional print calibration, rigid-body CAD animation and design exports.
 
-**Current version: 1.0.0rc11 · Python 3.12 recommended · Apache-2.0 application code**
+**Current version: 1.0.0rc12 · Python 3.12 recommended · Apache-2.0 application code**
 
 > **Release status:** This is a tested software release candidate for prototype
 > engineering. Its calculations are preliminary screens, not certified ISO/AGMA
@@ -31,6 +31,12 @@ reports. Its first development target is 250 W at 1,500 rpm, 5:1 reduction and
 for public GitHub distribution; no paid standard or private calculation package
 is required. See the [open engineering guide](docs/OPEN_ENGINEERING.md) for the
 method, reproducible FreeCAD Gears comparisons and exact verification scope.
+
+**Cyclic stress histories** adds signed local stress samples, exact finite rainflow
+counts across repeated blocks, bounded uniaxial fatigue damage, duration/start
+coverage, import fingerprints and three plots. Its original synthetic data and
+25,788 independent numerical checks are publishable on GitHub. This does not
+establish production gearbox fatigue life. See [methods and scope](docs/STRESS_HISTORY.md).
 
 **Tooth-root elastic stress** adds a cancellable 2D finite-element study on
 the generated spur profile, with explicit material/support/load inputs, three
@@ -532,8 +538,8 @@ windowed executable and a file-based worker protocol. Windows also includes
 For the current release:
 
 ```bash
-git tag -a v1.0.0rc11 -m "GearForge Studio 1.0.0rc11"
-git push origin v1.0.0rc11
+git tag -a v1.0.0rc12 -m "GearForge Studio 1.0.0rc12"
+git push origin v1.0.0rc12
 ```
 
 The tag must match package/runtime versions. Manual builds on `main` upload
@@ -560,7 +566,7 @@ includes them automatically and preserves file permissions:
 ```bash
 git init -b main
 git add .
-git commit -m "Add GearForge Studio 1.0.0rc11"
+git commit -m "Add GearForge Studio 1.0.0rc12"
 git remote add origin https://github.com/jonahsaunders/Gearforge-Studio.git
 git push -u origin main
 ```

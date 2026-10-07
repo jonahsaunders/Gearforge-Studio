@@ -75,6 +75,9 @@ def main():
         root=evidence.get("root_stress") or {}
         if root.get('app_version')!=version or root.get('tabs_rendered')!=7 or root.get('diagrams_rendered')!=7 or root.get('verified_files')!=6 or not root.get('calculation_and_export_workers') or not root.get('mesh_convergence_passed') or not root.get('domain_sensitivity_passed'):
             raise RuntimeError('Native root stress smoke failed: '+str(root))
+        history=evidence.get('stress_history') or {}
+        if history.get('app_version')!=version or history.get('tabs_rendered')!=7 or history.get('diagrams_rendered')!=3 or history.get('verified_files')!=5 or not history.get('calculation_and_export_workers') or history.get('production_approved') is not False:
+            raise RuntimeError('Native stress history smoke failed: '+str(history))
     output=ROOT/"release-assets";output.mkdir(exist_ok=True)
     if system!="darwin":
         platform_note=("Use GearForgeCLI.exe for console commands and diagnostics.\n" if system=="windows"

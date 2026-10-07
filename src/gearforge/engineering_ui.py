@@ -101,7 +101,8 @@ class EngineeringStudyDialog(QDialog):
         layout.addLayout(actions)
         studies = QHBoxLayout()
         for label, callback in (("Study shaft loads…", self.study_shaft), ("Study tooth contact…", self.study_contact),
-                                ("Study temperatures…", self.study_thermal), ("Study tooth roots…", self.study_tooth)):
+                                ("Study temperatures…", self.study_thermal), ("Study tooth roots…", self.study_tooth),
+                                ("Study stress history…", self.study_history)):
             button = QPushButton(label); button.clicked.connect(callback); studies.addWidget(button)
         layout.addLayout(studies)
         for row_form in (form, context_form):
@@ -182,6 +183,13 @@ class EngineeringStudyDialog(QDialog):
             return True
         except (ValueError, TypeError, OverflowError) as exc:
             self.result = None; self.report.clear(); self.show_error(exc); return False
+
+    def study_history(self):
+        from .cyclic import history_from_study
+        from .cyclic_ui import HistoryStudyDialog
+        try:study=history_from_study(self.read_study())
+        except (ValueError,TypeError) as exc:self.show_error(exc);return False
+        dialog=HistoryStudyDialog(self,study);dialog.dirty=True;dialog.exec();return True
 
     def study_tooth(self):
         from .tooth_profile import profile_from_study

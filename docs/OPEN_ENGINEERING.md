@@ -55,7 +55,10 @@ Edit geometry, allocate the complete operating life across duty rows, and
 record material/process and evidence references. Both negative speed and
 negative torque represent reverse motoring. Zero speed records a stationary
 load. Regenerative/braking operation requires another loss model and is rejected.
-Starts are recorded but do not yet produce a fatigue-damage calculation.
+Starts are recorded here without inventing transient stresses. The separate
+[local stress history study](STRESS_HISTORY.md) accepts explicit signed samples,
+checks duration/start coverage and assesses bounded uniaxial cyclic damage.
+It does not infer a local history from these quasi-static gear loads.
 
 ```text
 python -m gearforge study new target.gearforge-study

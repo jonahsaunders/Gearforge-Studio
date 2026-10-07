@@ -17,5 +17,6 @@ recursive-include examples *.gearforge-contact
 recursive-include examples *.gearforge-thermal
 recursive-include examples *.gearforge-tooth
 recursive-include examples *.gearforge-root
+recursive-include examples *.gearforge-history
 prune examples/exported-*
 recursive-include src/gearforge/data *.csv *.json *.svg *.png
