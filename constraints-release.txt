@@ -14,7 +14,7 @@ reportlab==4.4.9
 ezdxf==1.4.4
 casadi==3.7.2
 nlopt==2.11.0
-multimethod==1.12
+multimethod==2.1
 pillow==12.3.0
 pyparsing==3.3.2
 fonttools==4.61.1
