@@ -50,7 +50,7 @@ pyyaml==6.0.3
 runtype==0.5.3
 six==1.17.0
 trame==4.0.0
-trame-client==4.1.3
+trame-client==4.1.4
 trame-common==1.2.7
 trame-components==2.5.0
 trame-server==4.0.0
