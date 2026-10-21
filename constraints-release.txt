@@ -57,5 +57,5 @@ trame-components==2.5.0
 trame-server==4.0.0
 trame-vtk==2.11.17
 trame-vuetify==3.3.0
-wslink==2.5.7
+wslink==2.6.0
 yarl==1.25.1
